@@ -18,7 +18,7 @@ To democratize software development by creating an intelligent ecosystem where u
 
 #### **1.3 Key MVP Objectives (Hackathon "Raise Your Hack" Focus)**
 1.  **Vultr Track - Enterprise Agentic Workflow Platform:**
-    *   Deploy the core Sentient Core platform on **Vultr infrastructure**, showcasing its ability to design, build, and manage sophisticated agentic workflows.
+    *   Deploy the core Sentient Core platform on **Vultr infrastructure**, featuring a **FastAPI** backend, to showcase its ability to design, build, and manage sophisticated agentic workflows.
     *   Integrate **Groq API (for Meta's Llama 3)** as the primary LLM for high-speed reasoning, code generation, and natural language understanding.
     *   Implement **Fetch.ai `uAgents`** (or Agentverse) for decentralized agent registration, discovery, and secure communication within the platform and the broader Fetch.ai ecosystem.
     *   Utilize **Coral Protocol** for robust, thread-style collaboration, enabling complex multi-agent interactions and coordination for task execution.
@@ -445,8 +445,8 @@ This section outlines the strategic adaptation of the Genesis Agentic Developmen
 *   **Objective:** Create an innovative Edge AI Utility Generator module within Snoob-Dev that generates Python code for on-device consumer utility applications targeting Snapdragon X Elite.
 *   **Key Deliverables:**
     1.  The Edge AI Utility Generator module integrated into Snoob-Dev.
-    2.  Demonstration of generating a simple, useful on-device AI utility (e.g., image sorter, offline text summarizer) whose core AI functionality runs entirely offline.
-*   **Key Actions:** Design the generator module architecture. Research on-device inference libraries (ONNX Runtime, etc.) and application packaging for Snapdragon X Elite. Develop code generation prompts/logic for Groq/Llama 3 (and potentially Code Llama). Ensure the generated utility's core AI is offline.
+    2.  Demonstration of generating a simple, useful on-device AI utility (e.g., an offline text summarizer or image classifier) whose core AI functionality runs entirely offline on-device.
+*   **Key Actions:** Design the generator module architecture. Implement the model pipeline: conversion to `.onnx`, quantization, and final conversion to the `.ort` format. Integrate **ONNX Runtime** with the **QNN Execution Provider** into a target mobile application template. Develop code generation prompts for Groq/Llama 3 to produce the utility's business logic.
 
 #### **7.3 Success Metrics & Observability**
 

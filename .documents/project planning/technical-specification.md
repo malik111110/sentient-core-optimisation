@@ -936,8 +936,8 @@ spec:
 *   **Output:** Packaged Python application code, including necessary model files (e.g., ONNX) and a simple `requirements.txt` or setup script.
 
 #### 11.4.2 Key Technologies & Features for Qualcomm Track
-*   **Inference Runtime:** Primarily ONNX Runtime for Python. Explored for compatibility with Snapdragon X Elite.
-*   **Models:** Small, efficient pre-trained models (e.g., MobileNetV2/V3 for image tasks, distilled NLP models for text tasks) converted to ONNX format.
+*   **Inference Runtime:** **ONNX Runtime** is the designated runtime. The implementation will follow a strict pipeline: models will be converted to the `.onnx` format, quantized to 8-bit or 4-bit for efficiency, and then converted to the final `.ort` format for deployment.
+*   **Hardware Acceleration:** Inference will be executed using the **Qualcomm QNN Execution Provider** to leverage the full power of the Snapdragon SoC's dedicated AI hardware (e.g., Hexagon DSP), with the CPU provider as a fallback.
 *   **Packaging:** Techniques for creating standalone executables from Python scripts (e.g., PyInstaller, cx_Freeze) or providing a self-contained directory with a run script. Sandboxing knowledge from WebContainer work will be applied.
 *   **Offline Core:** Generated utility's core AI functionality must operate without internet access. The Groq/Llama 3 dependency is for the *generation phase* on the Sentient Core platform only.
 
