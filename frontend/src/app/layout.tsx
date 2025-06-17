@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Genesis Engine - AI-Powered Development Platform",
-  description: "Transform ideas into production-ready applications through intelligent multi-agent collaboration",
+  title: "Sentient Core - The Agentic Development Platform",
+  description: "Translate your vision into production-ready applications with an AI-driven, multi-agent ecosystem.",
 };
 
 export default function RootLayout({
