@@ -180,7 +180,7 @@
 - Background task processing
 
 **Tasks:**
-- [ ] **T1.2.1.1** - Initialize FastAPI project with uv
+- [ ] **T1.2.1.1** - Initialize FastAPI project with uvicorn
 - [ ] **T1.2.1.2** - Set up async database connections with SQLAlchemy 2.0
 - [ ] **T1.2.1.3** - Implement dependency injection system
 - [ ] **T1.2.1.4** - Configure API versioning strategy
@@ -752,8 +752,8 @@ This section details the Epics, Stories, and Tasks required to adapt Snoob-Dev f
 - [ ] **T8.4.1.1** - Design architecture for the Edge Utility Generator module.
 - [ ] **T8.4.1.2** - Develop `EdgeUtilityGeneratorService` for code generation logic.
 - [ ] **T8.4.1.3** - Design and implement UI for utility requirement specification.
-- [ ] **T8.4.1.4** - Research ONNX Runtime and other on-device Python inference libraries for Snapdragon X Elite.
-- [ ] **T8.4.1.5** - Research Python application packaging for cross-platform standalone executables.
+- [ ] **T8.4.1.4** - Implement the model conversion pipeline: convert pre-trained models to `.onnx`, apply quantization, and package them in the final `.ort` format.
+- [ ] **T8.4.1.5** - Integrate **ONNX Runtime** with the **Qualcomm QNN Execution Provider** into a template application to ensure hardware-accelerated inference on Snapdragon devices.
 
 #### Story 8.4.2: On-Device Utility Demo
 **Assigned Agent:** AGENT-BACKEND, AGENT-QA

@@ -1,0 +1,117 @@
+# Hackathon Adaptation Plan
+
+## Notes
+- Hackathon "Raise Your Hack" requires fulfilling 3 of 4 sponsor tracks; we will target **Vultr (enterprise agentic workflow)**, **Prosus (agent-powered e-commerce)**, and **Qualcomm (edge AI utility)**.
+- Maintain current multi-agent codebase (`snoob-dev`) while adding track-specific modules; reuse existing integrations (WebContainer, Archon, Supabase, etc.).
+- Must deploy the main web app on Vultr, build an e-commerce agent pack with knowledge-graph profiles, and generate on-device AI utilities for Snapdragon X Elite.
+- Utilize tools outlined in the `strategy-adaptation` workflow for research (hyperbrowserai/mcp, tavily, serper, etc.).
+- Must integrate Groq API with Llama 3 and adopt Fetch.ai uAgents/Agentverse plus Coral Protocol for inter-agent collaboration.
+- Qualcomm offline-first requirement resolved via on-device core utility; Groq/Llama 3 used only for development or optional cloud companion features.
+- All new artifacts (strategy, roadmap, pitch) should be versioned via mem0-memory-mcp.
+- `HACKATHON_STRATEGY.md` drafted in `.documents/hackathon/`.
+- `PITCH_DECK_OUTLINE.md` drafted in `.documents/hackathon/`.
+- Planning documents (high-level, technical specification, PRD, task breakdown) updated with hackathon sections.
+- `ROADMAP.md` created and drafted with hackathon sprint timeline.
+- Project renamed to **Sentient Core**; all documents should reflect new branding.
+- Ensure planning documents remain future-proof and not overly tied to specific tech choices.
+- Rebranding underway: key core documents (strategy, roadmap, high-level plan, tech spec, pitch deck) already renamed to Sentient Core; remaining docs still to be updated.
+- `VISION_AND_MISSION.md`, `BRANDING_GUIDELINES.md`, and `USER_PERSONAS.md` have been drafted and saved.
+- Document audit completed; summary report prepared; rebranding edits applied to several legacy documents.
+- Landing page scaffolding (Header, Hero, Features, Hackathon, Footer) implemented in Next.js frontend; layout metadata rebranded to Sentient Core.
+- Fade-in animations added to landing page sections; landing page polished.
+- INFOGRAPHICS.md created outlining infographic slide concepts.
+- GroqService client implemented in `src/clients/groq_client.py`.
+- FetchAIAdapter implemented in `src/clients/fetchai_adapter.py`.
+- CoralMessageHandler scaffolded in `src/clients/coral_message_handler.py`; `requirements.txt` created with dependencies.
+- Unit tests for backend clients added in `tests/clients`; `pytest` and `pytest-mock` appended to `requirements.txt`.
+- Dependencies installed; unit test execution deferred until after documentation alignment.
+- Git repository consolidated at project root; initial root-level commit completed.
+- User requested comprehensive documentation alignment; focus shifted to updating core planning documents before further implementation.
+- Project directory rename to `sentient-core` initiated; final rename pending after terminating active dev processes.
+- `story-concepts-painpoints.md` created in conceptual docs directory.
+- Original conceptual docs located under `.documents/concepts and roadmaps/`; duplicates with hackathon enhancements exist in `.documents/project planning/conceptual/` and need consolidation.
+- VISION_AND_MISSION, USER_PERSONAS, and story-concepts-painpoints conceptual docs merged into primary directory; consolidation complete.
+- User requested proactive real-time data validation (model versions, dependencies) and comprehensive crawl of Raise Your Hack competition page & related tech docs; planning docs must be revised accordingly.
+- `RAISE_YOUR_HACK_OVERVIEW.md` created in `.documents/hackathon/` with consolidated event information.
+- `GROQ_API_GUIDE.md` created in `.documents/hackathon/groq/` with detailed developer guide for Groq API.
+- `FETCHAI_UAGENT_GUIDE.md` created in `.documents/hackathon/fetchai/` with detailed developer guide for Fetch.ai uAgents.
+- `CORAL_PROTOCOL_GUIDE.md` created in `.documents/hackathon/coral/` with overview developer guide for Coral Protocol.
+- `LLAMA3_MODEL_GUIDE.md` created in `.documents/hackathon/llama3/` with model overview guide for Meta Llama 3.
+- `ONNX_RUNTIME_GUIDE.md` created in `.documents/hackathon/tech_refs/onnx_runtime/` with on-device inference guide for ONNX Runtime.
+- `NEXTJS_15_GUIDE.md` created in `.documents/hackathon/tech_refs/nextjs/` with developer guide for Next.js 15.
+- `FASTAPI_GUIDE.md` created in `.documents/hackathon/tech_refs/fastapi/` with developer guide for FastAPI.
+
+## Task List
+- [ ] Phase 0 – Repository Restructure & Renaming
+  - [x] Move `.git` directory from `frontend` to project root.
+  - [x] Commit consolidated repository state at root.
+  - [ ] Rename project folder `snoob-dev` to `sentient-core`.
+- [x] Phase 1 – Intelligence Infusion
+  - [x] Fetch official hackathon rules page and store parsed summary in memory.
+  - [x] Read existing planning documents under `.documents/project planning`.
+  - [x] Synthesize a constraint list covering each sponsor track.
+- [x] Phase 2 – Strategic Alignment
+  - [x] Evaluate project capabilities against each track’s constraints.
+  - [x] Craft an integrated narrative showing how one platform satisfies Vultr, Prosus, and Qualcomm.
+  - [x] Draft and save `HACKATHON_STRATEGY.md`.
+- [x] Phase 3 – Technical Roadmap Re-Architecture
+  - [x] Add Vultr deployment tasks (Docker container, FastAPI, CI/CD).
+  - [x] Add Prosus tasks: knowledge-graph user profiles, voice UI, Tavily search integration.
+  - [x] Add Qualcomm tasks: research on-device inference (ONNX Runtime, llama.cpp) for Snapdragon X Elite; design edge-utility generator.
+  - [x] Update `ROADMAP.md`.
+  - [x] Update `high-level-plan.md`.
+  - [x] Update `technical-specification.md`.
+  - [x] Update `prd.md`.
+  - [x] Update `task-breakdown.md`.
+- [x] Phase 4 – Deliverables
+  - [x] Produce final documents: revised roadmap, hackathon strategy, pitch deck outline.
+  - [x] Persist artifacts to memory with clear keys.
+- [x] Phase 5 – Document Refinement & Branding
+  - [x] Audit all existing documents for brand consistency (Sentient Core) and future-proof language.
+  - [x] Identify any gaps or redundant content; propose additions/removals.
+  - [x] Prepare summary report of required document modifications for user approval.
+  - [x] Complete rebranding edits across all documents (incl. PRD, task breakdown).
+  - [x] Draft `VISION_AND_MISSION.md`.
+  - [x] Draft `BRANDING_GUIDELINES.md`.
+  - [x] Draft `USER_PERSONAS.md`.
+- [x] Phase 6 – Front-End Concept & UI Prototypes
+  - [x] Draft wireframes for landing page and core UI flows.
+  - [x] Create initial Tailwind/Shadcn component library setup.
+  - [x] Compile infographic slides to visualize concepts for team.
+  - [x] Refine landing page polish and responsive testing.
+- [ ] Phase 7 – Backend Core Services
+  - [x] Create GroqService client in `src/clients`.
+  - [x] Implement FetchAIAdapter in `src/clients`.
+  - [x] Implement CoralMessageHandler in `src/clients`.
+  - [x] Write unit tests for new clients.
+  - [ ] Run unit tests and fix failures.
+- [ ] Phase 8 – Documentation Integration & Enhancement
+  - [x] Integrate hackathon strategy into high-level-plan, PRD, ROADMAP, technical-specification.
+  - [ ] Expand conceptual docs:
+    - [x] story-concepts-painpoints.md
+    - [x] USER_PERSONAS.md
+    - [x] VISION_AND_MISSION.md
+    - [x] Consolidate duplicate conceptual docs:
+      - [x] VISION_AND_MISSION merged
+      - [x] USER_PERSONAS merged
+      - [x] story-concepts-painpoints merged
+  - [ ] Audit & categorize applied techs docs; create Technology Strategy doc.
+  - [ ] Deprecate outdated action plans; generate new hackathon-focused action plans with latest tech docs.
+  - [ ] Ensure branding consistency across all documents.
+- [ ] Phase 9 – Real-Time Tech Validation & Hackathon Documentation
+  - [x] Create `RAISE_YOUR_HACK_OVERVIEW.md` summary document.
+  - [ ] Crawl and archive Raise Your Hack event page and all sponsor track docs into `.documents/hackathon/` sub-directories.
+  - [ ] Fetch latest official docs for Groq API, Llama 3, Fetch.ai uAgents, Coral Protocol, ONNX Runtime, Next.js 15, FastAPI, etc., and store under `.documents/hackathon/tech_refs/`.
+    - [x] Groq API documentation fetched and `GROQ_API_GUIDE.md` generated.
+    - [x] Fetch.ai uAgents documentation fetched and `FETCHAI_UAGENT_GUIDE.md` generated.
+    - [x] Coral Protocol documentation fetched and `CORAL_PROTOCOL_GUIDE.md` generated.
+    - [x] Llama 3 documentation fetched and `LLAMA3_MODEL_GUIDE.md` generated.
+    - [x] ONNX Runtime documentation fetched and `ONNX_RUNTIME_GUIDE.md` generated.
+    - [x] Next.js 15 documentation fetched and `NEXTJS_15_GUIDE.md` generated.
+    - [x] FastAPI documentation fetched and `FASTAPI_GUIDE.md` generated.
+  - [ ] Update high-level plan, technical specification, PRD, task breakdown, and action plans with verified, up-to-date versions and references.
+  - [ ] Define and document strict codebase structure & naming conventions to prevent duplication/hallucination.
+  - [ ] Persist all fetched docs and updates to memory with clear keys.
+
+## Current Goal
+- Draft Technology Strategy doc

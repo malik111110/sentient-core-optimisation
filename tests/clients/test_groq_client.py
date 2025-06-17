@@ -12,7 +12,11 @@ def mock_groq_client(mocker):
 @pytest.fixture
 def groq_service(mocker):
     """Provides an instance of GroqService with a mocked environment variable."""
-    mocker.patch('os.environ.get', return_value='fake_api_key')
+    def mock_os_get(key, default=None):
+        if key == 'GROQ_API_KEY':
+            return 'fake_api_key'
+        return default
+    mocker.patch('os.environ.get', side_effect=mock_os_get)
     return GroqService()
 
 def test_get_completion_success(groq_service, mock_groq_client):
