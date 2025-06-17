@@ -19,18 +19,18 @@ To democratize software development by creating an intelligent ecosystem where u
 #### **1.3 Key MVP Objectives (Hackathon "Raise Your Hack" Focus)**
 1.  **Vultr Track - Enterprise Agentic Workflow Platform:**
     *   Deploy the core Sentient Core platform on **Vultr infrastructure**, featuring a **FastAPI** backend, to showcase its ability to design, build, and manage sophisticated agentic workflows.
-    *   Integrate **Groq API (for Meta's Llama 3)** as the primary LLM for high-speed reasoning, code generation, and natural language understanding.
-    *   Implement **Fetch.ai `uAgents`** (or Agentverse) for decentralized agent registration, discovery, and secure communication within the platform and the broader Fetch.ai ecosystem.
-    *   Utilize **Coral Protocol** for robust, thread-style collaboration, enabling complex multi-agent interactions and coordination for task execution.
+    *   Integrate the **Groq API** (using the `llama-3.3-70b-versatile` model) as the primary LLM for high-speed reasoning and code generation.
+    *   Implement **Fetch.ai uAgents** for decentralized agent registration, discovery, and secure communication.
+    *   Utilize **Coral Protocol** for robust, thread-style collaboration and multi-agent coordination.
 2.  **Prosus Track - Agent-Powered E-commerce Solution:**
     *   Develop an "E-commerce Agent Pack" as a module within Sentient Core, demonstrating specialized agent capabilities for the retail sector.
-    *   Agents will leverage **knowledge graphs** (e.g., using RDFLib or similar) for rich user and product profiling, enabling personalized experiences.
-    *   Integrate **Tavily API** for advanced, AI-powered product search and market intelligence gathering.
-    *   Showcase **voice UI capabilities** for intuitive e-commerce interactions, powered by our core LLM and agent framework.
+    *   Agents will leverage **knowledge graphs** for rich user and product profiling.
+    *   Integrate the **Tavily API** for advanced, AI-powered product search and market intelligence.
+    *   Showcase **voice UI capabilities** for intuitive e-commerce interactions.
 3.  **Qualcomm Track - On-Device Edge AI Utility Generator:**
     *   Create an innovative "Edge AI Utility Generator" module within Sentient Core.
-    *   Utilize Groq/Llama 3 for generating Python code for simple, useful consumer utility applications (e.g., offline photo sorter, local document summarizer).
-    *   Ensure generated utilities are packaged for **Snapdragon X Elite** devices, with core AI functionality (e.g., using ONNX models) running **entirely offline on-device**, meeting Qualcomm's key constraint. The cloud-based LLM is used for *generation*, not *runtime* of the edge app.
+    *   Utilize **Groq/Llama 3** for generating Python code for simple, useful consumer utility applications.
+    *   Ensure generated utilities are packaged for **Snapdragon X Elite** devices, with core AI functionality running **entirely offline on-device** using **ONNX Runtime** and **ExecuTorch**.
 4.  **Cross-Cutting MVP Platform Features:**
     *   A modern, responsive web-based interface (Next.js 15, React 19, Tailwind CSS v4, Shadcn/UI) for users to define requirements, manage agents, and deploy applications.
     *   Demonstrable multi-agent orchestration capabilities, showcasing how different agents (both general and specialized) collaborate to achieve the track-specific deliverables.
@@ -46,84 +46,20 @@ To democratize software development by creating an intelligent ecosystem where u
 
 ### **2.0 Core Architecture & Technology Stack**
 
-#### **2.1 Advanced Multi-Agent Orchestration (2025 Framework)**
-The Genesis Engine employs a cutting-edge **hybrid multi-agent architecture** leveraging the latest developments in multi-agent systems, combining AutoGen's evolution to AG2 with LangGraph's graph-based orchestration:
+This section provides a high-level overview of the core technologies chosen for the Sentient Core project and the "Raise Your Hack" hackathon. All components have been selected based on performance, modern best practices, and alignment with the hackathon sponsor tracks.
 
-- **AutoGen/AG2**: Event-driven architecture for agent collaboration and secure code execution
-- **LangGraph**: Graph-based stateful workflow management with advanced state machines
-- **Agent Communication Protocol**: Implements Google's A2A (Agent-to-Agent) communication standards
-- **Graph-Based Orchestration**: LangGraph nodes representing specialized agents with conditional edges
-- **Modular Agent Architecture**: Planner, Executor, Communicator, and Evaluator agent patterns
-- **Advanced State Management**: Graph-based persistence with semantic memory capabilities
-- **Event-Driven Communication**: Asynchronous message passing with guaranteed delivery
-- **Cloud-Native Scalability**: Kubernetes-native with horizontal pod autoscaling
+**For a detailed breakdown and rationale for each technology, please refer to the official `TECHNOLOGY_STRATEGY.md` document located in `.documents/project planning/applied techs/`.** That document is the single source of truth for our technical stack.
 
-#### **2.1.1 Specialized Agent Ecosystem (2025 Edition)**
-1. **Requirements Intelligence Agent**: Advanced NLP for requirement extraction and validation with context understanding
-2. **Architecture Planning Agent**: System design with modern patterns, performance optimization, and cost considerations
-3. **Frontend Specialist Agent**: Next.js 15/React 19 with Server Components, PPR, and modern patterns
-4. **Backend Engineering Agent**: FastAPI 0.115+ with async optimization, caching, and API versioning
-5. **Database Architect Agent**: Multi-database design (PostgreSQL 16, ChromaDB, Redis) with optimization
-6. **DevOps Automation Agent**: Container orchestration with security hardening, CI/CD, and monitoring
-7. **Quality Assurance Agent**: Automated testing with performance, security validation, and code analysis
-8. **Documentation Intelligence Agent**: AI-powered documentation with real-time updates and ADRs
-9. **Performance Optimization Agent**: Code analysis and optimization recommendations
-10. **Security Compliance Agent**: Automated security auditing and compliance checking
+#### **2.1 Key Components Summary**
 
-#### **2.2 Modern Technology Stack (2025-Ready)**
-
-**Backend & Orchestration:**
-- **FastAPI 0.115+**: High-performance async Python framework with latest optimizations
-  - Async database queries with SQLAlchemy 2.0
-  - Advanced caching strategies (Redis + in-memory)
-  - Optimized Uvicorn configuration (workers, logging, debug settings)
-  - Background tasks with Celery/FastAPI BackgroundTasks
-- **AutoGen + LangGraph**: Hybrid multi-agent orchestration
-  - Event-driven architecture for agent coordination
-  - Stateful workflow management with graph-based approach
-- **Pydantic v2**: Data validation and serialization with performance improvements
-- **LLMs**: Claude 3.5 Sonnet, GPT-4 Turbo, Gemini Pro 1.5 with function calling and structured outputs
-- **SQLAlchemy 2.0**: Modern async ORM with optimized queries
-- **Redis**: Distributed caching and session management with aioredis
-- **Celery**: Background task processing for long-running operations
-- **uv**: Ultra-fast Python package manager (recommended by FastAPI team)
-
-**Frontend & User Interface:**
-- **Next.js 15.3**: React framework with App Router and latest optimizations
-  - Hybrid rendering (SSG, SSR, ISR) for optimal performance
-  - Streaming React Server Components (RSC)
-  - Partial Prerendering (PPR) for dynamic content
-  - Advanced caching and prefetching strategies
-- **React 19**: Latest React with concurrent features and server components
-  - Improved Suspense boundaries
-  - Enhanced performance with automatic batching
-- **Shadcn/UI**: Modern component library with accessibility-first design
-- **Tailwind CSS 4.0**: Enhanced performance and developer experience
-- **TypeScript 5.6**: Latest type-safe development features
-- **TanStack Query v5**: Advanced server state management with caching
-
-**Infrastructure & Deployment:**
-- **Docker**: Multi-stage builds with 2025 security best practices
-  - Distroless base images for minimal attack surface
-  - Non-root user execution
-  - Security scanning and runtime controls
-  - BuildKit and cache optimization
-- **Kubernetes**: Container orchestration with security hardening
-- **ChromaDB**: Vector database with HNSW index optimization
-  - Batch insertions and precomputed embeddings
-  - Dimensionality reduction for performance
-  - Periodic index defragmentation
-- **PostgreSQL 16**: Primary database with advanced indexing and partitioning
-- **Terraform/Pulumi**: Infrastructure as Code for cloud deployment
-
-**Development & Tooling:**
-- **Python 3.12**: Latest performance improvements and syntax enhancements
-- **uv**: Ultra-fast Python package installer and resolver
-- **Ruff**: Lightning-fast Python linter and formatter
-- **GitHub Actions**: CI/CD with advanced caching and matrix builds
-- **Sentry**: Error tracking and performance monitoring
-- **Prometheus + Grafana**: Metrics collection and visualization
-- **Prettier + ESLint**: Code formatting and quality enforcement
+- **Backend:** FastAPI (Python)
+- **Frontend:** Next.js 15 (TypeScript), with Shadcn/UI & DaisyUI on Tailwind CSS
+- **Cloud LLM:** Groq API, running `llama-3.3-70b-versatile`
+- **On-Device LLM:** Meta Llama 3 (8B & 3.2), run via **ONNX Runtime** and **ExecuTorch**
+- **Agent Framework:** Fetch.ai uAgents
+- **Agent Communication:** Coral Protocol
+- **Database:** Supabase (PostgreSQL)
+- **Deployment:** Vultr, using Docker
 
 ---
 

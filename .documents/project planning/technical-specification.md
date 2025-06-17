@@ -82,11 +82,10 @@ Each agent follows the modern 2025 pattern with four core components:
 3. **Communicator Component**: Inter-agent communication and context sharing
 4. **Evaluator Component**: Quality assurance and output validation
 
-#### 2.2.2 Agent Communication Protocol
-- **Protocol**: JSON-RPC 2.0 over WebSocket with message queuing
-- **Delivery Guarantee**: At-least-once delivery with idempotency keys
-- **State Synchronization**: Event sourcing with CQRS patterns
-- **Conflict Resolution**: Vector clock-based conflict detection and resolution
+#### 2.2.2 Agent Communication Protocol (Hackathon MVP)
+- **Primary Protocols**: For the hackathon, inter-agent communication, discovery, and structured messaging will primarily leverage **Fetch.ai uAgents** and **Coral Protocol**.
+- **Internal Protocol**: A baseline JSON-RPC 2.0 over WebSocket may be used for internal service-to-service communication where the full agent protocol is not required.
+- **State Synchronization**: Event sourcing with CQRS patterns, with agent state managed and persisted via the orchestration layer.
 
 ---
 
@@ -102,12 +101,17 @@ Each agent follows the modern 2025 pattern with four core components:
   - Background tasks with Celery integration
   - Rate limiting with Redis-based sliding window
 
-#### 3.1.2 Multi-Agent Frameworks
-- **AutoGen/AG2**: Event-driven agent collaboration
-  - Conversation-first architecture
-  - Multi-agent code execution
-  - Dynamic agent creation and management
-  - Security-first design with sandboxing
+#### 3.1.2 Multi-Agent Frameworks (Hackathon Stack)
+- **Fetch.ai uAgents**: For building autonomous, intelligent agents.
+  - Decentralized identity and registration (Seed Phrases)
+  - Asynchronous messaging (`ctx.send`) and synchronous requests (`ctx.ask`)
+  - Protocol-based structured communication
+  - Integration with the Agentverse for discovery
+
+- **Coral Protocol**: For decentralized agent collaboration.
+  - Enables complex, multi-agent workflows through a shared, decentralized server.
+  - Agent discovery via advertisements and a shared registry.
+  - Framework-agnostic design, compatible with our agent implementations.
 
 - **LangGraph**: Graph-based workflow orchestration
   - Stateful workflow management
@@ -160,13 +164,13 @@ Each agent follows the modern 2025 pattern with four core components:
 
 #### 3.2.2 UI and Styling
 - **TypeScript 5.6**: Type-safe development
-- **Tailwind CSS 3.4**: Utility-first CSS framework
+- **Tailwind CSS v4**: Utility-first CSS framework with a new engine
 - **Shadcn/ui**: Modern component library
 - **Zustand**: Lightweight state management
 - **TanStack Query v5**: Server state management
 
 #### 3.2.3 Development Tools
-- **Vite**: Fast build tool and dev server
+- **Next.js CLI with Turbopack**: Integrated fast build tool and dev server
 - **ESLint 9**: Code quality and consistency
 - **Prettier**: Code formatting
 - **Playwright**: End-to-end testing
@@ -328,20 +332,21 @@ CREATE TABLE code_artifacts (
 
 #### 6.1.2 Vector Embeddings Schema
 ```python
-# ChromaDB Collections
+# ChromaDB Collections (Example with a Llama-3 compatible model)
 class RequirementsEmbeddings:
     collection_name = "requirements"
-    embedding_dimension = 1536  # OpenAI ada-002
+    # Dimension will depend on the chosen open-source embedding model (e.g., Nomic, SentenceTransformers)
+    embedding_dimension = 768 # Example dimension, to be finalized
     metadata_fields = ["project_id", "requirement_type", "priority"]
 
 class CodeEmbeddings:
     collection_name = "code_patterns"
-    embedding_dimension = 1536
+    embedding_dimension = 768 # Example dimension
     metadata_fields = ["language", "framework", "pattern_type"]
 
 class ConversationEmbeddings:
     collection_name = "conversations"
-    embedding_dimension = 1536
+    embedding_dimension = 768 # Example dimension
     metadata_fields = ["user_id", "agent_type", "timestamp"]
 ```
 

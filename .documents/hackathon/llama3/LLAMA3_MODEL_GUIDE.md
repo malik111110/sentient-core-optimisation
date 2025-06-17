@@ -4,7 +4,7 @@ This guide provides an overview of Meta's Llama 3 family of large language model
 
 ## 1. Overview
 
-Meta Llama 3 is the next generation of open-source LLMs developed by Meta, released on **April 18, 2024**. These models are designed to be highly capable and support a broad range of use cases, demonstrating state-of-the-art performance on various industry benchmarks and offering new capabilities like improved reasoning.
+Meta Llama 3 is the next generation of open-source LLMs from Meta. The family, which began with the **April 2024** release of the 8B and 70B models, has since expanded to include newer versions like **Llama 3.2 and 3.3**, with a strong focus on improving on-device performance. These models are designed to be highly capable and support a broad range of use cases, demonstrating state-of-the-art performance on various industry benchmarks and offering new capabilities like improved reasoning.
 
 ## 2. Model Architecture and Training
 
@@ -16,14 +16,18 @@ Meta Llama 3 is the next generation of open-source LLMs developed by Meta, relea
 
 ## 3. Available Models and Variants
 
-Llama 3 is available in two main parameter sizes, each with pre-trained and instruction-tuned versions:
+Llama 3 is available in several parameter sizes, each with pre-trained and instruction-tuned versions.
 
-*   **Llama 3 8B:**
-    *   Designed for efficient deployment and development, potentially on consumer-grade GPUs.
-    *   Available as `Meta-Llama-3-8B` (pre-trained) and `Meta-Llama-3-8B-Instruct` (instruction-tuned).
-*   **Llama 3 70B:**
-    *   Targeted for large-scale, AI-native applications requiring maximum capability.
-    *   Available as `Meta-Llama-3-70B` (pre-trained) and `Meta-Llama-3-70B-Instruct` (instruction-tuned).
+*   **Llama 3 8B & 70B (April 2024):**
+    *   The initial release, providing a highly efficient 8B model and a powerful 70B model for large-scale applications.
+    *   Available as `Meta-Llama-3-8B-Instruct` and `Meta-Llama-3-70B-Instruct`.
+
+*   **Llama 3.2 (Announced 2024):**
+    *   Introduced lightweight models designed specifically to run on edge devices like phones and tablets.
+    *   Focuses on enabling on-device AI experiences.
+
+*   **Llama 3.3 (Announced 2024):**
+    *   A continuation of the family, with models like `Llama-3.3-70B-Instruct` offering further refinements and capabilities.
 
 **Input/Output:** All Llama 3 models currently accept text input and generate text and code as output.
 
@@ -52,13 +56,14 @@ Llama 3 is released under a **custom commercial license**. Users must review and
 
 ### b. Documentation
 
-Official documentation and getting started guides are available at: [https://llama.meta.com/get-started/](https://llama.meta.com/get-started/)
+Official documentation and overviews are available at: [https://www.llama.com/docs/overview/]
 
 ### c. On-Device Deployment (e.g., Qualcomm Snapdragon)
 
-*   The 8B models are particularly suited for on-device scenarios.
-*   Quantized versions (e.g., GGUF, ONNX-compatible formats) are crucial for efficient edge deployment.
-*   Tools like `llama.cpp` and ONNX Runtime are commonly used for running such models on devices like those powered by Snapdragon processors. Qualcomm's official support for Llama 3 suggests optimized pathways for their hardware.
+*   The smaller models (8B, 3.2) are specifically designed for on-device scenarios.
+*   **ExecuTorch:** Meta provides example code using **ExecuTorch** to demonstrate how to run Llama 3 models efficiently on mobile devices.
+*   **Llama Recipes:** For practical examples of fine-tuning, deployment, and evaluation, the official [Llama Recipes GitHub repository](https://github.com/meta-llama/llama-recipes) is the primary resource.
+*   Quantized versions (e.g., GGUF, ONNX-compatible formats) are crucial for efficient edge deployment. Tools like `llama.cpp` and ONNX Runtime are commonly used for running such models on devices like those powered by Snapdragon processors.
 
 ## 6. Key Strengths
 
