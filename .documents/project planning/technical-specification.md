@@ -846,7 +846,13 @@ This section details the technical specifications for features and integrations 
     *   Manages the state of collaborative threads (e.g., session IDs, participant tracking).
     *   Handles error conditions and timeouts as defined by Coral Protocol.
 *   **Dependencies:** Potentially a Coral Protocol client library if available, or direct HTTP/WebSocket implementation based on protocol docs.
-*   **Integration Points:** Inter-agent communication pathways, particularly for multi-step, collaborative tasks in e-commerce and enterprise scenarios.
+*   **Integration Points:** E-commerce agent logic, product research workflows.
+
+#### 11.1.4 Voice UI
+*   **Component:** `VoiceInterfaceService`
+*   **Description:** A frontend service that enables hands-free interaction with the e-commerce agents.
+*   **Technology:** **Web Speech API** (or a similar browser-based technology) for speech-to-text and text-to-speech.
+*   **Functionality:** Processes natural language voice commands, routes them to the appropriate agent, and vocalizes the agent's response.
 
 ### 11.2 Vultr Track: Deployment & Enterprise Agent
 
@@ -910,21 +916,24 @@ spec:
 
 ### 11.3 Prosus Track: Agent-Powered E-commerce on Sentient Core
 
-#### 11.3.1 Knowledge Graph User Profiles
+#### 11.3.1 Knowledge Graph Service
 *   **Component:** `KnowledgeGraphService`
-*   **Location:** `snoob-dev/backend/services/knowledge_graph_service.py`
-*   **Technology:** `RDFLib` for graph manipulation and persistence (e.g., to a local file or a simple triple store).
+*   **Description:** Manages the creation, storage, and querying of the user-centric knowledge graph, which is augmented by real-time search.
+*   **Technology:** `RDFLib` for graph manipulation, **ChromaDB** for vector storage, and the **Tavily Search API** for external product research.
 *   **Schema:** Defined in `snoob-dev/backend/models/knowledge_graph_schema.py` (e.g., User, Product, Preference, Interaction entities and relationships).
-*   **Functionality:** CRUD operations for user profiles, querying user preferences and history.
+*   **Functionality:** CRUD operations for user profiles, querying user preferences and history, and enriching profiles with search results.
+*   **Integration Points:** E-commerce agent logic.
 
-#### 11.3.2 Tavily API Integration
-*   **Component:** `TavilyService`
-*   **Location:** `snoob-dev/backend/services/tavily_service.py`
-*   **Functionality:** Client for Tavily API, handling search queries and result parsing.
-*   **Configuration:** `TAVILY_API_KEY` environment variable.
+#### 11.3.2 Voice UI
+*   **Component:** `VoiceInterfaceService`
+*   **Description:** A frontend service that enables hands-free interaction with the e-commerce agents.
+*   **Technology:** **Web Speech API** (or a similar browser-based technology) for speech-to-text and text-to-speech.
+*   **Functionality:** Processes natural language voice commands, routes them to the appropriate agent, and vocalizes the agent's response.
+*   **Integration Points:** Frontend UI, E-commerce Agent Pack.
 
-#### 11.3.3 E-commerce Agents
-*   **Location:** `snoob-dev/src/agents/ecommerce/` (e.g., `food_ordering_agent.py`, `travel_booking_agent.py`).
+#### 11.3.3 E-commerce Agent Pack
+*   **Description:** A collection of specialized agents designed to provide an intelligent and personalized e-commerce experience.
+*   **Location:** `snoob-dev/src/agents/ecommerce/` (e.g., `product_research_agent.py`, `personal_shopper_agent.py`).
 *   **Key Integrations:** `GroqService`, `KnowledgeGraphService`, `TavilyService`, `FetchAIAdapter`, `CoralMessageHandler`.
 
 ### 11.4 Qualcomm Track: On-Device Edge AI Utility Generator
@@ -938,7 +947,7 @@ spec:
 #### 11.4.2 Key Technologies & Features for Qualcomm Track
 *   **Inference Runtime:** **ONNX Runtime** is the designated runtime. The implementation will follow a strict pipeline: models will be converted to the `.onnx` format, quantized to 8-bit or 4-bit for efficiency, and then converted to the final `.ort` format for deployment.
 *   **Hardware Acceleration:** Inference will be executed using the **Qualcomm QNN Execution Provider** to leverage the full power of the Snapdragon SoC's dedicated AI hardware (e.g., Hexagon DSP), with the CPU provider as a fallback.
-*   **Packaging:** Techniques for creating standalone executables from Python scripts (e.g., PyInstaller, cx_Freeze) or providing a self-contained directory with a run script. Sandboxing knowledge from WebContainer work will be applied.
+*   **Packaging & UI:** The generated utility will be a standalone Python application. The user interface will be kept simple, implemented with a lightweight library like **Tkinter** or a local web server. Packaging will leverage techniques like PyInstaller or cx_Freeze, applying sandboxing principles learned from WebContainer work.
 *   **Offline Core:** Generated utility's core AI functionality must operate without internet access. The Groq/Llama 3 dependency is for the *generation phase* on the Sentient Core platform only.
 
 ## 12. Conclusion

@@ -442,7 +442,7 @@ This section outlines the strategic adaptation of the Genesis Agentic Developmen
 
 #### **8.4 Qualcomm Track: On-Device Edge AI Utility Generator**
 
-*   **Objective:** Create an innovative Edge AI Utility Generator module within Snoob-Dev that generates Python code for on-device consumer utility applications targeting Snapdragon X Elite.
+*   **Objective:** Create an innovative Edge AI Utility Generator module within Sentient Core that generates Python code for on-device consumer utility applications targeting Snapdragon X Elite.
 *   **Key Deliverables:**
     1.  The Edge AI Utility Generator module integrated into Snoob-Dev.
     2.  Demonstration of generating a simple, useful on-device AI utility (e.g., an offline text summarizer or image classifier) whose core AI functionality runs entirely offline on-device.
