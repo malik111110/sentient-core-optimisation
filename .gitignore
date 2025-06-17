@@ -41,8 +41,11 @@ yarn-error.log*
 next-env.d.ts
 
 # things
-.documents\agent dev roles
-.windsurf
-.trae
-.trae\rules
+.documents\agent dev roles*
+*\.windsurf*
+*\.trae*
+*\.trae\rules*
+*\.trae\rules\rules.md
+*\.trae\rules\rules.md
+*\.trae\rules\rules.md
 .documents\concepts and roadmaps
