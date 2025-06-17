@@ -174,10 +174,10 @@ To empower creators, entrepreneurs, and development teams to bring their digital
 - **Multi-Region**: Global deployment for low latency
 
 ### 5.2 Technology Stack
-- **Backend**: FastAPI 0.104+, Python 3.12, SQLAlchemy 2.0
-- **Frontend**: Next.js 15.3, React 19, TypeScript 5.3+
-- **Database**: PostgreSQL 16, Redis for caching
-- **AI/ML**: AutoGen + LangGraph, Claude 3.5 Sonnet, GPT-4 Turbo
+- **Backend**: FastAPI 0.115+, Python 3.12, SQLAlchemy 2.0
+- **Frontend**: Next.js 15, React 19, TypeScript 5.6
+- **Database**: PostgreSQL 16, Redis for caching, ChromaDB for vectors
+- **AI/ML (Hackathon Stack)**: LangGraph, Groq API (Llama 3), Fetch.ai uAgents, Coral Protocol, ONNX Runtime
 - **Infrastructure**: Docker, Kubernetes, Terraform
 - **Monitoring**: Prometheus, Grafana, Sentry
 
@@ -207,25 +207,13 @@ To empower creators, entrepreneurs, and development teams to bring their digital
 - **Revenue**: $100K ARR by end of year 1
 - **User Engagement**: 70% monthly active users
 
-## 7. Development Roadmap
+## 7. Development Roadmaps
 
-### 7.1 MVP (Months 1-3)
-- Requirements intelligence and clarification system
-- Basic code generation for React/Next.js applications
-- Secure sandbox execution environment
-- Simple preview and export functionality
+Our development strategy is detailed in two separate, focused roadmaps:
 
-### 7.2 V1.0 (Months 4-6)
-- Full-stack generation (frontend + backend + database)
-- Advanced testing and quality assurance
-- Team collaboration features
-- Cloud deployment integration
+- **[Hackathon Roadmap](./roadmaps/HACKATHON_ROADMAP.md)**: This document outlines the specific sprints, deliverables, and timeline for the 'Raise Your Hack' competition.
 
-### 7.3 V2.0 (Months 7-12)
-- Multi-framework support (Vue, Angular, Svelte)
-- Advanced architecture patterns (microservices, serverless)
-- Enterprise features (SSO, audit logs, compliance)
-- AI model fine-tuning and customization
+- **[Long-Term Product Roadmap](./roadmaps/LONG_TERM_ROADMAP.md)**: This document details our broader, strategic vision for the Sentient Core platform, including post-MVP features and long-term goals.
 
 ## 8. Risk Assessment
 
