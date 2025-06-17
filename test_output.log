@@ -1,0 +1,41 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.3, pytest-8.4.0, pluggy-1.6.0 -- L:\python agents\snoob-dev\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: L:\python agents\snoob-dev
+plugins: anyio-4.9.0, langsmith-0.3.45, mock-3.14.1
+collecting ... collected 3 items
+
+tests/clients/test_groq_client.py::test_get_completion_success FAILED    [ 33%]
+tests/clients/test_groq_client.py::test_get_completion_api_error PASSED  [ 66%]
+tests/clients/test_groq_client.py::test_groq_service_no_api_key PASSED   [100%]
+
+================================== FAILURES ===================================
+_________________________ test_get_completion_success _________________________
+
+groq_service = <src.clients.groq_client.GroqService object at 0x0000021DABC09A90>
+mock_groq_client = <MagicMock id='2326459954048'>
+
+    def test_get_completion_success(groq_service, mock_groq_client):
+        """Tests a successful completion from the Groq API."""
+        # Arrange
+        mock_response = MagicMock()
+        mock_response.choices[0].message.content = "This is a test completion."
+        mock_groq_client.chat.completions.create.return_value = mock_response
+    
+        # Act
+        prompt = "Test prompt"
+        result = groq_service.get_completion(prompt)
+    
+        # Assert
+>       assert result == "This is a test completion."
+E       AssertionError: assert 'Error: Could...on from Groq.' == 'This is a test completion.'
+E         
+E         - This is a test completion.
+E         + Error: Could not get completion from Groq.
+
+tests\clients\test_groq_client.py:34: AssertionError
+---------------------------- Captured stdout call -----------------------------
+An error occurred while communicating with Groq API: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+=========================== short test summary info ===========================
+FAILED tests/clients/test_groq_client.py::test_get_completion_success - Asser...
+========================= 1 failed, 2 passed in 1.34s =========================

@@ -44,6 +44,7 @@ def test_get_completion_api_error(groq_service, mock_groq_client):
 
     # Act
     result = groq_service.get_completion("Test prompt")
+    print(f"[DEBUG] Result from get_completion on error: '{result}'")
 
     # Assert
     assert result == "Error: Could not get completion from Groq."
