@@ -61,16 +61,45 @@ The Coral ecosystem involves several key types of participants:
 *   **Application Developers:** Those who build applications that leverage Coral-compatible agents to provide advanced features or services.
 *   **Application Backends:** Existing server-side components of applications. Coral is designed to integrate with these, often by deploying a local Coral Server instance.
 
-## 4. How to Integrate (Conceptual)
+## 4. How to Integrate (Server-Side)
 
-While detailed SDKs or step-by-step coding guides were not the primary focus of the fetched overview docs, the conceptual integration points are:
+Based on the `coral-server` GitHub repository, here are the concrete steps to run the server component. 
 
-*   **"Coralizing" an Agent:** This involves adapting an existing agent to communicate via the Coral Server, register its capabilities, and adhere to the protocol's standards for messaging and identity.
-*   **Interacting with Coral Server:** Agents and applications will likely interact with a Coral Server instance (either a globally available one or a locally deployed one) to:
-    *   Register/publish agent advertisements.
-    *   Discover other agents.
-    *   Send and receive messages through communication threads.
-    *   Manage data and state via the server's memory handling.
+**Disclaimer:** As of the latest review, the Coral Protocol project is in its early stages. The `coral-server` is available, but a corresponding public Python client (`interface-agent`) is not. Therefore, the client-side integration remains conceptual until a client library is released.
+
+### a. Running the Coral Server
+
+The server is a Java application that can be run from the command line.
+
+1.  **Download the Server:** Obtain the `coral-server.jar` file from the project's releases.
+2.  **Run the Server:** Execute the following command in your terminal. The `sse` mode (Server-Sent Events) is recommended for use with the MCP Inspector.
+
+    ```bash
+    java -jar coral-server.jar --mode sse --port 8080
+    ```
+
+3.  **Connect with MCP Inspector:** Once running, you can connect to the server using an MCP inspection tool at the SSE URL: `http://localhost:8080/sse`.
+
+### b. Available MCP Tools (Server-Side)
+
+The `coral-server` exposes the following tools for agents to use:
+
+*   **Agent Registration**
+    *   `register_agent`: Registers an agent with the system.
+
+*   **Thread Management**
+    *   `create_thread`: Create a new thread with participants.
+    *   `add_participant`: Add a participant to a thread.
+    *   `remove_participant`: Remove a participant from a thread.
+    *   `close_thread`: Close a thread with a summary.
+
+*   **Messaging**
+    *   `send_message`: Send a message to a thread.
+    *   `wait_for_mentions`: Wait for new messages mentioning an agent.
+
+### c. Client-Side Integration (Conceptual)
+
+A Python client would interact with these tools by making requests to the running Coral Server. For example, it would call the `register_agent` tool to make itself known to the agent society and then use `send_message` to communicate within a thread. Without a public client library, the exact implementation details cannot be documented.
 
 ## 5. Key Benefits
 
@@ -79,4 +108,4 @@ While detailed SDKs or step-by-step coding guides were not the primary focus of 
 *   **Reusability:** Promotes the sharing and reuse of agent capabilities.
 *   **Foundation for Complex Systems:** Provides building blocks for sophisticated multi-agent applications.
 
-For detailed instructions on running a Coral Server, specific API interactions, or examples, refer to the "Quick Start," "Examples," and "Guide" sections of the [official Coral Protocol Documentation](https://docs.coralprotocol.org/).
+For the latest updates, refer to the [Coral Server GitHub repository](https://github.com/Coral-Protocol/coral-server) and the [official Coral Protocol Documentation](https://docs.coralprotocol.org/).
