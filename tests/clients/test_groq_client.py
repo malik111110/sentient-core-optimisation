@@ -10,7 +10,7 @@ def mock_groq_client(mocker):
     return mock_client
 
 @pytest.fixture
-def groq_service(mocker):
+def groq_service(mocker, mock_groq_client):
     """Provides an instance of GroqService with a mocked environment variable."""
     def mock_os_get(key, default=None):
         if key == 'GROQ_API_KEY':
@@ -44,7 +44,6 @@ def test_get_completion_api_error(groq_service, mock_groq_client):
 
     # Act
     result = groq_service.get_completion("Test prompt")
-    print(f"[DEBUG] Result from get_completion on error: '{result}'")
 
     # Assert
     assert result == "Error: Could not get completion from Groq."
