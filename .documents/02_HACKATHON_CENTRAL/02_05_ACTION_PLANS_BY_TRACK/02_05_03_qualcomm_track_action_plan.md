@@ -1,87 +1,111 @@
-# Action Plan: Qualcomm Track - Edge AI Utility
+# Qualcomm Track Action Plan: Edge AI Utility
 
-**Version:** 1.0
+**Version:** 2.0 (Epic/Story Aligned)
 **Date:** June 18, 2025
-**Status:** Initial Draft
+**Status:** In Refactoring
+**Parent Epic:** EPIC-QUALCOMM (Develop On-Device Edge AI Utility Generator)
+**Related Task Breakdown:** [../../../01_PROJECT_PLANNING/01_04_task_breakdown.md#EPIC-QUALCOMM](README.md)
 
 ---
 
 ## 1. Objective
 
-To design and build a practical, high-performance Edge AI utility that runs entirely on-device, leveraging the power of Snapdragon hardware. This plan details the steps to meet the Qualcomm sponsor track requirements, focusing on offline-first capabilities and efficient on-device inference.
+To design and build a practical, high-performance Edge AI utility that runs entirely on-device, leveraging the power of Snapdragon hardware. This plan details the steps to meet the Qualcomm sponsor track requirements, focusing on offline-first capabilities and efficient on-device inference, organized by stories under EPIC-QUALCOMM.
 
-## 2. Key Technologies
+## 2. Stories & Detailed Tasks
 
-- **Inference Runtime:** ONNX Runtime
-- **Execution Provider:** Qualcomm QNN Execution Provider
-- **Model Format:** ONNX (`.ort`)
-- **Target Hardware:** Snapdragon X Elite
-- **Application:** Python (e.g., using Tkinter or a simple web server for UI)
+### STORY-QUALCOMM-1: Research & Select On-Device AI Model
+-   **Description:** Identify suitable small, efficient model (e.g., text summarizer, code snippet generator) convertible to ONNX.
+-   **Assigned:** AGENT-RESEARCH / AGENT-AI
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Qual-1.1:** Define criteria for model selection (size, performance, task suitability for an edge utility, ONNX compatibility, existing pre-trained versions).
+        -   *Acceptance Criteria:* Clear selection criteria documented.
+    -   **Task-Qual-1.2:** Research and shortlist potential models (e.g., from Hugging Face: DistilBERT variants, MobileBERT, small T5 variants, or specialized models for chosen utility).
+        -   *Acceptance Criteria:* List of 3-5 candidate models with pros/cons.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_05_llama3_model_guide.md` (for context on model characteristics, though Llama3 itself might be too large for initial utility).
+    -   **Task-Qual-1.3:** Select the primary model for the Edge AI utility.
+        -   *Acceptance Criteria:* Final model selected and justification documented.
+    -   **Task-Qual-1.4:** Research ONNX Runtime specifics for on-device deployment, including the Qualcomm QNN Execution Provider.
+        -   *Acceptance Criteria:* Understanding of model conversion, quantization, and QNN EP usage is documented.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_08_onnx_runtime_guide.md`.
 
-## 3. Action Steps
+### STORY-QUALCOMM-2: Convert & Optimize Model for On-Device Inference
+-   **Description:** Convert to ONNX, quantize to `.ort` format for QNN Execution Provider.
+-   **Assigned:** AGENT-AI
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Qual-2.1:** Obtain the pre-trained selected model (e.g., download from Hugging Face).
+        -   *Acceptance Criteria:* Model files are locally available.
+    -   **Task-Qual-2.2:** Convert the model to ONNX format using appropriate tools (e.g., `torch.onnx.export`, `tf2onnx`).
+        -   *Acceptance Criteria:* `.onnx` model file is generated and passes basic validation.
+    -   **Task-Qual-2.3:** Apply quantization (e.g., 8-bit static or dynamic) to the ONNX model to reduce size and improve inference speed.
+        -   *Acceptance Criteria:* Quantized ONNX model is generated.
+    -   **Task-Qual-2.4:** Convert the quantized ONNX model to the `.ort` format, optimized for ONNX Runtime.
+        -   *Acceptance Criteria:* `.ort` model file is generated.
+    -   **Task-Qual-2.5:** Test the `.ort` model with ONNX Runtime on a development machine (CPU first) to ensure correctness.
+        -   *Acceptance Criteria:* Model loads and produces expected outputs.
+    -   **References:** `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_08_onnx_runtime_guide.md`.
 
-### Phase 1: Research & Model Selection (Lead: AGENT-RESEARCH)
+### STORY-QUALCOMM-3: Develop "Edge AI Utility" Application
+-   **Description:** Python app, ONNX Runtime integration, simple UI (Tkinter/web).
+-   **Assigned:** AGENT-BACKEND / AGENT-FRONTEND (if web UI)
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Qual-3.1:** Define the specific functionality and user interface for the chosen utility (e.g., "Offline Text Summarizer," "On-Device Code Formatter").
+        -   *Acceptance Criteria:* Utility specification and basic UI wireframes are complete.
+    -   **Task-Qual-3.2:** Develop the core Python application logic for the utility.
+        -   *Acceptance Criteria:* Core functionality (without AI model yet) is implemented.
+    -   **Task-Qual-3.3:** Integrate ONNX Runtime into the Python application to load and run the `.ort` model.
+        -   *Details:* Implement inference session creation, input preprocessing, model execution, and output postprocessing.
+        -   *Acceptance Criteria:* Application can successfully perform inference using the model.
+    -   **Task-Qual-3.4:** Configure the application to use the Qualcomm QNN Execution Provider. Include fallbacks to CPU EP if QNN is unavailable.
+        -   *Acceptance Criteria:* Application attempts to use QNN EP first.
+    -   **Task-Qual-3.5:** Develop a simple user interface for the utility.
+        -   *Options:* Tkinter for a native desktop feel, or a very lightweight local web server (e.g., Flask/FastAPI with minimal HTML/JS) if a browser-based UI is preferred.
+        -   *Acceptance Criteria:* UI allows user input and displays model output.
+    -   **Task-Qual-3.6:** Package the application and model for easy distribution/testing (e.g., as a standalone script with dependencies, or a simple installer).
+        -   *Acceptance Criteria:* Application can be run on a target-like environment.
 
-1.  **Select a Suitable AI Model:**
-    *   [ ] Identify a small, efficient model suitable for an on-device utility (e.g., a code snippet generator, a text summarizer, or an image classifier).
-    *   [ ] The model must be convertible to the ONNX format.
-    *   [ ] Prioritize models with a good balance of performance and accuracy.
+### STORY-QUALCOMM-4: Test & Benchmark Utility on Snapdragon Hardware (Simulated/Actual)
+-   **Description:** Performance testing, QNN EP validation.
+-   **Assigned:** AGENT-AI / AGENT-DEVOPS
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Qual-4.1:** If actual Snapdragon X Elite hardware is unavailable, set up a development environment that best simulates it (e.g., ARM64 VM, or focus on cross-platform ONNX Runtime testing).
+        -   *Acceptance Criteria:* Test environment is ready.
+    -   **Task-Qual-4.2:** Deploy and run the Edge AI utility on the test environment.
+        -   *Acceptance Criteria:* Utility runs successfully.
+    -   **Task-Qual-4.3:** Verify that the Qualcomm QNN Execution Provider is being utilized (check logs or use ONNX Runtime APIs if available).
+        -   *Acceptance Criteria:* QNN EP usage confirmed.
+    -   **Task-Qual-4.4:** Perform basic performance benchmarking (e.g., inference latency, resource usage).
+        -   *Acceptance Criteria:* Performance metrics are recorded.
+    -   **Task-Qual-4.5:** Identify any performance bottlenecks or issues and attempt to optimize.
+        -   *Acceptance Criteria:* Optimization efforts are documented.
 
-2.  **Research ONNX Runtime & QNN:**
-    *   [ ] Review the official documentation for ONNX Runtime and the Qualcomm QNN Execution Provider.
-    *   [ ] Understand the process for converting models to the `.ort` format and quantizing them for performance.
-
-### Phase 2: Model Conversion & Optimization (Lead: AGENT-AI)
-
-1.  **Convert Model to ONNX Format:**
-    *   [ ] Obtain the pre-trained model (e.g., from Hugging Face).
-    *   [ ] Use the appropriate tools (e.g., `torch.onnx.export`) to convert the model to the ONNX format.
-
-2.  **Quantize and Optimize the Model:**
-    *   [ ] Apply quantization techniques (e.g., dynamic or static quantization) to reduce the model size and improve inference speed.
-    *   [ ] The final model should be saved in the `.ort` format, ready for use with ONNX Runtime.
-
-### Phase 3: Application Development (Lead: AGENT-BACKEND)
-
-1.  **Build the Core Utility Application:**
-    *   [ ] Create a simple Python application that will host the on-device model.
-    *   [ ] The application will provide a basic user interface for interacting with the model (e.g., a text input for a prompt).
-
-2.  **Integrate ONNX Runtime:**
-    *   [ ] Add the ONNX Runtime dependency to the application.
-    *   [ ] Write the code to load the `.ort` model and create an inference session.
-    *   [ ] Configure the inference session to use the Qualcomm QNN Execution Provider.
-
-3.  **Implement Inference Logic:**
-    *   [ ] Create the logic to preprocess user input, run inference on the model, and post-process the output.
-    *   [ ] Ensure the entire process runs offline, without any reliance on cloud services.
-
-### Phase 4: Testing & Demonstration (Lead: AGENT-ARCHITECT)
-
-1.  **Test on Target Hardware:**
-    *   [ ] If possible, test the application on a device with a Snapdragon X Elite processor to validate performance.
-    *   [ ] If target hardware is not available, test on a standard machine and document the expected performance gains on Snapdragon.
-
-2.  **Prepare Demonstration:**
-    *   [ ] Create a demonstration that clearly shows the utility running entirely on-device.
-    *   [ ] Highlight the speed and efficiency of the on-device inference.
-    *   [ ] Explain how the utility could be integrated into a larger application or operating system.
-
-## 4. Connecting to Our Users
-
-Developing an Edge AI Utility for the Qualcomm track aligns with Sentient Core's principle of **Unconstrained Innovation** and demonstrates its adaptability to diverse technological frontiers, benefiting our user personas (see `../../../00_CONCEPTUAL_FRAMEWORK/00_03_user_personas.md`):
-
-*   **For Alex, The Technical Entrepreneur:** The ability of Sentient Core to generate utilities for edge devices like those powered by Snapdragon X Elite opens up new avenues for Alex. It means the platform isn't limited to cloud-based applications but can help create products that leverage the unique capabilities of on-device AI (offline functionality, low latency, privacy). This expands the potential market and types of solutions Alex can build rapidly.
-
-*   **For Morgan, The Development Team Lead:** The Qualcomm track showcases how Sentient Core can assist Morgan's team in exploring and adopting new technologies like on-device inference with ONNX Runtime and specialized hardware EPs (QNN). Instead of a steep learning curve for each new platform, Sentient Core can abstract some of the complexity, allowing the team to prototype and build for edge devices more efficiently. This helps keep the team's skills current and enables them to tackle a wider range of projects.
-
-While the immediate deliverable is a specific utility, the underlying message is that Sentient Core is designed to be extensible and to empower users to innovate across the full spectrum of computing environments, from cloud to edge.
+### STORY-QUALCOMM-5: Prepare Qualcomm Track Demo Script & Assets
+-   **Description:** Finalize demo flow and materials for Qualcomm presentation.
+-   **Assigned:** AGENT-STRATEGIC-EVANGELIST / AGENT-ARCHITECT
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Qual-5.1:** Outline the demo flow, highlighting the on-device nature, offline capability, and performance of the Edge AI utility.
+        -   *Acceptance Criteria:* Clear, concise demo script is drafted.
+    -   **Task-Qual-5.2:** Emphasize how Sentient Core's architecture facilitates the creation of such edge utilities (even if the generator itself is a future concept).
+        -   *Acceptance Criteria:* Demo narrative connects to Sentient Core.
+    -   **Task-Qual-5.3:** Create any necessary visual aids or presentation slides.
+        -   *Acceptance Criteria:* Supporting materials are ready.
+    -   **Task-Qual-5.4:** Rehearse the demo multiple times.
+        -   *Acceptance Criteria:* Demo can be delivered confidently.
+    -   **Task-Qual-5.5:** Record a video walkthrough of the Edge AI utility in action.
+        -   *Acceptance Criteria:* High-quality video demo is produced.
 
 ---
 
-## 5. Success Criteria
+## 3. Success Criteria for Qualcomm Track
 
-- A functional Edge AI utility is created that runs entirely offline.
+- A functional Edge AI utility is created that runs entirely offline on a target device/environment.
 - The utility uses a quantized ONNX model (`.ort`) for efficient on-device inference.
-- The application is configured to leverage the Qualcomm QNN Execution Provider.
-- The solution effectively demonstrates the potential of on-device AI on Snapdragon hardware.
+- The application is configured to attempt leveraging the Qualcomm QNN Execution Provider.
+- The solution effectively demonstrates the potential of on-device AI on Snapdragon hardware (or simulated environment).
+- The demo clearly articulates the benefits of on-device AI and its connection to the broader Sentient Core vision.
+- All Qualcomm track requirements from the `02_02_raise_your_hack_overview.md` are met.
