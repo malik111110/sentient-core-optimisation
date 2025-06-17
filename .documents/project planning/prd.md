@@ -256,7 +256,7 @@ This section outlines additional product requirements and features specifically 
 
 ### 9.2 Vultr Track: Enterprise Agentic Workflow Platform
 
-*   **FR-VULTR-001 (Vultr Deployment):** The Sentient Core platform (backend and frontend) must be successfully deployed and publicly accessible on Vultr infrastructure.
+*   **FR-VULTR-001 (Core Platform Deployment):** The Sentient Core platform must be deployed and demonstrated on Vultr's cloud infrastructure. The backend, built with **FastAPI**, is chosen for its native asynchronous capabilities, which are essential for efficiently orchestrating I/O-bound agent tasks.
     *   **NFR-VULTR-001.1 (Scalability):** The deployment should demonstrate basic scalability considerations for an enterprise application.
     *   **NFR-VULTR-001.2 (Reliability):** The deployed application should be stable and reliably perform its demonstrated functions.
 *   **FR-VULTR-002 (Enterprise Agent Demo):** The platform must showcase at least one functional enterprise agent (e.g., "Automated Market Research & Competitor Analysis Agent").
@@ -277,7 +277,7 @@ This section outlines additional product requirements and features specifically 
 
 *   **FR-QUALCOMM-001 (Utility Generation Module):** Sentient Core must include a module that allows users to define requirements for a simple consumer utility application.
 *   **FR-QUALCOMM-002 (Code Generation):** The platform must use Groq/Llama 3 (and/or Code Llama) to automatically generate Python code for the specified utility application.
-*   **FR-QUALCOMM-003 (On-Device & Offline Core AI):** The core AI functionality of the *generated* utility application must run entirely on-device (targeting Snapdragon X Elite) and operate without requiring an internet connection.
+*   **FR-QUALCOMM-003 (On-Device & Offline Core AI):** The core AI functionality of the *generated* utility application must run entirely on-device (targeting Snapdragon X Elite) and operate without an internet connection. This will be achieved by packaging models in the **`.ort` format** and executing them with **ONNX Runtime** using the **Qualcomm QNN Execution Provider** for hardware acceleration.
     *   **NFR-QUALCOMM-003.1 (Cross-Platform Compatibility):** The generated utility should be compatible with Windows, macOS, and Linux, as per track requirements.
 *   **FR-QUALCOMM-004 (Developer-Ready Output):** The generated utility should be provided with clear setup/run instructions, suitable for a developer audience (polished consumer UI for the *generated app* is not the primary focus).
 *   **NFR-QUALCOMM-005 (No Internet for Core Utility):** The Sentient Core platform itself (which *generates* the utility) can be cloud-based, but the *generated utility's* primary function must be offline.
