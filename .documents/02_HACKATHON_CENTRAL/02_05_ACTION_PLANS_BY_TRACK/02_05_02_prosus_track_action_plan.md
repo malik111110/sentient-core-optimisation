@@ -65,7 +65,19 @@ To develop an innovative, agent-powered e-commerce solution that leverages the S
     *   [ ] Create a compelling demonstration that showcases the personalized shopping experience.
     *   [ ] Highlight the use of the knowledge graph, the product research agent, and the voice UI.
 
-## 4. Success Criteria
+## 4. Connecting to Our Users
+
+This Prosus track's e-commerce solution directly addresses the aspirations and challenges of our key user personas (see `../../../00_CONCEPTUAL_FRAMEWORK/00_03_user_personas.md`):
+
+*   **For Alex, The Technical Entrepreneur:** The ability to rapidly develop an e-commerce platform with advanced features like personalized recommendations (via knowledge graph) and voice UI allows Alex to create highly differentiated and engaging customer experiences. This is crucial for a startup looking to carve out a niche and compete on innovation, not just price. Sentient Core, by providing the agents and infrastructure for these features, accelerates Alex's time-to-market for such sophisticated offerings.
+
+*   **For Morgan, The Development Team Lead:** Building an intelligent e-commerce solution often involves complex integrations (search APIs, recommendation engines, voice services). Sentient Core's agent-based approach, as demonstrated in this track, provides Morgan's team with a structured way to implement these features. The platform handles the underlying complexity of agent communication and knowledge management, allowing the team to focus on the business logic of the e-commerce experience rather than getting bogged down in low-level plumbing. This boosts productivity and allows for the creation of high-value features more efficiently.
+
+By showcasing an agent-powered e-commerce solution, we demonstrate Sentient Core's ability to build applications that are not only functional but also intelligent, personalized, and capable of delivering next-generation user experiences.
+
+---
+
+## 5. Success Criteria
 
 - A functional e-commerce agent pack is created and integrated into the Sentient Core platform.
 - The system can build and utilize a knowledge graph of user preferences to provide personalized recommendations.

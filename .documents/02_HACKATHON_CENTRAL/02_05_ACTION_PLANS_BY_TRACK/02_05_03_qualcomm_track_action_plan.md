@@ -67,7 +67,19 @@ To design and build a practical, high-performance Edge AI utility that runs enti
     *   [ ] Highlight the speed and efficiency of the on-device inference.
     *   [ ] Explain how the utility could be integrated into a larger application or operating system.
 
-## 4. Success Criteria
+## 4. Connecting to Our Users
+
+Developing an Edge AI Utility for the Qualcomm track aligns with Sentient Core's principle of **Unconstrained Innovation** and demonstrates its adaptability to diverse technological frontiers, benefiting our user personas (see `../../../00_CONCEPTUAL_FRAMEWORK/00_03_user_personas.md`):
+
+*   **For Alex, The Technical Entrepreneur:** The ability of Sentient Core to generate utilities for edge devices like those powered by Snapdragon X Elite opens up new avenues for Alex. It means the platform isn't limited to cloud-based applications but can help create products that leverage the unique capabilities of on-device AI (offline functionality, low latency, privacy). This expands the potential market and types of solutions Alex can build rapidly.
+
+*   **For Morgan, The Development Team Lead:** The Qualcomm track showcases how Sentient Core can assist Morgan's team in exploring and adopting new technologies like on-device inference with ONNX Runtime and specialized hardware EPs (QNN). Instead of a steep learning curve for each new platform, Sentient Core can abstract some of the complexity, allowing the team to prototype and build for edge devices more efficiently. This helps keep the team's skills current and enables them to tackle a wider range of projects.
+
+While the immediate deliverable is a specific utility, the underlying message is that Sentient Core is designed to be extensible and to empower users to innovate across the full spectrum of computing environments, from cloud to edge.
+
+---
+
+## 5. Success Criteria
 
 - A functional Edge AI utility is created that runs entirely offline.
 - The utility uses a quantized ONNX model (`.ort`) for efficient on-device inference.

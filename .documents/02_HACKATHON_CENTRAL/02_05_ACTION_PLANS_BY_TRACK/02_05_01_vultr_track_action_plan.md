@@ -72,7 +72,18 @@ To deploy the Sentient Core platform on Vultr's cloud infrastructure and demonst
     *   [ ] Verify that the agentic workflow runs successfully in the Vultr environment.
     *   [ ] Prepare a demonstration script and record a video walkthrough.
 
-## 4. Success Criteria
+## 4. Connecting to Our Users
+
+This Vultr track directly addresses the needs of key user personas (see `../../../00_CONCEPTUAL_FRAMEWORK/00_03_user_personas.md`):
+
+*   **For Morgan, The Development Team Lead:** Deploying Sentient Core on Vultr provides a standardized, enterprise-grade environment. This aligns with Morgan's goals of ensuring architectural consistency, standardizing development processes, and delivering high-quality software. The containerized approach (Docker) and reverse proxy setup (Nginx) reflect best practices that Morgan would champion, alleviating pain points around complex stack management and ensuring maintainability.
+*   **For Alex, The Technical Entrepreneur:** A robust Vultr deployment means Alex can take their rapidly developed MVPs (built with Sentient Core) and scale them reliably. This addresses Alex's need for speed and quality, ensuring that the technology underpinning their vision is solid and can grow with their business, avoiding the pitfalls of solutions that are easy to start but hard to scale.
+
+By showcasing a seamless deployment to a leading cloud provider like Vultr, we demonstrate that Sentient Core is not just a development tool but a complete platform for bringing sophisticated applications to life and managing them effectively.
+
+---
+
+## 5. Success Criteria
 
 - The Sentient Core platform is successfully deployed and accessible on a Vultr instance.
 - The backend and frontend services are running in Docker containers, orchestrated by Docker Compose.
