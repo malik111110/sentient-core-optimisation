@@ -5,11 +5,11 @@
 
 ## 1. Overall Project Vision
 
-Sentient Core aims to be an advanced AI-driven development platform that transforms natural language requirements into production-ready applications through intelligent multi-agent orchestration. This roadmap outlines the planned development phases, including a focused sprint for the 'Raise Your Hack' competition.
+Sentient Core is an advanced AI-driven development platform designed to transform natural language requirements into production-ready applications via intelligent multi-agent orchestration. The immediate focus of this roadmap is the 'Raise Your Hack' competition, which will serve as the launchpad for delivering the initial, tangible version of Sentient Core, showcasing its core capabilities and innovative potential by addressing specific sponsor challenges.
 
 ## 2. Original Project Phases (Conceptual Timeline)
 
-*This is an estimated timeline for the broader project vision, which will run in parallel and extend beyond the hackathon sprint.*
+*This is an estimated timeline for the broader project vision. The 'Raise Your Hack' competition deliverables will form the foundational MVP, which these subsequent phases will build upon and extend.*
 
 *   **Phase 1: Foundation & Core Intelligence (Estimated Weeks 1-4 of project start)**
     *   Multi-Agent Infrastructure Setup (AutoGen/AG2, LangGraph).
@@ -37,36 +37,27 @@ Sentient Core aims to be an advanced AI-driven development platform that transfo
 *This sprint focuses on delivering the requirements for the Vultr, Prosus, and Qualcomm tracks, integrating specified sponsor technologies.*
 
 ### Week 1: Hackathon Preparation & Foundational Tech Integration
-*   **Goal:** Establish core technology integrations and begin track-specific foundational work.
-*   **Core Tech (Parallel):**
-    *   **Groq API & Llama 3:** Implement `GroqService`, test basic LLM calls (T8.1.1.1, T8.1.1.3).
-    *   **Fetch.ai:** Initial research and `FetchAIAdapter` stub (T8.1.2.1, part of T8.1.2.2).
-    *   **Coral Protocol:** Initial research and `CoralMessageHandler` stub (T8.1.3.1, part of T8.1.3.2).
-*   **Vultr Track:**
-    *   Dockerize backend and frontend applications (T8.2.1.1, T8.2.1.2).
-    *   Initial Vultr account setup and familiarization.
-*   **Prosus Track:**
-    *   Design Knowledge Graph schema for user profiles (T8.3.1.1).
-    *   Stub `KnowledgeGraphService` and `TavilyService` (part of T8.3.1.2, T8.3.2.1).
-*   **Qualcomm Track:**
-    *   Research on-device inference libraries (ONNX Runtime) and Python app packaging (T8.4.1.4, T8.4.1.5).
-    *   Design Edge Utility Generator module architecture (T8.4.1.1).
+*   **Goal:** Establish core platform infrastructure (Sentient Core) and integrate foundational hackathon technologies (Groq, Fetch.ai, Coral Protocol).
+*   **Key Deliverables & Technologies:**
+    *   **Platform Core:** Initial setup of Next.js 15 (React 19, Tailwind CSS v4, Shadcn/UI) frontend and FastAPI (Python) backend for Sentient Core.
+    *   **Core Agent Tech:** Implement initial versions of backend clients for **Groq API (Llama 3)**, **Fetch.ai `uAgents`**, and **Coral Protocol** within `src/clients`.
+    *   **Vultr Track:** Initial Vultr account setup; plan for deployment of the Sentient Core platform.
+    *   **Prosus Track:** Design e-commerce agent pack architecture; define knowledge graph schema for user/product profiles; plan Tavily API integration.
+    *   **Qualcomm Track:** Research on-device AI libraries (ONNX Runtime) and application packaging for Snapdragon X Elite; plan Edge AI Utility Generator module.
 
-### Week 2: Hackathon Build Sprint - MVP Development
-*   **Goal:** Develop Minimum Viable Product (MVP) functionality for all three tracks.
-*   **Core Tech (Parallel):**
-    *   **Groq API & Llama 3:** Full integration into agent workflows (T8.1.1.2).
-    *   **Fetch.ai:** Complete `FetchAIAdapter` and test agent registration/discovery (T8.1.2.2, T8.1.2.3, T8.1.2.4).
-    *   **Coral Protocol:** Complete `CoralMessageHandler` and test basic collaborative task (T8.1.3.2, T8.1.3.3, T8.1.3.4).
-*   **Vultr Track:**
-    *   Deploy Snoob-Dev to Vultr (T8.2.1.3, T8.2.1.5).
-    *   Develop MVP of Enterprise Agent Demo (e.g., Market Research Agent) (T8.2.2.1, T8.2.2.2, T8.2.2.3).
-*   **Prosus Track:**
-    *   Implement `KnowledgeGraphService` and `TavilyService` (T8.3.1.2, T8.3.1.3, T8.3.2.1, T8.3.2.2).
-    *   Develop MVP of E-commerce Agent (T8.3.3.1, T8.3.3.2, T8.3.3.3).
-*   **Qualcomm Track:**
-    *   Implement `EdgeUtilityGeneratorService` and UI for requirements (T8.4.1.2, T8.4.1.3).
-    *   Generate and test first on-device utility (T8.4.2.1, T8.4.2.2, T8.4.2.3).
+### Week 2: Core Feature Implementation (Track-Specific)
+*   **Goal:** Develop core functionalities for each hackathon track, leveraging the integrated foundational technologies.
+*   **Vultr Track (Enterprise Agentic Workflow Platform):**
+    *   Implement core agentic workflow orchestration logic within Sentient Core, utilizing **Groq (Llama 3)** for intelligence, **Fetch.ai `uAgents`** for agent management, and **Coral Protocol** for inter-agent communication.
+    *   Develop basic UI elements for defining and monitoring these workflows.
+*   **Prosus Track (Agent-Powered E-commerce):**
+    *   Develop `ECommerceAgentService` incorporating knowledge graph capabilities for user/product profiles.
+    *   Integrate **Tavily API** for enhanced e-commerce search.
+    *   Implement initial voice UI capabilities using the core LLM.
+*   **Qualcomm Track (On-Device Edge AI Utility Generator):**
+    *   Develop the `EdgeUtilityGeneratorService` within Sentient Core, using **Groq (Llama 3)** to generate Python code for utilities.
+    *   Implement UI for users to specify utility requirements.
+    *   Generate, package, and test a first simple on-device utility (e.g., offline image sorter or text summarizer) for Snapdragon X Elite, ensuring core AI runs offline.
 
 ### Week 3: Hackathon Refinement, Testing & Demo Preparation
 *   **Goal:** Stabilize features, conduct thorough testing, and prepare all demonstration materials.

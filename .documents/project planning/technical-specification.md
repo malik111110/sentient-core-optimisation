@@ -1,37 +1,38 @@
 # Sentient Core - Technical Specification
 
-**Version:** 1.0  
-**Date:** January 2025  
-**Status:** Initial Planning Phase
+**Version:** 1.1 (Hackathon MVP Update)
+**Date:** June 17, 2025
+**Status:** Focused on 'Raise Your Hack' MVP Implementation
 
 ---
 
 ## 1. Executive Summary
 
 ### 1.1 Technical Vision
-Sentient Core represents a paradigm shift in software development, leveraging cutting-edge multi-agent AI systems to automate the entire development lifecycle. Built on 2025's most advanced frameworks and patterns, Sentient Core combines AutoGen's evolution to AG2 with LangGraph's graph-based orchestration to create an intelligent, scalable, and secure development platform.
+Sentient Core represents a paradigm shift in software development, leveraging cutting-edge multi-agent AI systems to automate the development lifecycle. Built on advanced frameworks and patterns, Sentient Core utilizes technologies like LangGraph for orchestration. The 'Raise Your Hack' competition will serve as the first practical implementation and demonstration of this technical vision, showcasing core functionalities through targeted solutions for sponsor tracks.
 
-### 1.2 Key Technical Innovations
-- **Graph-Based Agent Orchestration**: LangGraph-powered stateful workflows with conditional routing
-- **Event-Driven Architecture**: A2A (Agent-to-Agent) communication with guaranteed delivery
-- **Multi-Runtime Execution**: Secure sandboxed environments for Python 3.12, Node.js 20, and Go 1.22
-- **Semantic Memory System**: ChromaDB-powered vector embeddings for intelligent context retention
-- **Zero-Trust Security**: Enterprise-grade security with OAuth 2.1 and comprehensive compliance
+### 1.2 Key Technical Innovations (Showcased in Hackathon MVP)
+- **Graph-Based Agent Orchestration**: LangGraph-powered stateful workflows, central to the Vultr enterprise agentic workflow track, utilizing **Fetch.ai uAgents** and **Coral Protocol** for inter-agent communication.
+- **Advanced LLM Integration**: Primary reliance on **Groq API with Llama 3** for complex reasoning, code generation, and natural language understanding across all tracks.
+- **Modular Microservices Architecture**: FastAPI backend services for distinct functionalities (e.g., e-commerce agents, utility generator).
+- **Semantic Memory System**: ChromaDB-powered vector embeddings for the knowledge graph in the Prosus e-commerce track.
+- **On-Device AI Utility Generation**: Leveraging **ONNX Runtime** for creating offline-first AI utilities for the Qualcomm track.
+- **Modern Frontend**: Next.js 15 with React 19 for a responsive and interactive user experience for managing and demonstrating hackathon deliverables.
 
 ---
 
 ## 2. System Architecture
 
-### 2.1 High-Level Architecture
+### 2.1 High-Level Architecture (Hackathon MVP Focus)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Genesis Agentic Platform                     │
+│                       Sentient Core Platform                    │
 ├─────────────────────────────────────────────────────────────────┤
-│  Frontend Layer (Next.js 15 + React 19)                       │
-│  ├─ Server Components + PPR                                    │
-│  ├─ Real-time Collaboration (WebSocket)                        │
-│  └─ Progressive Web App (PWA)                                  │
+│  Frontend Layer (Next.js 15, React 19, Tailwind CSS v4, Shadcn/UI) │
+│  ├─ User Interface for Hackathon Task Definition & Monitoring  │
+│  ├─ Real-time updates via WebSockets (optional for hackathon)  │
+│  └─ Responsive Design for Demos                              │
 ├─────────────────────────────────────────────────────────────────┤
 │  API Gateway & Load Balancer                                   │
 │  ├─ Rate Limiting & Authentication                             │
@@ -383,7 +384,7 @@ class ProjectAggregate:
 # OpenAPI 3.1 Specification
 openapi: 3.1.0
 info:
-  title: Genesis Agentic Development API
+  title: Sentient Core Agentic Development API
   version: 1.0.0
   description: AI-powered development platform API
 
@@ -527,18 +528,18 @@ type WebSocketMessage = AgentMessage | WorkflowUpdate | CodeGeneration;
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: genesis-production
+  name: sentient-core-production
   labels:
     environment: production
-    app: genesis
+    app: sentient-core
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: genesis-staging
+  name: sentient-core-staging
   labels:
     environment: staging
-    app: genesis
+    app: sentient-core
 ```
 
 #### 9.1.2 Deployment Configuration
@@ -546,17 +547,17 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: genesis-api
-  namespace: genesis-production
+  name: sentient-core-api
+  namespace: sentient-core-production
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: genesis-api
+      app: sentient-core-api
   template:
     metadata:
       labels:
-        app: genesis-api
+        app: sentient-core-api
     spec:
       securityContext:
         runAsNonRoot: true
@@ -564,7 +565,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: api
-        image: genesis/api:latest
+        image: sentient-core/api:latest
         ports:
         - containerPort: 8000
         env:
@@ -598,7 +599,7 @@ spec:
 
 #### 9.2.1 GitHub Actions Workflow
 ```yaml
-name: Genesis CI/CD Pipeline
+name: Sentient Core CI/CD Pipeline
 
 on:
   push:
@@ -709,26 +710,26 @@ from prometheus_client import Counter, Histogram, Gauge
 
 # Request metrics
 request_count = Counter(
-    'genesis_requests_total',
+    'sentient_core_requests_total',
     'Total requests',
     ['method', 'endpoint', 'status']
 )
 
 request_duration = Histogram(
-    'genesis_request_duration_seconds',
+    'sentient_core_request_duration_seconds',
     'Request duration',
     ['method', 'endpoint']
 )
 
 # Agent metrics
 agent_tasks = Gauge(
-    'genesis_agent_tasks_active',
+    'sentient_core_agent_tasks_active',
     'Active agent tasks',
     ['agent_type']
 )
 
 code_generation_time = Histogram(
-    'genesis_code_generation_seconds',
+    'sentient_core_code_generation_seconds',
     'Code generation time',
     ['language', 'complexity']
 )
@@ -777,14 +778,14 @@ def execute_agent_workflow(workflow_id: str):
 ```yaml
 # Prometheus alerting rules
 groups:
-- name: genesis.rules
+- name: sentient_core.rules
   rules:
   - alert: HighErrorRate
     expr: |
       (
-        rate(genesis_requests_total{status=~"5.."}[5m])
+        rate(sentient_core_requests_total{status=~"5.."}[5m])
         /
-        rate(genesis_requests_total[5m])
+        rate(sentient_core_requests_total[5m])
       ) > 0.05
     for: 5m
     labels:
@@ -795,9 +796,9 @@ groups:
   
   - alert: AgentWorkflowStuck
     expr: |
-      increase(genesis_agent_tasks_active[10m]) == 0
+      increase(sentient_core_agent_tasks_active[10m]) == 0
       and
-      genesis_agent_tasks_active > 0
+      sentient_core_agent_tasks_active > 0
     for: 10m
     labels:
       severity: warning
@@ -808,45 +809,13 @@ groups:
 
 ---
 
-## 11. Disaster Recovery
+## 11. Hackathon MVP - Technical Implementation Details
 
-### 11.1 Backup Strategy
+This section details the technical specifications for features and integrations specifically developed for the 'Raise Your Hack' competition, forming the Minimum Viable Product (MVP) of Sentient Core. These build upon the core Sentient Core architecture previously outlined.
 
-#### 11.1.1 Database Backups
-- **PostgreSQL**: Continuous WAL archiving with point-in-time recovery
-- **ChromaDB**: Regular snapshots with incremental backups
-- **Redis**: RDB snapshots with AOF for durability
-- **Retention**: 30 days for daily backups, 12 months for monthly
+### 11.1 Core Foundational Technology Integrations (for Hackathon MVP)
 
-#### 11.1.2 Application Backups
-- **Code Artifacts**: Versioned storage with Git integration
-- **User Data**: Encrypted backups with cross-region replication
-- **Configuration**: GitOps with version control
-- **Secrets**: Secure backup with HashiCorp Vault
-
-### 11.2 Recovery Procedures
-
-#### 11.2.1 RTO/RPO Targets
-- **Recovery Time Objective (RTO)**: 4 hours
-- **Recovery Point Objective (RPO)**: 1 hour
-- **Availability Target**: 99.9% uptime
-- **Data Loss Tolerance**: < 1 hour of data
-
-#### 11.2.2 Failover Procedures
-1. **Automated Failover**: Health checks trigger automatic failover
-2. **Manual Failover**: Documented procedures for manual intervention
-3. **Data Synchronization**: Ensure data consistency across regions
-4. **Service Validation**: Comprehensive testing after failover
-
----
-
-## 12. Hackathon-Specific Technical Specifications: 'Raise Your Hack'
-
-This section details the technical specifications for features and integrations specifically developed for the 'Raise Your Hack' competition. These build upon the existing Genesis/Snoob-Dev architecture.
-
-### 12.1 Core Technology Integrations
-
-#### 12.1.1 Groq API & Llama 3 Integration
+#### 11.1.1 Groq API & Llama 3 Integration
 *   **Component:** `GroqService` (Python client library)
 *   **Location:** `snoob-dev/backend/services/groq_service.py`
 *   **Functionality:**
@@ -857,18 +826,18 @@ This section details the technical specifications for features and integrations 
 *   **Integration Points:** Existing agent classes requiring LLM capabilities will be updated to use `GroqService`.
 *   **Configuration:** `GROQ_API_KEY` environment variable.
 
-#### 12.1.2 Fetch.ai (uAgents/Agentverse) Integration
+#### 11.1.2 Fetch.ai (uAgents/Agentverse) Integration
 *   **Component:** `FetchAIAdapter`
 *   **Location:** `snoob-dev/backend/integration/fetchai_adapter.py` (new module)
 *   **Functionality:**
-    *   Provides methods to register Snoob-Dev agents with the `Agentverse`.
+    *   Provides methods to register Sentient Core agents with the `Agentverse`.
     *   Facilitates agent discovery by querying `Agentverse`.
-    *   Implements message translation layers if needed to allow Snoob-Dev agents (Archon/LangGraph based) to communicate with `uAgents` or agents discoverable via `Agentverse`.
+    *   Implements message translation layers if needed to allow Sentient Core agents (Archon/LangGraph based) to communicate with `uAgents` or agents discoverable via `Agentverse`.
     *   Manages any necessary Fetch.ai network credentials or configurations.
 *   **Dependencies:** `uagents` Python library.
 *   **Integration Points:** Agent lifecycle management services, inter-agent communication bus.
 
-#### 12.1.3 Coral Protocol Integration
+#### 11.1.3 Coral Protocol Integration
 *   **Component:** `CoralMessageHandler`
 *   **Location:** `snoob-dev/backend/messaging/coral_handler.py` (new module or integrated into existing messaging system)
 *   **Functionality:**
@@ -879,69 +848,107 @@ This section details the technical specifications for features and integrations 
 *   **Dependencies:** Potentially a Coral Protocol client library if available, or direct HTTP/WebSocket implementation based on protocol docs.
 *   **Integration Points:** Inter-agent communication pathways, particularly for multi-step, collaborative tasks in e-commerce and enterprise scenarios.
 
-### 12.2 Vultr Track: Deployment & Enterprise Agent
+### 11.2 Vultr Track: Deployment & Enterprise Agent
 
-#### 12.2.1 Vultr Deployment
-*   **Backend (FastAPI):**
-    *   `Dockerfile` located at `snoob-dev/backend/Dockerfile`.
-    *   Base Image: `python:3.12-slim`.
-    *   Dependencies: Installed via `poetry install --no-dev`.
-    *   Entrypoint: `uvicorn main:app --host 0.0.0.0 --port $PORT`.
-*   **Frontend (Next.js):**
-    *   `Dockerfile` located at `snoob-dev/frontend/Dockerfile`.
-    *   Base Image: `node:20-alpine`.
-    *   Build Stage: `npm ci && npm run build`.
-    *   Serve Stage: Serve static assets (e.g., using `serve` or a minimal Node.js server).
-*   **Orchestration:** `docker-compose.vultr.yml` for local simulation; direct Vultr deployment mechanisms (e.g., Vultr Kubernetes Engine or managed VMs with Docker).
-*   **CI/CD:** GitHub Actions workflow in `.github/workflows/deploy-vultr.yml` triggered on pushes to `main` branch.
+#### 11.2.1 Deployment of Sentient Core on Vultr
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentient-core-api
+  namespace: sentient-core-production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sentient-core-api
+  template:
+    metadata:
+      labels:
+        app: sentient-core-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: api
+        image: sentient-core/api:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database-secret
+              key: url
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+```
 
-#### 12.2.2 Enterprise Agent (e.g., Market Research)
+#### 11.2.2 Enterprise Agentic Workflow Implementation
 *   **Agent Class:** `MarketResearchAgent` in `snoob-dev/src/agents/enterprise/market_research_agent.py`.
 *   **Core Logic:** Utilizes `GroqService` for data analysis and report generation. May integrate with external APIs for data gathering (e.g., news APIs, financial data APIs – to be specified).
-*   **Workflow:** Defined using LangGraph, orchestrated by the Snoob-Dev platform.
+*   **Workflow:** Defined using LangGraph, orchestrated by the Sentient Core platform.
 
-### 12.3 Prosus Track: E-Commerce Solution Pack
+### 11.3 Prosus Track: Agent-Powered E-commerce on Sentient Core
 
-#### 12.3.1 Knowledge Graph User Profiles
+#### 11.3.1 Knowledge Graph User Profiles
 *   **Component:** `KnowledgeGraphService`
 *   **Location:** `snoob-dev/backend/services/knowledge_graph_service.py`
 *   **Technology:** `RDFLib` for graph manipulation and persistence (e.g., to a local file or a simple triple store).
 *   **Schema:** Defined in `snoob-dev/backend/models/knowledge_graph_schema.py` (e.g., User, Product, Preference, Interaction entities and relationships).
 *   **Functionality:** CRUD operations for user profiles, querying user preferences and history.
 
-#### 12.3.2 Tavily API Integration
+#### 11.3.2 Tavily API Integration
 *   **Component:** `TavilyService`
 *   **Location:** `snoob-dev/backend/services/tavily_service.py`
 *   **Functionality:** Client for Tavily API, handling search queries and result parsing.
 *   **Configuration:** `TAVILY_API_KEY` environment variable.
 
-#### 12.3.3 E-commerce Agents
+#### 11.3.3 E-commerce Agents
 *   **Location:** `snoob-dev/src/agents/ecommerce/` (e.g., `food_ordering_agent.py`, `travel_booking_agent.py`).
 *   **Key Integrations:** `GroqService`, `KnowledgeGraphService`, `TavilyService`, `FetchAIAdapter`, `CoralMessageHandler`.
 
-### 12.4 Qualcomm Track: Edge AI Utility Generator
+### 11.4 Qualcomm Track: On-Device Edge AI Utility Generator
 
-#### 12.4.1 Utility Generator Module
+#### 11.4.1 Utility Generator Module
 *   **Component:** `EdgeUtilityGeneratorService`
 *   **Location:** `snoob-dev/backend/services/edge_utility_generator_service.py`
 *   **Core Logic:** Takes high-level user requirements (e.g., via a structured JSON input from the frontend). Uses `GroqService` (with Llama 3 / Code Llama) to generate Python code for the utility.
 *   **Output:** Packaged Python application code, including necessary model files (e.g., ONNX) and a simple `requirements.txt` or setup script.
 
-#### 12.4.2 On-Device AI Technologies
+#### 11.4.2 Key Technologies & Features for Qualcomm Track
 *   **Inference Runtime:** Primarily ONNX Runtime for Python. Explored for compatibility with Snapdragon X Elite.
 *   **Models:** Small, efficient pre-trained models (e.g., MobileNetV2/V3 for image tasks, distilled NLP models for text tasks) converted to ONNX format.
 *   **Packaging:** Techniques for creating standalone executables from Python scripts (e.g., PyInstaller, cx_Freeze) or providing a self-contained directory with a run script. Sandboxing knowledge from WebContainer work will be applied.
-*   **Offline Core:** Generated utility's core AI functionality must operate without internet access. The Groq/Llama 3 dependency is for the *generation phase* on the Snoob-Dev platform only.
+*   **Offline Core:** Generated utility's core AI functionality must operate without internet access. The Groq/Llama 3 dependency is for the *generation phase* on the Sentient Core platform only.
 
 ## 12. Conclusion
 
-This technical specification provides a comprehensive blueprint for building the Genesis Agentic Development Engine using cutting-edge 2025 technologies and best practices. The architecture emphasizes scalability, security, and maintainability while leveraging the latest advances in multi-agent AI systems.
+This technical specification outlines the blueprint for Sentient Core, with an immediate focus on delivering a compelling MVP for the 'Raise Your Hack' competition. The architecture leverages modern technologies like FastAPI, Next.js 15, Groq API (Llama 3), Fetch.ai uAgents, Coral Protocol, and ONNX Runtime to address the specific challenges of the Vultr, Prosus, and Qualcomm sponsor tracks. The hackathon deliverables will serve as a critical validation of Sentient Core's foundational architecture and its potential to revolutionize AI-driven development.
 
-Key success factors:
-- **Modern Technology Stack**: Utilizing the latest versions and patterns
-- **Security-First Design**: Zero-trust architecture with comprehensive compliance
-- **Scalable Architecture**: Cloud-native design with horizontal scaling
-- **Observability**: Comprehensive monitoring and alerting
-- **Quality Assurance**: Automated testing and quality gates
+Key success factors for the hackathon MVP:
+- **Effective Integration of Sponsor Technologies**: Demonstrating proficient use of Groq, Fetch.ai, Coral, Vultr's platform, and Qualcomm's edge capabilities.
+- **Innovative Solutions for Each Track**: Delivering unique and functional applications for enterprise workflows, e-commerce, and on-device AI.
+- **Platform Stability and Performance**: Ensuring Sentient Core itself is robust and performs well during demonstrations.
+- **Clear Demonstration of Value**: Articulating how Sentient Core addresses the problems posed by each sponsor track.
 
-The implementation should follow agile methodologies with continuous integration and deployment, ensuring rapid iteration and feedback cycles while maintaining high quality and security standards.
+The implementation will follow an agile approach, prioritizing the core features required for a successful hackathon submission.

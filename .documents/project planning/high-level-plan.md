@@ -11,18 +11,30 @@
 ### **1.0 Introduction**
 
 #### **1.1 Project Overview**
-Sentient Core is an advanced AI-driven development platform that transforms natural language requirements into production-ready applications through intelligent multi-agent orchestration. The system combines state-of-the-art LLMs with specialized development agents to automate the entire software development lifecycle.
+Sentient Core is an advanced AI-driven development platform that transforms natural language requirements into production-ready applications through intelligent multi-agent orchestration. The system combines state-of-the-art LLMs with specialized development agents to automate the entire software development lifecycle. Its initial capabilities and validation will be showcased through participation in the "Raise Your Hack" hackathon, where it will address key enterprise and consumer challenges by leveraging cutting-edge agentic technologies.
 
 #### **1.2 Vision Statement**
-To democratize software development by creating an intelligent ecosystem where users can describe their vision in natural language and receive complete, scalable, and maintainable applications with enterprise-grade quality and security.
+To democratize software development by creating an intelligent ecosystem where users can describe their vision in natural language and receive complete, scalable, and maintainable applications with enterprise-grade quality and security. The "Raise Your Hack" competition serves as an initial catalyst to realize key aspects of this vision by delivering tangible, high-impact solutions focused on enterprise agentic workflows, agent-powered e-commerce, and on-device AI utilities.
 
-#### **1.3 Key MVP Objectives**
-1.  **Intelligent Requirement Analysis:** Advanced NLP with context-aware clarification, scope validation, and requirement decomposition
-2.  **Adaptive Architecture Planning:** AI-driven system design with modern technology stack selection, scalability considerations, and security-first approach
-3.  **Multi-Agent Code Generation:** Specialized agents for frontend (React 19/Next.js 15), backend (FastAPI/Python), database design, and infrastructure as code
-4.  **Automated Quality Assurance:** Comprehensive testing strategies, security scanning, performance optimization, and code quality analysis
-5.  **Cloud-Native Deployment:** Containerized deployment with Kubernetes support, CI/CD automation, and monitoring integration
-6.  **Continuous Learning:** Feedback loops for improving code generation quality and architectural decisions
+#### **1.3 Key MVP Objectives (Hackathon "Raise Your Hack" Focus)**
+1.  **Vultr Track - Enterprise Agentic Workflow Platform:**
+    *   Deploy the core Sentient Core platform on **Vultr infrastructure**, showcasing its ability to design, build, and manage sophisticated agentic workflows.
+    *   Integrate **Groq API (for Meta's Llama 3)** as the primary LLM for high-speed reasoning, code generation, and natural language understanding.
+    *   Implement **Fetch.ai `uAgents`** (or Agentverse) for decentralized agent registration, discovery, and secure communication within the platform and the broader Fetch.ai ecosystem.
+    *   Utilize **Coral Protocol** for robust, thread-style collaboration, enabling complex multi-agent interactions and coordination for task execution.
+2.  **Prosus Track - Agent-Powered E-commerce Solution:**
+    *   Develop an "E-commerce Agent Pack" as a module within Sentient Core, demonstrating specialized agent capabilities for the retail sector.
+    *   Agents will leverage **knowledge graphs** (e.g., using RDFLib or similar) for rich user and product profiling, enabling personalized experiences.
+    *   Integrate **Tavily API** for advanced, AI-powered product search and market intelligence gathering.
+    *   Showcase **voice UI capabilities** for intuitive e-commerce interactions, powered by our core LLM and agent framework.
+3.  **Qualcomm Track - On-Device Edge AI Utility Generator:**
+    *   Create an innovative "Edge AI Utility Generator" module within Sentient Core.
+    *   Utilize Groq/Llama 3 for generating Python code for simple, useful consumer utility applications (e.g., offline photo sorter, local document summarizer).
+    *   Ensure generated utilities are packaged for **Snapdragon X Elite** devices, with core AI functionality (e.g., using ONNX models) running **entirely offline on-device**, meeting Qualcomm's key constraint. The cloud-based LLM is used for *generation*, not *runtime* of the edge app.
+4.  **Cross-Cutting MVP Platform Features:**
+    *   A modern, responsive web-based interface (Next.js 15, React 19, Tailwind CSS v4, Shadcn/UI) for users to define requirements, manage agents, and deploy applications.
+    *   Demonstrable multi-agent orchestration capabilities, showcasing how different agents (both general and specialized) collaborate to achieve the track-specific deliverables.
+    *   Secure, scalable, and robust backend services (FastAPI/Python) supporting the platform's functionalities.
 
 #### **1.4 Target Audience**
 *   **Primary:** Technical entrepreneurs, startup founders, and product managers seeking rapid prototyping
