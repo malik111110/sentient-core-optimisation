@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains comprehensive documentation of technologies, architectural patterns, and implementation strategies relevant to the Genesis Agentic Development Engine. These guides are derived from analysis of best practices, leading open-source projects, and the specific requirements of the Archon framework.
+This directory contains comprehensive documentation of technologies, architectural patterns, and implementation strategies relevant to the Sentient Core. These guides are derived from analysis of best practices, leading open-source projects, and the specific requirements of the Archon framework.
 
 ## Documentation Structure
 
