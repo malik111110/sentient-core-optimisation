@@ -46,6 +46,6 @@ next-env.d.ts
 *\.trae*
 *\.trae\rules*
 *\.trae\rules\rules.md
-*\.trae\rules\rules.md
-*\.trae\rules\rules.md
-.documents\concepts and roadmaps
+.trae
+.trae*
+.windsurf*
