@@ -1,91 +1,135 @@
-# Action Plan: Vultr Track - Enterprise Agentic Workflow Platform
+# Vultr Track Action Plan: Enterprise Agentic Workflow Platform
 
-**Version:** 1.0
+**Version:** 2.0 (Epic/Story Aligned)
 **Date:** June 18, 2025
-**Status:** Initial Draft
+**Status:** In Refactoring
+**Parent Epic:** EPIC-VULTR (Deploy & Showcase Core Sentient Platform on Vultr)
+**Related Task Breakdown:** [../../../01_PROJECT_PLANNING/01_04_task_breakdown.md#EPIC-VULTR](README.md) 
 
 ---
 
 ## 1. Objective
 
-To deploy the Sentient Core platform on Vultr's cloud infrastructure and demonstrate a sophisticated, enterprise-grade agentic workflow. This plan details the technical steps required to meet the Vultr sponsor track requirements for the 'Raise Your Hack' competition.
+To deploy the Sentient Core platform on Vultr's cloud infrastructure and demonstrate a sophisticated, enterprise-grade agentic workflow. This plan details the technical steps required to meet the Vultr sponsor track requirements for the 'Raise Your Hack' competition, organized by stories under EPIC-VULTR.
 
-## 2. Key Technologies
+## 2. Stories & Detailed Tasks
 
-- **Cloud Provider:** Vultr
-- **Backend:** FastAPI
-- **Frontend:** Next.js 15
-- **Containerization:** Docker
-- **LLM:** Groq API (Llama 3)
-- **Agent Framework:** Fetch.ai uAgents
-- **Communication:** Coral Protocol
+### STORY-VULTR-1: Configure Vultr Production Environment
+-   **Description:** Networking, Security, VM Sizing for Vultr deployment.
+-   **Assigned:** AGENT-DEVOPS
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-1.1:** Provision Vultr cloud compute instance (e.g., High Frequency Compute, select appropriate region and size based on anticipated load).
+        -   *Acceptance Criteria:* Vultr instance is active and accessible.
+    -   **Task-Vultr-1.2:** Configure base OS (e.g., Ubuntu 22.04 LTS) with security hardening (ufw, fail2ban).
+        -   *Acceptance Criteria:* OS is updated, basic security measures are in place.
+    -   **Task-Vultr-1.3:** Set up Vultr networking: Static IP, DNS records (e.g., `sentientcore.vultr.example.com`) pointing to the instance.
+        -   *Acceptance Criteria:* Instance is reachable via domain name.
+    -   **Task-Vultr-1.4:** Configure Vultr security groups/firewall rules to allow necessary traffic (HTTP/S, SSH, specific ports for agent communication if needed).
+        -   *Acceptance Criteria:* Only essential ports are open.
+    -   **Task-Vultr-1.5:** Set up SSH key-based authentication for secure access.
+        -   *Acceptance Criteria:* Password login disabled, SSH keys are functional.
+    -   **References:** Vultr Documentation.
 
-## 3. Action Steps
+### STORY-VULTR-2: Dockerize Sentient Core Application Suite
+-   **Description:** Containerize Frontend, Backend API, Agent Services.
+-   **Assigned:** AGENT-DEVOPS / AGENT-BACKEND / AGENT-FRONTEND
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-2.1:** Create `Dockerfile` for Sentient Core Backend (FastAPI).
+        -   *Details:* Use a Python base image, install dependencies from `requirements.txt`, copy application code, expose port for Uvicorn.
+        -   *Acceptance Criteria:* Backend Docker image builds successfully.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_06_fastapi_guide.md`, Docker Documentation.
+    -   **Task-Vultr-2.2:** Create `Dockerfile` for Sentient Core Frontend (Next.js 15).
+        -   *Details:* Use a multi-stage build. Stage 1: Node.js image to build the app (`npm run build`). Stage 2: Lightweight server (e.g., Nginx or Node.js static server) to serve production assets.
+        -   *Acceptance Criteria:* Frontend Docker image builds successfully and serves the application.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_07_nextjs_15_guide.md`, Docker Documentation.
+    -   **Task-Vultr-2.3:** Create `Dockerfile` for any standalone agent services (if not part of the main backend).
+        -   *Acceptance Criteria:* Agent service Docker images build successfully.
+    -   **Task-Vultr-2.4:** Test all Docker images locally to ensure they run as expected.
+        -   *Acceptance Criteria:* Containers start and basic functionality is verified.
 
-### Phase 1: Infrastructure Setup (Lead: AGENT-DEVOPS)
+### STORY-VULTR-3: Implement CI/CD Pipeline for Automated Vultr Deployments
+-   **Description:** GitHub Actions to Vultr.
+-   **Assigned:** AGENT-DEVOPS
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-3.1:** Design GitHub Actions workflow for CI (linting, testing, security scans).
+        -   *Acceptance Criteria:* CI pipeline runs on every push/PR to main branches.
+    -   **Task-Vultr-3.2:** Design GitHub Actions workflow for CD (building Docker images, pushing to a registry like Docker Hub or GitHub Container Registry).
+        -   *Acceptance Criteria:* New images are built and pushed on merges to main.
+    -   **Task-Vultr-3.3:** Implement deployment script (e.g., Bash or Ansible playbook) to be run on the Vultr instance.
+        -   *Details:* Script should pull new images, stop old containers, and start new ones using Docker Compose.
+        -   *Acceptance Criteria:* Deployment script reliably updates the application.
+    -   **Task-Vultr-3.4:** Securely store Vultr SSH credentials and registry credentials in GitHub Secrets.
+        -   *Acceptance Criteria:* Secrets are configured and accessible by the CI/CD pipeline.
+    -   **Task-Vultr-3.5:** Configure GitHub Actions workflow to trigger the deployment script on the Vultr instance via SSH upon successful image push.
+        -   *Acceptance Criteria:* Successful CD pipeline deploys new version to Vultr.
 
-1.  **Provision Vultr Instance:**
-    *   [ ] Create a new Vultr cloud compute instance (e.g., High Frequency Compute).
-    *   [ ] Configure the instance with a standard OS (e.g., Ubuntu 22.04).
-    *   [ ] Set up networking, security groups, and SSH access.
+### STORY-VULTR-4: Develop "Enterprise Workflow Agent"
+-   **Description:** Demo agent for Vultr track (e.g., marketing content generation or sales lead qualification agent).
+-   **Assigned:** AGENT-ARCHITECT / AGENT-BACKEND / AGENT-KNOWLEDGE-SYNTHESIS
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-4.1:** Define specific use case and capabilities for the Enterprise Workflow Agent.
+        -   *Example:* "Automated Blog Post Idea Generator & Outline Creator for Marketing Teams."
+        -   *Acceptance Criteria:* Clear problem statement, target users, and desired outcomes defined.
+    -   **Task-Vultr-4.2:** Design the agent's LangGraph flow (states, nodes, edges).
+        -   *Acceptance Criteria:* Agent workflow diagram and state definitions are complete.
+    -   **Task-Vultr-4.3:** Implement agent tools/skills (e.g., web search via Tavily, document analysis, content summarization using Groq/Llama 3).
+        -   *Acceptance Criteria:* Tools are functional and tested independently.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_01_groq_api_guide.md`
+    -   **Task-Vultr-4.4:** Implement the agent logic within the Sentient Core backend (FastAPI service).
+        -   *Acceptance Criteria:* Agent can be invoked via an API endpoint.
+    -   **Task-Vultr-4.5:** Integrate with Fetch.ai uAgent patterns if the agent requires autonomous periodic tasks or specific protocol interactions.
+        -   *Acceptance Criteria:* Fetch.ai components are integrated and functional if used.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_03_fetchai_uagent_guide.md`
+    -   **Task-Vultr-4.6:** Integrate with Coral Protocol if the agent needs to collaborate with other distinct agents via decentralized discovery/communication.
+        -   *Acceptance Criteria:* Coral Protocol components are integrated and functional if used.
+        -   *References:* `../../../02_HACKATHON_CENTRAL/02_06_TECHNOLOGY_GUIDES/02_06_04_coral_protocol_guide.md`
+    -   **Task-Vultr-4.7:** Develop a simple UI within the Sentient Core frontend to interact with this agent.
+        -   *Acceptance Criteria:* User can trigger the agent and see results.
+    -   **Task-Vultr-4.8:** Unit test all components of the Enterprise Workflow Agent.
+        -   *Acceptance Criteria:* Tests pass, covering core logic and tool integrations.
 
-2.  **Install Core Dependencies:**
-    *   [ ] Install Docker and Docker Compose on the Vultr instance.
-    *   [ ] Install Nginx to act as a reverse proxy.
-    *   [ ] Configure DNS records to point to the Vultr instance's IP address.
+### STORY-VULTR-5: Implement Monitoring & Logging for Sentient Core on Vultr
+-   **Description:** Setup observability for the platform on Vultr.
+-   **Assigned:** AGENT-DEVOPS
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-5.1:** Configure Docker Compose to manage application components (backend, frontend, Nginx reverse proxy).
+        -   *Details:* Define services, networks, volumes. Ensure Nginx handles SSL termination and proxies requests to backend/frontend.
+        -   *Acceptance Criteria:* `docker-compose up -d` successfully starts all services.
+    -   **Task-Vultr-5.2:** Implement structured logging for all application components (FastAPI, Next.js, Nginx).
+        -   *Acceptance Criteria:* Logs are consistently formatted (e.g., JSON).
+    -   **Task-Vultr-5.3:** Set up basic Vultr monitoring for instance health (CPU, memory, disk, network).
+        -   *Acceptance Criteria:* Vultr dashboard shows instance metrics.
+    -   **Task-Vultr-5.4:** (Optional Stretch Goal) Deploy a simple log aggregation stack (e.g., ELK minimal or Grafana Loki) if time permits, or ensure logs are easily retrievable from Vultr instance.
+        -   *Acceptance Criteria:* Centralized log viewing is possible.
+    -   **References:** `../../../03_TECHNICAL_DEEP_DIVES/03_05_llm_observability_management.md`
 
-### Phase 2: Application Containerization (Lead: AGENT-BACKEND, AGENT-FRONTEND)
-
-1.  **Backend (FastAPI) Dockerization:**
-    *   [ ] Create a `Dockerfile` for the FastAPI application.
-    *   [ ] Ensure the container installs all Python dependencies from `requirements.txt`.
-    *   [ ] Configure the container to run the FastAPI application using `uvicorn`.
-
-2.  **Frontend (Next.js) Dockerization:**
-    *   [ ] Create a multi-stage `Dockerfile` for the Next.js application.
-    *   [ ] The first stage will build the production-ready application (`npm run build`).
-    *   [ ] The second stage will serve the static build artifacts using a lightweight server.
-
-### Phase 3: Deployment & Orchestration (Lead: AGENT-DEVOPS)
-
-1.  **Create Docker Compose Configuration:**
-    *   [ ] Create a `docker-compose.yml` file to define and orchestrate the backend, frontend, and database services.
-    *   [ ] Configure environment variables for all services, including API keys for Groq and Fetch.ai (to be injected securely).
-
-2.  **Deploy to Vultr:**
-    *   [ ] Copy the project source code to the Vultr instance.
-    *   [ ] Run `docker-compose up -d --build` to build and start the application containers.
-    *   [ ] Verify that all containers are running and communicating correctly.
-
-3.  **Configure Reverse Proxy:**
-    *   [ ] Configure Nginx to route traffic to the appropriate containers (e.g., `/api/*` to the FastAPI backend, `/` to the Next.js frontend).
-    *   [ ] Set up SSL/TLS using Let's Encrypt to secure the application.
-
-### Phase 4: Integration & Demonstration (Lead: AGENT-ARCHITECT)
-
-1.  **Implement Core Agentic Workflow:**
-    *   [ ] Develop the logic for the demonstration workflow (e.g., an automated market research agent).
-    *   [ ] Ensure the workflow correctly utilizes the Groq, Fetch.ai, and Coral Protocol clients.
-
-2.  **Final Testing & Validation:**
-    *   [ ] Conduct end-to-end testing of the deployed application.
-    *   [ ] Verify that the agentic workflow runs successfully in the Vultr environment.
-    *   [ ] Prepare a demonstration script and record a video walkthrough.
-
-## 4. Connecting to Our Users
-
-This Vultr track directly addresses the needs of key user personas (see `../../../00_CONCEPTUAL_FRAMEWORK/00_03_user_personas.md`):
-
-*   **For Morgan, The Development Team Lead:** Deploying Sentient Core on Vultr provides a standardized, enterprise-grade environment. This aligns with Morgan's goals of ensuring architectural consistency, standardizing development processes, and delivering high-quality software. The containerized approach (Docker) and reverse proxy setup (Nginx) reflect best practices that Morgan would champion, alleviating pain points around complex stack management and ensuring maintainability.
-*   **For Alex, The Technical Entrepreneur:** A robust Vultr deployment means Alex can take their rapidly developed MVPs (built with Sentient Core) and scale them reliably. This addresses Alex's need for speed and quality, ensuring that the technology underpinning their vision is solid and can grow with their business, avoiding the pitfalls of solutions that are easy to start but hard to scale.
-
-By showcasing a seamless deployment to a leading cloud provider like Vultr, we demonstrate that Sentient Core is not just a development tool but a complete platform for bringing sophisticated applications to life and managing them effectively.
+### STORY-VULTR-6: Prepare Vultr Track Demo Script & Assets
+-   **Description:** Finalize demo flow and materials for Vultr presentation.
+-   **Assigned:** AGENT-STRATEGIC-EVANGELIST / AGENT-ARCHITECT
+-   **Status:** To Do
+-   **Detailed Tasks:**
+    -   **Task-Vultr-6.1:** Outline the demo flow, highlighting key features of the Vultr deployment and the Enterprise Workflow Agent.
+        -   *Acceptance Criteria:* Clear, concise demo script is drafted.
+    -   **Task-Vultr-6.2:** Create any necessary visual aids or presentation slides.
+        -   *Acceptance Criteria:* Supporting materials are ready.
+    -   **Task-Vultr-6.3:** Rehearse the demo multiple times to ensure smooth delivery.
+        -   *Acceptance Criteria:* Demo can be delivered confidently within time limits.
+    -   **Task-Vultr-6.4:** Record a video walkthrough of the deployment and demo.
+        -   *Acceptance Criteria:* High-quality video demo is produced.
 
 ---
 
-## 5. Success Criteria
+## 3. Success Criteria for Vultr Track
 
-- The Sentient Core platform is successfully deployed and accessible on a Vultr instance.
-- The backend and frontend services are running in Docker containers, orchestrated by Docker Compose.
-- A functional, enterprise-grade agentic workflow is demonstrated, showcasing the integration of Groq, Fetch.ai, and Coral Protocol.
+- The Sentient Core platform (frontend, backend, enterprise agent) is successfully deployed and publicly accessible on a Vultr instance.
+- All services are running in Docker containers, orchestrated by Docker Compose, behind an Nginx reverse proxy.
+- The demonstrated "Enterprise Workflow Agent" functions correctly, showcasing multi-step reasoning and tool use (e.g., Groq, Tavily).
+- CI/CD pipeline automates deployment to Vultr.
+- Basic monitoring and logging are in place.
 - The deployment is secure, stable, and performs reliably.
+- All Vultr track requirements from the `02_02_raise_your_hack_overview.md` are met.
