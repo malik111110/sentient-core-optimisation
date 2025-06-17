@@ -18,10 +18,13 @@ pip install uagents
 *   **Model:** A Pydantic-like class (inheriting from `uagents.Model`) defining the structure of messages exchanged between agents.
 *   **Protocol:** Defines a set of rules and message types for specific interactions. Useful for service discovery and standardized communication, especially when interacting with the Agentverse.
 
-## 3. Creating an Agent
+## 3. Creating and Funding an Agent
+
+A complete, runnable example of a single agent that includes the essential funding step.
 
 ```python
 from uagents import Agent, Context, Model
+from uagents.setup import fund_agent_if_low
 
 # Define a message model
 class MyMessage(Model):
@@ -38,11 +41,19 @@ alice = Agent(
     endpoint=["http://localhost:8000/submit"]
 )
 
+# Fund the agent's wallet if it's low on funds.
+# This is crucial for agents that need to transact on the network.
+fund_agent_if_low(alice.wallet.address())
+
 @alice.on_event("startup")
-async def say_hello(ctx: Context):
+async def agent_startup(ctx: Context):
     ctx.logger.info(f"Hello, I'm agent {alice.name} and my address is {alice.address}")
 
 # More handlers (on_message, on_interval) would go here
+
+# To run a single agent, use the run() method
+if __name__ == "__main__":
+    alice.run()
 ```
 
 ## 4. Message Handling

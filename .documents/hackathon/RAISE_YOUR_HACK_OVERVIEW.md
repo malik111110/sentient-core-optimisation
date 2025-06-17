@@ -26,13 +26,14 @@ The central challenge is to leverage state-of-the-art artificial intelligence te
 
 The hackathon features several distinct tracks, each sponsored by a leading technology company. Participants can choose to focus on one or more tracks. The primary tracks identified from the event page are:
 
-*   **The Groq Challenge:** Focuses on leveraging the Groq API for building applications that require exceptional LLM inference speed.
-*   **The Fetch.ai Challenge:** Encourages the development of autonomous agents and decentralized AI solutions using the Fetch.ai ecosystem.
-*   **The Qualcomm Challenge:** Centers on building innovative on-device AI applications optimized for Snapdragon X Elite platforms.
-*   **The Vultr Challenge:** Tasks participants with creating enterprise-grade AI solutions deployed on Vultr's cloud infrastructure.
-*   **The BNP Paribas Personal Finance Challenge:** Explores the application of AI for promoting responsible and innovative financial services.
-*   **The LVMH Challenge:** Focuses on using AI to redefine and enhance experiences within the luxury sector.
-*   **The Coral Protocol Challenge:** Involves building solutions that utilize Coral Protocol for decentralized AI, focusing on secure data and model exchange.
+*   **The Vultr Challenge ($25,000 Prize Pool):** Tasks participants with creating enterprise-grade AI solutions deployed on Vultr's cloud infrastructure.
+*   **The Qualcomm Challenge ($20,000 Prize Pool):** Centers on building innovative on-device AI applications optimized for Snapdragon X Elite platforms.
+*   **The Groq Challenge ($15,000 Prize Pool):** Focuses on leveraging the Groq API for building applications that require exceptional LLM inference speed.
+*   **The BNP Paribas Personal Finance Challenge ($15,000 Prize Pool):** Explores the application of AI for promoting responsible and innovative financial services.
+*   **The LVMH Challenge ($15,000 Prize Pool):** Focuses on using AI to redefine and enhance experiences within the luxury sector.
+*   **The Fetch.ai Challenge ($5,000 Prize Pool):** Encourages the development of autonomous agents and decentralized AI solutions using the Fetch.ai ecosystem.
+*   **The Coral Protocol Challenge ($5,000 Prize Pool):** Involves building solutions that utilize Coral Protocol for decentralized AI, focusing on secure data and model exchange.
+*   **Main Prize Pool ($50,000):** Awarded to the top overall projects.
 
 ## 5. Core & Featured Technologies
 

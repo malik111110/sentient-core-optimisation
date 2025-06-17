@@ -32,13 +32,9 @@ Import the library and initialize the client:
 import os
 from groq import Groq
 
-# Retrieve the API key from environment variables
-api_key = os.environ.get("GROQ_API_KEY")
-
-if not api_key:
-    raise ValueError("GROQ_API_KEY environment variable not set.")
-
-client = Groq(api_key=api_key)
+# The client automatically uses the GROQ_API_KEY environment variable.
+# Ensure the environment variable is set before running the code.
+client = Groq()
 ```
 
 ## 4. Chat Completions
@@ -56,18 +52,17 @@ try:
                 "content": "Explain the importance of low-latency LLM inference.",
             }
         ],
-        model="mixtral-8x7b-32768", # Or other available models like llama2-70b-4096
+        model="llama-3.3-70b-versatile", # Recommended model as of latest docs
     )
     print(chat_completion.choices[0].message.content)
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
 
-### Available Models (Examples from Docs)
+### Available Models (Examples from Latest Docs)
 
-*   `mixtral-8x7b-32768`
-*   `llama2-70b-4096`
-*   `gemma-7b-it`
+*   `llama-3.3-70b-versatile`: A new, powerful model for chat and tool use.
+*   `llama3-70b-8192`: A capable model for general chat and routing.
 *(Always check Groq's official documentation for the latest list of supported models.)*
 
 ### Streaming Chat Completions
@@ -83,7 +78,7 @@ try:
                 "content": "Write a short story about an AI exploring the internet for the first time.",
             }
         ],
-        model="mixtral-8x7b-32768",
+        model="llama-3.3-70b-versatile",
         stream=True,
     )
 
