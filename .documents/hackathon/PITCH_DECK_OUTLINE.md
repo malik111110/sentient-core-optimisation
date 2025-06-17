@@ -1,6 +1,6 @@
 # Sentient Core - Pitch Deck Outline ('Raise Your Hack')
 
-**Objective:** To present a compelling overview of the Snoob-Dev platform, its adaptation for the hackathon, how it addresses three sponsor tracks (Vultr, Prosus, Qualcomm), and its innovative use of sponsor technologies (Meta/Groq, Fetch.ai, Coral Protocol).
+**Objective:** To present a compelling overview of the Sentient Core platform, its adaptation for the hackathon, how it addresses three sponsor tracks (Vultr, Prosus, Qualcomm), and its innovative use of sponsor technologies (Meta/Groq, Fetch.ai, Coral Protocol).
 
 ---
 
@@ -9,7 +9,7 @@
 *   **Event:** Raise Your Hack
 *   **Team Name/Members:** (Placeholder - TBD)
 *   **Date:** (Placeholder - Event Date)
-*   **Logos:** Snoob-Dev, Raise Your Hack, Vultr, Prosus, Qualcomm, Meta, Groq, Fetch.ai, Coral Protocol (tastefully arranged)
+*   **Logos:** Sentient Core, Raise Your Hack, Vultr, Prosus, Qualcomm, Meta, Groq, Fetch.ai, Coral Protocol (tastefully arranged)
 
 **Slide 2: The Problem / The Opportunity**
 *   **Problem Statement (Concise):**
@@ -19,17 +19,17 @@
     *   Leverage the power of agentic AI to automate, accelerate, and democratize the creation of intelligent applications.
     *   Build a unified platform that bridges the gap between powerful cloud AI and responsive edge AI.
 
-**Slide 3: Our Solution: Snoob-Dev - The Agentic Nexus**
-*   **Core Concept:** Snoob-Dev is an **Enterprise Agentic Workflow Platform** designed to empower users to rapidly design, build, deploy, and manage intelligent AI agents and multi-agent systems.
-*   **Visual:** High-level architecture diagram of Snoob-Dev, emphasizing modularity.
+**Slide 3: Our Solution: Sentient Core - The Agentic Nexus**
+*   **Core Concept:** Sentient Core is an **Enterprise Agentic Workflow Platform** designed to empower users to rapidly design, build, deploy, and manage intelligent AI agents and multi-agent systems.
+*   **Visual:** High-level architecture diagram of Sentient Core, emphasizing modularity.
 *   **Key Value Propositions:**
     *   **Accelerated Innovation:** Go from idea to deployed AI solution faster.
     *   **Enhanced Productivity:** Automate complex development tasks.
     *   **Integrated Ecosystem:** Seamlessly combine diverse AI capabilities and technologies.
 
 **Slide 4: Addressing the 'Raise Your Hack' Challenge**
-*   **Statement:** "Snoob-Dev is uniquely positioned to tackle the 'Raise Your Hack' challenge by integrating three distinct sponsor tracks into a cohesive and powerful narrative."
-*   **Visual:** Logos of Vultr, Prosus, Qualcomm prominently displayed, with connecting lines to a central Snoob-Dev logo.
+*   **Statement:** "Sentient Core is uniquely positioned to tackle the 'Raise Your Hack' challenge by integrating three distinct sponsor tracks into a cohesive and powerful narrative."
+*   **Visual:** Logos of Vultr, Prosus, Qualcomm prominently displayed, with connecting lines to a central Sentient Core logo.
 *   **Briefly state the three tracks being addressed.**
 
 **Slide 5: Core Technology Stack - The Powerhouse Within**
@@ -39,7 +39,7 @@
     *   **Benefit:** Unprecedented speed and intelligence for our agents.
 *   **Fetch.ai (uAgents / Agentverse):**
     *   **Role:** Agent registration, discovery, and decentralized communication.
-    *   **Benefit:** Enables Snoob-Dev agents to join a wider, interoperable agent ecosystem.
+    *   **Benefit:** Enables Sentient Core agents to join a wider, interoperable agent ecosystem.
 *   **Coral Protocol:**
     *   **Role:** Standardized, robust, thread-style collaboration for inter-agent communication.
     *   **Benefit:** Facilitates complex multi-agent tasks and reliable coordination.
@@ -47,7 +47,7 @@
 
 **Slide 6: Vultr Track - Enterprise Agentic Workflow Platform**
 *   **Track Focus:** Agentic Workflows for the Future of Work.
-*   **Our Solution:** The core Snoob-Dev platform, deployed scalably on **Vultr infrastructure**.
+*   **Our Solution:** The core Sentient Core platform, deployed scalably on **Vultr infrastructure**.
 *   **Demonstration:** An "Automated Market Research & Competitor Analysis Agent."
     *   **Function:** Autonomously gathers market data, analyzes trends using Llama 3 on Groq, generates insightful reports.
     *   **Benefit for Enterprise:** Empowers teams with actionable intelligence, saves time.
@@ -55,7 +55,7 @@
 
 **Slide 7: Prosus Track - Agent-Powered E-Commerce Reimagined**
 *   **Track Focus:** Design an Agent-Powered E-Commerce App.
-*   **Our Solution:** An **AI-Powered E-Commerce Agent Pack** built using Snoob-Dev.
+*   **Our Solution:** An **AI-Powered E-Commerce Agent Pack** built using Sentient Core.
 *   **Key Innovations:**
     *   **Knowledge Graph User Profiles:** Deeply personalized experiences based on dynamic user KGs (built with RDFLib).
     *   **Tavily API Integration:** Advanced, AI-native search for product discovery and comparison.
@@ -65,10 +65,10 @@
 
 **Slide 8: Qualcomm Track - Generating On-Device Edge AI Utilities**
 *   **Track Focus:** Edge AI Consumer Utility Application on Snapdragon X Elite.
-*   **Our Solution:** An **Edge AI Utility Generator** module within the Snoob-Dev platform.
+*   **Our Solution:** An **Edge AI Utility Generator** module within the Sentient Core platform.
 *   **How it Works:**
-    1.  User defines utility needs in Snoob-Dev (cloud platform).
-    2.  Snoob-Dev uses Llama 3 on Groq (and/or Code Llama) to **generate Python code** for the on-device application.
+    1.  User defines utility needs in Sentient Core (cloud platform).
+    2.  Sentient Core uses Llama 3 on Groq (and/or Code Llama) to **generate Python code** for the on-device application.
     3.  Generated utility (e.g., image sorter, offline text tool) runs **entirely on-device and offline** on Snapdragon X Elite (using ONNX Runtime or similar).
 *   **Key Differentiator:** The Groq/Llama 3 dependency is for the *generation phase* in the cloud; the *edge application's core AI is offline*, meeting the track's critical constraint.
 *   **Qualcomm Advantage:** Demonstrating rapid development of practical, offline-first AI utilities tailored for Snapdragon X Elite's capabilities.
@@ -79,7 +79,7 @@
     *   Arrow to Edge AI Utility Generator (Qualcomm), showing code generation and deployment to an edge device.
 *   **Narrative:** Emphasize how a single, powerful platform can address diverse AI challenges across the cloud-to-edge spectrum.
 
-**Slide 10: Why Snoob-Dev? Our Unique Strengths**
+**Slide 10: Why Sentient Core? Our Unique Strengths**
 *   **Unified & Versatile Platform:** From enterprise workflows (Vultr) to specialized e-commerce (Prosus) and innovative edge solutions (Qualcomm).
 *   **Strategic & Seamless Tech Integration:** Deeply embedding sponsor technologies (Meta/Groq, Fetch.ai, Coral) for maximum impact.
 *   **Rapid Development & Deployment:** Agentic automation accelerates the creation of complex AI systems.

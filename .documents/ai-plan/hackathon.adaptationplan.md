@@ -2,7 +2,7 @@
 
 ## Notes
 - Hackathon "Raise Your Hack" requires fulfilling 3 of 4 sponsor tracks; we will target **Vultr (enterprise agentic workflow)**, **Prosus (agent-powered e-commerce)**, and **Qualcomm (edge AI utility)**.
-- Maintain current multi-agent codebase (`snoob-dev`) while adding track-specific modules; reuse existing integrations (WebContainer, Archon, Supabase, etc.).
+- Maintain current multi-agent codebase (`sentient-core`) while adding track-specific modules; reuse existing integrations (WebContainer, Archon, Supabase, etc.).
 - Must deploy the main web app on Vultr, build an e-commerce agent pack with knowledge-graph profiles, and generate on-device AI utilities for Snapdragon X Elite.
 - Utilize tools outlined in the `strategy-adaptation` workflow for research (hyperbrowserai/mcp, tavily, serper, etc.).
 - Must integrate Groq API with Llama 3 and adopt Fetch.ai uAgents/Agentverse plus Coral Protocol for inter-agent collaboration.
@@ -45,7 +45,7 @@
 - [ ] Phase 0 – Repository Restructure & Renaming
   - [x] Move `.git` directory from `frontend` to project root.
   - [x] Commit consolidated repository state at root.
-  - [ ] Rename project folder `snoob-dev` to `sentient-core`.
+  - [x] Rename project folder `snoob-dev` to `sentient-core`.
 - [x] Phase 1 – Intelligence Infusion
   - [x] Fetch official hackathon rules page and store parsed summary in memory.
   - [x] Read existing planning documents under `.documents/project planning`.

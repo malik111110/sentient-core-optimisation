@@ -251,7 +251,7 @@ This section outlines additional product requirements and features specifically 
 ### 9.1 Overall Hackathon Requirements
 
 *   **FR-HACK-001 (Groq API Integration):** The platform must utilize the Groq API for LLM tasks, specifically with a Llama 3 model, for core agent reasoning, generation, and analysis capabilities.
-*   **FR-HACK-002 (Fetch.ai Integration):** The platform must integrate with Fetch.ai's `uAgents` or `Agentverse` for agent registration and discovery, enabling Snoob-Dev agents to be part of the broader Fetch.ai ecosystem.
+*   **FR-HACK-002 (Fetch.ai Integration):** The platform must integrate with Fetch.ai's `uAgents` or `Agentverse` for agent registration and discovery, enabling Sentient Core agents to be part of the broader Fetch.ai ecosystem.
 *   **FR-HACK-003 (Coral Protocol Integration):** Inter-agent communication for complex, collaborative tasks must support or be compatible with Coral Protocol's thread-style collaboration model.
 
 ### 9.2 Vultr Track: Enterprise Agentic Workflow Platform
@@ -261,7 +261,7 @@ This section outlines additional product requirements and features specifically 
     *   **NFR-VULTR-001.2 (Reliability):** The deployed application should be stable and reliably perform its demonstrated functions.
 *   **FR-VULTR-002 (Enterprise Agent Demo):** The platform must showcase at least one functional enterprise agent (e.g., "Automated Market Research & Competitor Analysis Agent").
     *   **FR-VULTR-002.1 (Agentic Workflow):** The demo agent must exhibit agentic behavior, including multi-step task execution, reasoning (via Groq/Llama 3), and autonomous operation based on initial parameters.
-    *   **FR-VULTR-002.2 (Web Interface):** Users must be able to initiate, monitor, and view results from the enterprise agent via the Snoob-Dev web interface.
+    *   **FR-VULTR-002.2 (Web Interface):** Users must be able to initiate, monitor, and view results from the enterprise agent via the Sentient Core web interface.
 
 ### 9.3 Prosus Track: Agent-Powered E-Commerce Solution Pack
 

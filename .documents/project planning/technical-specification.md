@@ -817,7 +817,7 @@ This section details the technical specifications for features and integrations 
 
 #### 11.1.1 Groq API & Llama 3 Integration
 *   **Component:** `GroqService` (Python client library)
-*   **Location:** `snoob-dev/backend/services/groq_service.py`
+*   **Location:** `sentient-core/backend/services/groq_service.py`
 *   **Functionality:**
     *   Manages API key authentication with Groq (via environment variables).
     *   Provides methods for making synchronous and asynchronous calls to the Groq API, specifically targeting Llama 3 models (e.g., `llama-3.3-70b-versatile`).
@@ -828,7 +828,7 @@ This section details the technical specifications for features and integrations 
 
 #### 11.1.2 Fetch.ai (uAgents/Agentverse) Integration
 *   **Component:** `FetchAIAdapter`
-*   **Location:** `snoob-dev/backend/integration/fetchai_adapter.py` (new module)
+*   **Location:** `sentient-core/backend/integration/fetchai_adapter.py` (new module)
 *   **Functionality:**
     *   Provides methods to register Sentient Core agents with the `Agentverse`.
     *   Facilitates agent discovery by querying `Agentverse`.
@@ -839,7 +839,7 @@ This section details the technical specifications for features and integrations 
 
 #### 11.1.3 Coral Protocol Integration
 *   **Component:** `CoralMessageHandler`
-*   **Location:** `snoob-dev/backend/messaging/coral_handler.py` (new module or integrated into existing messaging system)
+*   **Location:** `sentient-core/backend/messaging/coral_handler.py` (new module or integrated into existing messaging system)
 *   **Functionality:**
     *   Implements Coral Protocol's thread-style collaboration model.
     *   Formats outgoing messages and parses incoming messages according to Coral Protocol specifications.
@@ -910,7 +910,7 @@ spec:
 ```
 
 #### 11.2.2 Enterprise Agentic Workflow Implementation
-*   **Agent Class:** `MarketResearchAgent` in `snoob-dev/src/agents/enterprise/market_research_agent.py`.
+*   **Agent Class:** `MarketResearchAgent` in `sentient-core/src/agents/enterprise/market_research_agent.py`.
 *   **Core Logic:** Utilizes `GroqService` for data analysis and report generation. May integrate with external APIs for data gathering (e.g., news APIs, financial data APIs – to be specified).
 *   **Workflow:** Defined using LangGraph, orchestrated by the Sentient Core platform.
 
@@ -920,7 +920,7 @@ spec:
 *   **Component:** `KnowledgeGraphService`
 *   **Description:** Manages the creation, storage, and querying of the user-centric knowledge graph, which is augmented by real-time search.
 *   **Technology:** `RDFLib` for graph manipulation, **ChromaDB** for vector storage, and the **Tavily Search API** for external product research.
-*   **Schema:** Defined in `snoob-dev/backend/models/knowledge_graph_schema.py` (e.g., User, Product, Preference, Interaction entities and relationships).
+*   **Schema:** Defined in `sentient-core/backend/models/knowledge_graph_schema.py` (e.g., User, Product, Preference, Interaction entities and relationships).
 *   **Functionality:** CRUD operations for user profiles, querying user preferences and history, and enriching profiles with search results.
 *   **Integration Points:** E-commerce agent logic.
 
@@ -933,14 +933,14 @@ spec:
 
 #### 11.3.3 E-commerce Agent Pack
 *   **Description:** A collection of specialized agents designed to provide an intelligent and personalized e-commerce experience.
-*   **Location:** `snoob-dev/src/agents/ecommerce/` (e.g., `product_research_agent.py`, `personal_shopper_agent.py`).
+*   **Location:** `sentient-core/src/agents/ecommerce/` (e.g., `product_research_agent.py`, `personal_shopper_agent.py`).
 *   **Key Integrations:** `GroqService`, `KnowledgeGraphService`, `TavilyService`, `FetchAIAdapter`, `CoralMessageHandler`.
 
 ### 11.4 Qualcomm Track: On-Device Edge AI Utility Generator
 
 #### 11.4.1 Utility Generator Module
 *   **Component:** `EdgeUtilityGeneratorService`
-*   **Location:** `snoob-dev/backend/services/edge_utility_generator_service.py`
+*   **Location:** `sentient-core/backend/services/edge_utility_generator_service.py`
 *   **Core Logic:** Takes high-level user requirements (e.g., via a structured JSON input from the frontend). Uses `GroqService` (with Llama 3 / Code Llama) to generate Python code for the utility.
 *   **Output:** Packaged Python application code, including necessary model files (e.g., ONNX) and a simple `requirements.txt` or setup script.
 

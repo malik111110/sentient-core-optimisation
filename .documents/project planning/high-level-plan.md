@@ -409,31 +409,31 @@ Advanced preview generation with comprehensive testing:
 
 ### **8.0 Hackathon Strategic Objectives: 'Raise Your Hack'**
 
-This section outlines the strategic adaptation of the Genesis Agentic Development Engine (now also referred to as Snoob-Dev: The Agentic Nexus for the hackathon) to meet the requirements of the 'Raise Your Hack' competition. We will target three sponsor tracks: Vultr, Prosus, and Qualcomm, and integrate core technologies from Meta (via Groq), Groq, Fetch.ai, and Coral Protocol.
+This section outlines the strategic adaptation of the Sentient Core (now also referred to as Sentient Core: The Agentic Nexus for the hackathon) to meet the requirements of the 'Raise Your Hack' competition. We will target three sponsor tracks: Vultr, Prosus, and Qualcomm, and integrate core technologies from Meta (via Groq), Groq, Fetch.ai, and Coral Protocol.
 
 #### **8.1 Core Technology Integration Mandates**
 
 *   **8.1.1 Meta & Groq API Integration:**
     *   **Objective:** Leverage Groq's high-speed inference for Meta's Llama 3 models as the primary LLM backbone for agentic tasks.
-    *   **Key Actions:** Implement a robust `GroqService` client. Refactor existing LLM calls to utilize this service. Explore Llama 3's capabilities for code generation, reasoning, and natural language understanding within the Snoob-Dev agent framework.
+    *   **Key Actions:** Implement a robust `GroqService` client. Refactor existing LLM calls to utilize this service. Explore Llama 3's capabilities for code generation, reasoning, and natural language understanding within the Sentient Core agent framework.
 *   **8.1.2 Fetch.ai (uAgents/Agentverse) Integration:**
     *   **Objective:** Enhance agent interoperability and discovery by integrating with the Fetch.ai ecosystem.
-    *   **Key Actions:** Develop an adapter for `uAgents` or `Agentverse` to allow Snoob-Dev agents to be registered and discovered on the Fetch.ai network. Explore Fetch.ai for decentralized communication, particularly for the e-commerce agent pack.
+    *   **Key Actions:** Develop an adapter for `uAgents` or `Agentverse` to allow Sentient Core agents to be registered and discovered on the Fetch.ai network. Explore Fetch.ai for decentralized communication, particularly for the e-commerce agent pack.
 *   **8.1.3 Coral Protocol Integration:**
     *   **Objective:** Implement Coral Protocol's thread-style collaboration model for standardized and robust inter-agent communication.
     *   **Key Actions:** Develop a `CoralMessageHandler` to manage collaborative sessions and ensure messages conform to Coral's specifications. Integrate this into complex multi-agent workflows.
 
 #### **8.2 Vultr Track: Enterprise Agentic Workflow Platform**
 
-*   **Objective:** Showcase Snoob-Dev as a deployable, web-based enterprise agent platform on Vultr infrastructure.
+*   **Objective:** Showcase Sentient Core as a deployable, web-based enterprise agent platform on Vultr infrastructure.
 *   **Key Deliverables:**
-    1.  Fully deployed Snoob-Dev platform (frontend and backend) on Vultr.
+    1.  Fully deployed Sentient Core platform (frontend and backend) on Vultr.
     2.  Demonstration of an enterprise use-case (e.g., "Automated Market Research & Competitor Analysis Agent") utilizing the platform's agent orchestration and Groq/Llama 3 capabilities.
 *   **Key Actions:** Dockerize application components. Develop Vultr deployment scripts. Set up CI/CD. Build out the selected enterprise agent.
 
 #### **8.3 Prosus Track: Agent-Powered E-Commerce Solution Pack**
 
-*   **Objective:** Develop an AI-Powered E-Commerce Agent Pack as a specialized solution built upon the Snoob-Dev platform.
+*   **Objective:** Develop an AI-Powered E-Commerce Agent Pack as a specialized solution built upon the Sentient Core platform.
 *   **Key Deliverables:**
     1.  A suite of e-commerce agents (e.g., for smart food ordering or travel booking) demonstrating intelligent product discovery, personalization, and order processing.
     2.  Implementation of user profiles as knowledge graphs (e.g., using RDFLib).
@@ -444,7 +444,7 @@ This section outlines the strategic adaptation of the Genesis Agentic Developmen
 
 *   **Objective:** Create an innovative Edge AI Utility Generator module within Sentient Core that generates Python code for on-device consumer utility applications targeting Snapdragon X Elite.
 *   **Key Deliverables:**
-    1.  The Edge AI Utility Generator module integrated into Snoob-Dev.
+    1.  The Edge AI Utility Generator module integrated into Sentient Core.
     2.  Demonstration of generating a simple, useful on-device AI utility (e.g., an offline text summarizer or image classifier) whose core AI functionality runs entirely offline on-device.
 *   **Key Actions:** Design the generator module architecture. Implement the model pipeline: conversion to `.onnx`, quantization, and final conversion to the `.ort` format. Integrate **ONNX Runtime** with the **QNN Execution Provider** into a target mobile application template. Develop code generation prompts for Groq/Llama 3 to produce the utility's business logic.
 
