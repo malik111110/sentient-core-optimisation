@@ -10,7 +10,12 @@
 
 ## 1. Objective
 
-To develop an innovative, agent-powered e-commerce solution that leverages the Sentient Core platform to provide a personalized and intelligent shopping experience. This plan details the steps to meet the Prosus sponsor track requirements, organized by stories under EPIC-PROSUS.
+To develop an innovative, agent-powered e-commerce solution concept that leverages the Sentient Core platform, showcasing its ability to create specialized agents capable of providing personalized and intelligent experiences. While our primary hackathon showcase will focus on the Qualcomm track (on-device AI), the development related to this Prosus track will serve to:
+*   Demonstrate Sentient Core's versatility in powering diverse agent types, including those for complex domains like e-commerce.
+*   Highlight advanced agent capabilities such as knowledge graph utilization, natural language interaction, and integration with external APIs for rich data retrieval.
+*   Provide a compelling example of how Sentient Core can be used to build sophisticated applications that improve everyday life, aligning with Prosus's themes.
+
+This plan details the steps to develop key components of this e-commerce agent concept, supporting the overall 'Raise Your Hack' competition goals by illustrating the broader potential of the Sentient Core platform.
 
 ## 2. Stories & Detailed Tasks
 
@@ -117,10 +122,10 @@ To develop an innovative, agent-powered e-commerce solution that leverages the S
 
 ---
 
-## 3. Success Criteria for Prosus Track
+## 3. Success Criteria for Prosus Track (Supporting Role)
 
-- A functional e-commerce agent pack (Product Discovery, Personal Shopper) is created and integrated into the Sentient Core platform.
-- The system can build and utilize a knowledge graph of user preferences (stored in Supabase, managed via FastAPI) to provide personalized recommendations.
-- Users can interact with the platform using a natural language voice interface (STT/TTS).
-- The solution effectively demonstrates an innovative and intelligent e-commerce experience.
-- All Prosus track requirements from the `02_02_raise_your_hack_overview.md` are met.
+- Key components of an e-commerce agent pack (e.g., Product Discovery, Personal Shopper logic) are developed within the Sentient Core platform, showcasing its agent creation capabilities.
+- The system demonstrates the ability to build and utilize a knowledge graph of user preferences (potentially using Supabase and FastAPI) to enable personalized recommendations, highlighting data-driven agent intelligence.
+- The concept for natural language voice interaction (STT/TTS) is outlined or prototyped, indicating how users could interact with such specialized agents.
+- The developed components effectively demonstrate Sentient Core's potential for creating innovative and intelligent e-commerce (or similar specialized) solutions.
+- The work aligns with Prosus's themes of technology improving everyday life and can be presented as an example of the sophisticated agents Sentient Core can produce, complementing the primary on-device AI demo for the Qualcomm track.

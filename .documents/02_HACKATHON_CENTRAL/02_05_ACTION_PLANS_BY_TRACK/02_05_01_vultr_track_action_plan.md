@@ -10,7 +10,12 @@
 
 ## 1. Objective
 
-To deploy the Sentient Core platform on Vultr's cloud infrastructure and demonstrate a sophisticated, enterprise-grade agentic workflow. This plan details the technical steps required to meet the Vultr sponsor track requirements for the 'Raise Your Hack' competition, organized by stories under EPIC-VULTR.
+To deploy the Sentient Core platform on Vultr's cloud infrastructure, establishing a robust backend and operational environment. While our primary hackathon showcase will focus on the Qualcomm track (on-device AI), this Vultr deployment serves as a critical foundation. It will demonstrate:
+*   The core infrastructure required to support the Sentient Core ecosystem.
+*   A platform capable of developing, managing, and potentially orchestrating sophisticated AI agents, including those designed for edge deployment.
+*   An example of an enterprise-grade agentic workflow, showcasing the broader capabilities of Sentient Core beyond the immediate on-device demo.
+
+This plan details the technical steps for this foundational Vultr deployment, aligning with EPIC-VULTR and supporting the overall 'Raise Your Hack' competition goals.
 
 ## 2. Stories & Detailed Tasks
 
@@ -124,12 +129,12 @@ To deploy the Sentient Core platform on Vultr's cloud infrastructure and demonst
 
 ---
 
-## 3. Success Criteria for Vultr Track
+## 3. Success Criteria for Vultr Track (Supporting Role)
 
-- The Sentient Core platform (frontend, backend, enterprise agent) is successfully deployed and publicly accessible on a Vultr instance.
-- All services are running in Docker containers, orchestrated by Docker Compose, behind an Nginx reverse proxy.
-- The demonstrated "Enterprise Workflow Agent" functions correctly, showcasing multi-step reasoning and tool use (e.g., Groq, Tavily).
-- CI/CD pipeline automates deployment to Vultr.
-- Basic monitoring and logging are in place.
-- The deployment is secure, stable, and performs reliably.
-- All Vultr track requirements from the `02_02_raise_your_hack_overview.md` are met.
+- The Sentient Core platform (frontend, backend, example enterprise agent) is successfully deployed and publicly accessible on a Vultr instance, serving as a stable backend and development hub.
+- All core services run in Docker containers, orchestrated by Docker Compose, behind an Nginx reverse proxy, demonstrating good DevOps practices.
+- An "Enterprise Workflow Agent" (or a similar complex agent) functions correctly, showcasing the platform's capability for multi-step reasoning and tool use (e.g., Groq, Tavily). This demonstrates the potential of Sentient Core beyond the primary on-device demo.
+- CI/CD pipeline automates deployment to Vultr, showcasing efficient development workflows.
+- Basic monitoring and logging are in place for platform stability.
+- The deployment is secure, stable, and performs reliably, providing a solid foundation for the Sentient Core ecosystem.
+- Key Vultr infrastructure capabilities are utilized and can be highlighted as part of the broader Sentient Core architecture, supporting the primary Qualcomm track narrative by illustrating how edge agents could be managed or updated in a larger system.
