@@ -7,3 +7,6 @@ fastapi
 uvicorn[standard]
 httpx
 supabase==2.3.0
+pydantic
+crewai
+langgraph
