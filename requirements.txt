@@ -1,6 +1,6 @@
 groq
 uagents
-coral-protocol
+coral-server
 pytest
 pytest-mock
 fastapi
