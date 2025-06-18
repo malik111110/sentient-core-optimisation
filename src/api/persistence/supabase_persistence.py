@@ -3,46 +3,94 @@ import uuid
 from datetime import datetime, timezone
 
 from ..models.core_models import AgentRead, AgentCreate, AgentUpdate, TaskRead, TaskCreate, TaskUpdate, AgentStatus, TaskStatus
+from src.clients.supabase_client import supabase_client # Import Supabase client
 
-# In-memory data stores
-db_agents: Dict[uuid.UUID, AgentRead] = {}
+# In-memory data store for tasks (will be refactored later)
 db_tasks: Dict[uuid.UUID, TaskRead] = {}
 
-# --- Agent Persistence Functions ---
+# --- Agent Persistence Functions (Supabase) ---
 def get_agent(agent_id: uuid.UUID) -> Optional[AgentRead]:
-    return db_agents.get(agent_id)
+    if not supabase_client:
+        print("ERROR: Supabase client not initialized in get_agent")
+        return None
+    try:
+        response = supabase_client.table('agents').select("*").eq('agent_id', str(agent_id)).single().execute()
+        if response.data:
+            return AgentRead(**response.data)
+    except Exception as e:
+        print(f"Error fetching agent {agent_id} from Supabase: {e}")
+    return None
 
 def get_agents(skip: int = 0, limit: int = 100) -> List[AgentRead]:
-    return list(db_agents.values())[skip : skip + limit]
+    if not supabase_client:
+        print("ERROR: Supabase client not initialized in get_agents")
+        return []
+    try:
+        response = supabase_client.table('agents').select("*").range(skip, skip + limit - 1).execute()
+        if response.data:
+            return [AgentRead(**item) for item in response.data]
+    except Exception as e:
+        print(f"Error fetching agents from Supabase: {e}")
+    return []
 
-def create_agent(agent_create: AgentCreate) -> AgentRead:
+def create_agent(agent_create: AgentCreate) -> Optional[AgentRead]: # Changed return to Optional for consistency
+    if not supabase_client:
+        print("ERROR: Supabase client not initialized in create_agent")
+        return None
     now = datetime.now(timezone.utc)
     new_agent_id = uuid.uuid4()
-    # Create an AgentRead instance from AgentCreate data
-    agent_data = agent_create.model_dump()
-    agent = AgentRead(
-        **agent_data, # Unpack fields from AgentCreate
-        agent_id=new_agent_id,
-        status=AgentStatus.INACTIVE, # Default status on creation
-        created_at=now,
-        updated_at=now
-    )
-    db_agents[new_agent_id] = agent
-    return agent
+    agent_data_dict = agent_create.model_dump()
+    agent_data_dict['agent_id'] = str(new_agent_id) # Ensure UUID is string for Supabase
+    agent_data_dict['status'] = AgentStatus.INACTIVE.value # Default status
+    agent_data_dict['created_at'] = now.isoformat()
+    agent_data_dict['updated_at'] = now.isoformat()
+
+    try:
+        response = supabase_client.table('agents').insert(agent_data_dict).execute()
+        if response.data:
+            # Supabase returns a list with one item on successful insert
+            return AgentRead(**response.data[0])
+    except Exception as e:
+        print(f"Error creating agent in Supabase: {e}")
+    return None
 
 def update_agent(agent_id: uuid.UUID, agent_update: AgentUpdate) -> Optional[AgentRead]:
-    agent = db_agents.get(agent_id)
-    if agent:
-        update_data = agent_update.model_dump(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(agent, key, value)
-        agent.updated_at = datetime.now(timezone.utc)
-        db_agents[agent_id] = agent # Ensure the updated agent is stored back
-        return agent
+    if not supabase_client:
+        print("ERROR: Supabase client not initialized in update_agent")
+        return None
+    update_data_dict = agent_update.model_dump(exclude_unset=True)
+    update_data_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+
+    # Convert enums to their values if present
+    if 'status' in update_data_dict and isinstance(update_data_dict['status'], AgentStatus):
+        update_data_dict['status'] = update_data_dict['status'].value
+
+    try:
+        response = supabase_client.table('agents').update(update_data_dict).eq('agent_id', str(agent_id)).select().single().execute()
+        if response.data:
+            return AgentRead(**response.data)
+    except Exception as e:
+        print(f"Error updating agent {agent_id} in Supabase: {e}")
     return None
 
 def delete_agent(agent_id: uuid.UUID) -> Optional[AgentRead]:
-    return db_agents.pop(agent_id, None)
+    if not supabase_client:
+        print("ERROR: Supabase client not initialized in delete_agent")
+        return None
+    # First, fetch the agent to return its data, as per original in-memory logic
+    agent_to_delete = get_agent(agent_id)
+    if not agent_to_delete:
+        return None # Agent not found
+
+    try:
+        response = supabase_client.table('agents').delete().eq('agent_id', str(agent_id)).execute()
+        # Successful delete in Supabase might not return the deleted data in response.data directly in all client versions/scenarios.
+        # We rely on agent_to_delete fetched prior to deletion for the return value.
+        if response.data or (hasattr(response, 'status_code') and 200 <= response.status_code < 300): # Check for successful HTTP status too
+             return agent_to_delete
+    except Exception as e:
+        print(f"Error deleting agent {agent_id} from Supabase: {e}")
+    return None
 
 # --- Task Persistence Functions ---
 def get_task(task_id: uuid.UUID) -> Optional[TaskRead]:
