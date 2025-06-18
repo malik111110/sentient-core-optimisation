@@ -3,7 +3,7 @@ from typing import List, Optional
 import uuid
 
 from ..models.core_models import TaskCreate, TaskRead, TaskUpdate
-from ..persistence import in_memory_db as db
+from ..persistence import supabase_persistence as db
 
 router = APIRouter(
     prefix="/tasks",

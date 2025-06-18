@@ -3,7 +3,7 @@ from typing import List, Optional
 import uuid
 
 from ..models.core_models import AgentCreate, AgentRead, AgentUpdate
-from ..persistence import in_memory_db as db # Using an alias for brevity
+from ..persistence import supabase_persistence as db # Using an alias for brevity
 
 router = APIRouter(
     prefix="/agents",
