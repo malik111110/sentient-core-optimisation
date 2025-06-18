@@ -3,3 +3,6 @@ uagents
 coral-protocol
 pytest
 pytest-mock
+fastapi
+uvicorn[standard]
+httpx
