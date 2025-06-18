@@ -1,65 +1,120 @@
 import pytest
+import uuid
 from fastapi.testclient import TestClient
-from src.main import app
-from src.api.models.core_models import Agent, Task, TaskStatus
+from src.main import app # app instance from src/main.py
+from src.api.models.core_models import AgentCreate, AgentRead, AgentUpdate, AgentStatus
+from src.api.persistence import in_memory_db # To clear db for test isolation
 
 client = TestClient(app)
 
-def test_read_root():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"status": "ok", "message": "Welcome to the Sentient Core API!"}
+@pytest.fixture(autouse=True)
+def clear_db_before_each_test():
+    """Fixture to clear in-memory database before each test."""
+    in_memory_db.db_agents.clear()
+    in_memory_db.db_tasks.clear() # Though not directly used here, good practice
+    yield # This is where the test runs
 
-def test_create_and_get_agent():
-    # Create a new agent
-    agent_data = {"name": "Test Agent", "description": "An agent for testing purposes."}
-    response = client.post("/v1/agents/", json=agent_data)
+def test_read_api_v1_root():
+    response = client.get("/api/v1")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Welcome to Sentient Core API v1"}
+
+def test_create_agent():
+    agent_data = AgentCreate(
+        name="Test Agent Alpha",
+        description="An agent for testing creation.",
+        capabilities=["test", "create"],
+        config={"param1": "value1"}
+    )
+    response = client.post("/api/v1/agents/", json=agent_data.model_dump())
     assert response.status_code == 201
-    created_agent = response.json()
-    assert created_agent["name"] == agent_data["name"]
-    agent_id = created_agent["id"]
+    created_agent = AgentRead(**response.json())
+    assert created_agent.name == agent_data.name
+    assert created_agent.description == agent_data.description
+    assert created_agent.capabilities == agent_data.capabilities
+    assert created_agent.config == agent_data.config
+    assert created_agent.agent_id is not None
+    assert created_agent.status == AgentStatus.INACTIVE
+    assert created_agent.created_at is not None
+    assert created_agent.updated_at is not None
+    assert created_agent.created_at == created_agent.updated_at # Initially
+
+def test_get_specific_agent():
+    # First, create an agent
+    agent_data = AgentCreate(name="Test Agent Beta", description="For get test")
+    create_response = client.post("/api/v1/agents/", json=agent_data.model_dump())
+    assert create_response.status_code == 201
+    agent_id = create_response.json()["agent_id"]
 
     # Get the agent back
-    response = client.get(f"/v1/agents/{agent_id}")
+    response = client.get(f"/api/v1/agents/{agent_id}")
     assert response.status_code == 200
-    retrieved_agent = response.json()
-    assert retrieved_agent["id"] == agent_id
-    assert retrieved_agent["name"] == agent_data["name"]
+    retrieved_agent = AgentRead(**response.json())
+    assert retrieved_agent.agent_id == uuid.UUID(agent_id) # Ensure UUID conversion
+    assert retrieved_agent.name == agent_data.name
 
 def test_get_nonexistent_agent():
-    response = client.get("/v1/agents/nonexistent-id")
+    non_existent_uuid = uuid.uuid4()
+    response = client.get(f"/api/v1/agents/{non_existent_uuid}")
     assert response.status_code == 404
+    assert response.json()["detail"] == "Agent not found"
 
 def test_list_agents():
-    # Clear previous state if necessary or ensure test isolation
-    # For this simple in-memory db, we rely on test execution order or could reset db
-    response = client.get("/v1/agents/")
+    # Create a couple of agents
+    client.post("/api/v1/agents/", json=AgentCreate(name="Agent One").model_dump())
+    client.post("/api/v1/agents/", json=AgentCreate(name="Agent Two").model_dump())
+
+    response = client.get("/api/v1/agents/")
     assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    agents_list = response.json()
+    assert isinstance(agents_list, list)
+    assert len(agents_list) == 2
+    for agent_dict in agents_list:
+        agent = AgentRead(**agent_dict) # Validate structure
+        assert agent.agent_id is not None
 
-def test_create_and_get_task():
-    # First, create an agent to assign the task to
-    agent_data = {"name": "Task Agent", "description": "An agent for running tasks."}
-    agent_response = client.post("/v1/agents/", json=agent_data)
-    agent_id = agent_response.json()["id"]
+def test_update_agent():
+    # Create an agent
+    agent_data = AgentCreate(name="Agent Gamma", description="Before update")
+    create_response = client.post("/api/v1/agents/", json=agent_data.model_dump())
+    agent_id = create_response.json()["agent_id"]
+    original_created_at = create_response.json()["created_at"]
 
-    # Now, create a task for that agent
-    task_input = {"prompt": "Summarize this text...", "text": "A long text..."}
-    task_response = client.post(f"/v1/agents/{agent_id}/tasks", json=task_input)
-    assert task_response.status_code == 202
-    created_task = task_response.json()
-    assert created_task["agent_id"] == agent_id
-    assert created_task["input_data"] == task_input
-    assert created_task["status"] == TaskStatus.RUNNING
-    task_id = created_task["id"]
+    # Update the agent
+    update_payload = AgentUpdate(name="Agent Gamma Updated", status=AgentStatus.ACTIVE, description="After update")
+    response = client.put(f"/api/v1/agents/{agent_id}", json=update_payload.model_dump(exclude_unset=True))
+    assert response.status_code == 200
+    updated_agent = AgentRead(**response.json())
+    assert updated_agent.name == "Agent Gamma Updated"
+    assert updated_agent.status == AgentStatus.ACTIVE
+    assert updated_agent.description == "After update"
+    assert updated_agent.agent_id == uuid.UUID(agent_id)
+    assert updated_agent.created_at == original_created_at # Should not change
+    assert updated_agent.updated_at > original_created_at
 
-    # Get the task status back
-    status_response = client.get(f"/v1/tasks/{task_id}")
-    assert status_response.status_code == 200
-    retrieved_task = status_response.json()
-    assert retrieved_task["id"] == task_id
-    assert retrieved_task["status"] == TaskStatus.RUNNING
+def test_update_nonexistent_agent():
+    non_existent_uuid = uuid.uuid4()
+    update_payload = AgentUpdate(name="Doesn't Matter")
+    response = client.put(f"/api/v1/agents/{non_existent_uuid}", json=update_payload.model_dump(exclude_unset=True))
+    assert response.status_code == 404
 
-def test_get_nonexistent_task():
-    response = client.get("/v1/tasks/nonexistent-id")
+def test_delete_agent():
+    # Create an agent
+    agent_data = AgentCreate(name="Agent Delta", description="To be deleted")
+    create_response = client.post("/api/v1/agents/", json=agent_data.model_dump())
+    agent_id = create_response.json()["agent_id"]
+
+    # Delete the agent
+    response = client.delete(f"/api/v1/agents/{agent_id}")
+    assert response.status_code == 200 # As per our router returning the deleted agent
+    deleted_agent_data = response.json()
+    assert deleted_agent_data["agent_id"] == agent_id
+
+    # Verify it's gone
+    get_response = client.get(f"/api/v1/agents/{agent_id}")
+    assert get_response.status_code == 404
+
+def test_delete_nonexistent_agent():
+    non_existent_uuid = uuid.uuid4()
+    response = client.delete(f"/api/v1/agents/{non_existent_uuid}")
     assert response.status_code == 404
