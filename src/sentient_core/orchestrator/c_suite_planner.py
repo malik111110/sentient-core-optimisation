@@ -42,7 +42,7 @@ class CSuitePlanner:
             agents=[self.project_architect_agent],
             tasks=[planning_task],
             process=Process.sequential,
-            verbose=2
+            verbose=True
         )
 
         # For now, since we don't have a live LLM, we'll mock the result

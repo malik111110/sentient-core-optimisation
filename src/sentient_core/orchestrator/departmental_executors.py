@@ -1,15 +1,126 @@
 # Departmental Executor Agents using LangGraph
 
-# This module will contain the LangGraph workflows for each department
-# (e.g., Research, Development). Each workflow will be a state machine
-# that executes the tasks assigned by the C-Suite Planner.
+from typing import Dict, Any, List, TypedDict
+from langgraph.graph import StateGraph, END
+from .shared_state import Task # Task is defined in shared_state.py within the same orchestrator package
+
+# Define the state for our LangGraph
+class ExecutorGraphState(TypedDict):
+    tasks_to_process: List[Task]
+    current_task_index: int
+    current_task_result: Any
+    completed_task_outputs: List[Any]
+    error_message: str
 
 class DepartmentalExecutor:
-    def execute_task(self, task_details: dict):
-        department = task_details.get("department")
-        task = task_details.get("task")
-        print(f"[{department} Executor]: Starting task - '{task}'")
-        # Here, we would trigger the specific LangGraph for the department.
-        # For now, we'll just simulate completion.
-        print(f"[{department} Executor]: Finished task - '{task}'")
-        return True
+    def __init__(self):
+        self.workflow = StateGraph(ExecutorGraphState)
+        self._setup_graph()
+        self.app = self.workflow.compile()
+        print("DepartmentalExecutor initialized with LangGraph workflow.")
+
+    def _setup_graph(self):
+        # Define nodes
+        self.workflow.add_node("get_next_task", self._get_next_task)
+        self.workflow.add_node("execute_single_task", self._execute_single_task)
+        self.workflow.add_node("handle_error", self._handle_error)
+
+        # Define edges
+        self.workflow.set_entry_point("get_next_task")
+        self.workflow.add_conditional_edges(
+            "get_next_task",
+            self._decide_to_execute_or_finish,
+            {
+                "execute": "execute_single_task",
+                "finish": END,
+            }
+        )
+        # self.workflow.add_edge("execute_single_task", "get_next_task") # Replaced by conditional edge below
+        self.workflow.add_conditional_edges(
+            "execute_single_task",
+            self._check_task_outcome,
+            {
+                "success": "get_next_task",
+                "error": "handle_error"
+            }
+        )
+        self.workflow.add_edge("handle_error", END) # End if error occurs
+
+    def _check_task_outcome(self, state: ExecutorGraphState) -> str:
+        print("[LangGraph Router]: Checking task outcome...")
+        if state.get('error_message') and state['error_message'] != '':
+            print(f"[LangGraph Router]: Task failed with message: {state['error_message']}")
+            return "error"
+        else:
+            print("[LangGraph Router]: Task succeeded or no error reported.")
+            return "success"
+
+    def _get_next_task(self, state: ExecutorGraphState) -> ExecutorGraphState:
+        print("[LangGraph Router]: Getting next task...")
+        current_index = state.get('current_task_index', 0)
+        tasks = state.get('tasks_to_process', [])
+        if current_index < len(tasks):
+            task = tasks[current_index]
+            print(f"[LangGraph Router]: Next task is '{task.task}' for department '{task.department}'.")
+            return {**state, "current_task_index": current_index + 1, "current_task_result": None}
+        else:
+            print("[LangGraph Router]: No more tasks to process.")
+            return {**state, "current_task_result": "All tasks processed"}
+
+    def _decide_to_execute_or_finish(self, state: ExecutorGraphState) -> str:
+        print("[LangGraph Router]: Deciding next step...")
+        if state.get("current_task_result") == "All tasks processed":
+            print("[LangGraph Router]: Decision: Finish.")
+            return "finish"
+        else:
+            # This implies _get_next_task found a task and current_task_index is valid for the *next* task
+            print("[LangGraph Router]: Decision: Execute next task.")
+            return "execute"
+
+    def _execute_single_task(self, state: ExecutorGraphState) -> ExecutorGraphState:
+        # The actual task to execute is at index current_task_index - 1 because _get_next_task increments it
+        task_to_execute = state['tasks_to_process'][state['current_task_index'] - 1]
+        department = task_to_execute.department
+        task_description = task_to_execute.task
+        
+        print(f"[{department} Executor - LangGraph Node]: Starting task - '{task_description}'")
+        # Simulate task execution. In a real scenario, this would call a specialized agent or tool.
+        # For now, we just mock success.
+        result = f"Successfully executed: {task_description}"
+        print(f"[{department} Executor - LangGraph Node]: Finished task - '{task_description}'")
+        
+        completed_outputs = state.get('completed_task_outputs', [])
+        completed_outputs.append({ "task": task_description, "result": result, "status": "completed"})
+        return {**state, "current_task_result": result, "completed_task_outputs": completed_outputs}
+
+    def _handle_error(self, state: ExecutorGraphState) -> ExecutorGraphState:
+        error_msg = state.get('error_message', 'Unknown error')
+        print(f"[LangGraph Error Handler]: An error occurred: {error_msg}")
+        return {**state}
+
+    def execute_plan(self, tasks: List[Task]) -> Dict[str, Any]:
+        print(f"DepartmentalExecutor: Received plan with {len(tasks)} tasks. Invoking LangGraph workflow...")
+        initial_state = ExecutorGraphState(
+            tasks_to_process=tasks,
+            current_task_index=0,
+            current_task_result=None,
+            completed_task_outputs=[],
+            error_message=''
+        )
+        
+        final_state = self.app.invoke(initial_state)
+        print("DepartmentalExecutor: LangGraph workflow complete.")
+        return {"status": "success", "results": final_state.get('completed_task_outputs', [])}
+
+    # This method needs to be adapted or removed if execute_plan is the new entry point
+    def execute_task(self, task_details: dict) -> bool:
+        # This method is now superseded by execute_plan which processes a list of tasks.
+        # For compatibility with the current main_orchestrator, we can simulate a single task execution
+        # or update main_orchestrator to call execute_plan directly.
+        # For now, let's make it compatible by wrapping the single task.
+        print("[Deprecation Warning]: execute_task is called. Consider using execute_plan for multi-task execution.")
+        mock_task_obj = Task(department=task_details.get('department', 'Unknown'), 
+                             task=task_details.get('task', 'Unknown Task'), 
+                             status='pending')
+        result = self.execute_plan([mock_task_obj])
+        return result['status'] == 'success' and len(result['results']) > 0

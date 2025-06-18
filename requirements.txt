@@ -10,3 +10,5 @@ supabase==2.3.0
 pydantic
 crewai
 langgraph
+numpy<2.0
+setuptools

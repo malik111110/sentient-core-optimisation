@@ -23,20 +23,34 @@ class MainOrchestrator:
         
         print(f"Plan for project '{self.state.plan.project_name}' received. Executing tasks...")
 
-        # 2. Departmental Executors execute the plan task by task
-        for task in self.state.plan.tasks:
-            task.status = 'in_progress'
-            success = self.executor.execute_task(task.model_dump())
+        # 2. Departmental Executors execute the plan using LangGraph workflow
+        # The print statement: "Plan for project '{self.state.plan.project_name}' received. Executing tasks..." is already present before this block.
             
-            if success:
-                task.status = 'completed'
-                self.state.completed_tasks.append(task)
-            else:
-                task.status = 'failed'
-                print(f"Task failed: {task.task}. Halting execution.")
-                break
+        # Pass the list of Task objects directly to the new execute_plan method
+        execution_results = self.executor.execute_plan(self.state.plan.tasks)
+            
+        if execution_results.get("status") == "success":
+            results_list = execution_results.get("results", [])
+            # Create a mapping from task description to original Task object for easy update
+            task_map = {task.task: task for task in self.state.plan.tasks}
+                
+            for result_detail in results_list:
+                task_description = result_detail.get("task")
+                task_status = result_detail.get("status") # This should be 'completed' from our mock
+                if task_description in task_map:
+                    original_task = task_map[task_description]
+                    original_task.status = task_status # Update status on the Pydantic model instance
+                    if task_status == 'completed':
+                        self.state.completed_tasks.append(original_task)
+                    else: # Handle other statuses if they become possible
+                        print(f"Task '{original_task.task}' processed by LangGraph with status: {task_status}")
+                else:
+                    print(f"Warning: Result received from LangGraph for unknown task: {task_description}")
+            print("\nAll tasks processed by Departmental Executor using LangGraph.")
+        else:
+            print("Departmental Executor (LangGraph) reported a failure in processing the plan.")
         
-        print("\nAll tasks executed. Factory run complete.")
+        print("\nAgentic Factory run complete.") # This replaces the old "All tasks executed..." print statement
         print(f"\n--- Final State ---")
         print(self.state.model_dump_json(indent=2))
 
