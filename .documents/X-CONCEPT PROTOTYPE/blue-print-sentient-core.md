@@ -50,7 +50,7 @@ The platform offers two distinct modes to accommodate varying user needs and des
             *   Architectural Graphs and Diagrams
             *   Interactive Application UI Previews (rendered via Webcontainer/E2B for live interaction)
             *   Structured Data Visualizations and Charts
-        *   **E2B Integration:** **Crucially, E2B will be leveraged to create and render these interactive UI components and visual representations directly within the environment, allowing for real-time feedback and manipulation.**
+        *   **Sandbox Integration:** **Crucially, sandbox environments are leveraged to create and render these interactive UI components and visual representations. The `Chooser` utility intelligently selects between WebContainer (via the `WebContainerTool`) for frontend previews and E2B (via the `E2BSandboxTool`) for backend tasks, allowing for real-time feedback and manipulation.**
         *   **Comprehensive Document Display:** This Flow UI also serves as a central hub for displaying and collecting:
             *   Project Documents (e.g., Markdown files, PDFs)
             *   Images (e.g., mood boards, design inspirations)
@@ -118,6 +118,24 @@ The platform offers two distinct modes to accommodate varying user needs and des
     *   **Knowledge Memory Layers (Examples):**
         *   **Task-Based & Plans Layer:** Stores detailed execution plans and task breakdowns.
         *   *(Further layers to be defined, e.g., Codebase Knowledge Layer, User Preferences Layer, System Constraints Layer).*
+
+---
+
+**4. Core Agentic Tools: The Execution Layer**
+
+These tools form the practical execution layer, translating agent decisions into actions within sandboxed environments. They are the direct interface to the E2B and WebContainer technologies.
+
+*   **4.1. The `Chooser` Utility:**
+    *   **Location:** `src/sentient_core/orchestrator/chooser.py`
+    *   **Role:** This critical utility acts as a traffic controller. Based on a defined decision tree (e.g., task requirements, language, need for UI), it determines whether a given task should be executed in a WebContainer or an E2B sandbox. This is invoked by the **Coordinator** agent before dispatching tasks.
+
+*   **4.2. The `WebContainerTool`:**
+    *   **Location:** `src/sentient_core/tools/webcontainer_tool.py`
+    *   **Role:** This tool serves as the primary interface for the **FrontEndAgent**. It packages files (HTML, CSS, JS) and commands to be run in a client-side WebContainer instance, enabling live, interactive UI previews and development.
+
+*   **4.3. The `E2BSandboxTool`:**
+    *   **Location:** `src/sentient_core/tools/e2b_sandbox_tool.py`
+    *   **Role:** This tool is used by the **BackEndAgent** to securely execute backend code (e.g., Python, Node.js scripts) in an isolated E2B cloud sandbox. It is ideal for running tests, data processing, and validating server-side logic.
 
 ---
 

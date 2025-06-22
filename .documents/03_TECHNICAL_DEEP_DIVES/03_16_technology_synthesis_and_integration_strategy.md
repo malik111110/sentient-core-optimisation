@@ -38,7 +38,8 @@ Agent Graph (LangGraph)
 └─ Coordinator ────> Chooser (based on Decision Tree)
 ```
 
-### 4.1 Tool Interfaces
+### 4.1 Tool Interfaces (Implemented & Tested)
+
 ```ts
 interface WebContainerToolInput { files: FileTree; commands: string[]; }
 interface E2BSandboxToolInput   { language: 'python'|'node'; script: string; }
@@ -52,9 +53,9 @@ interface E2BSandboxToolInput   { language: 'python'|'node'; script: string; }
 ## 6. Roadmap Alignment & Milestones
 | Timeline | Deliverable | Responsible |
 |----------|-------------|-------------|
-| Week 1 | Implement Chooser utility | Core team |
-| Week 2 | Wrap WebContainerTool | Front-end agent |
-| Week 3 | Wrap E2BSandboxTool | Back-end agent |
+| Week 1 | Implement Chooser utility | ✅ Core team |
+| Week 2 | Wrap WebContainerTool | ✅ Front-end agent |
+| Week 3 | Wrap E2BSandboxTool | ✅ Back-end agent |
 | Week 4 | PersistDesktopTool + SnapshotTool | Persistence agent |
 | Week 5 | UI dashboards & audit log | UX team |
 

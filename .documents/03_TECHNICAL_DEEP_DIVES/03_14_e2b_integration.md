@@ -71,16 +71,21 @@ desktop.close()
 * Research or data ETL spanning minutes / hours.  
 * Persist `desktopId` in task memory; reconnect between agent steps.
 
-### 6.3 Tool Library Wrapper
-Expose a LangGraph / CrewAI **Tool**:
-```ts
-export const runInSandbox = async (code: string, lang: "python"|"node") => {
-  // 1. fetch/create Desktop
-  // 2. write file
-  // 3. exec & stream output
-  // 4. return result / error
-};
+### 6.3 Code Implementation
+
+The `E2BSandboxTool` located in `src/sentient_core/tools/e2b_sandbox_tool.py` provides a ready-to-use wrapper for agent interactions. It uses the following Pydantic model for its input:
+
+```python
+from pydantic import BaseModel
+from typing import Literal
+
+class E2BSandboxToolInput(BaseModel):
+    language: Literal['python', 'node']
+    script: str
 ```
+
+This tool is the primary interface for any agent needing to execute code in an E2B sandbox.
+
 
 ## 7. Security & Governance
 * **Network Egress**: Default allowed; lock down with E2B ACL if processing sensitive data.
