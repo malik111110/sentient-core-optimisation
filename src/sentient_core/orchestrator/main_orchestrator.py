@@ -1,8 +1,17 @@
+print("--- PYTHON SCRIPT EXECUTION STARTED ---") # ABSOLUTE FIRST LINE TEST
+import sys
+sys.stdout.flush() # FLUSH AFTER FIRST PRINT
+
 # Main entry point for the Sentient-Core Agentic Factory
 
+print("--- DEBUG: Before imports block ---"); sys.stdout.flush()
 from .c_suite_planner import CSuitePlanner
-from .departmental_executors import DepartmentalExecutor
+print("--- DEBUG: After CSuitePlanner import attempt ---"); sys.stdout.flush()
+# from .departmental_executors import DepartmentalExecutor
+# print("--- DEBUG: After DepartmentalExecutor import attempt ---"); sys.stdout.flush()
 from .shared_state import AgenticState, Plan, Task
+print("--- DEBUG: After SharedState import attempt ---"); sys.stdout.flush()
+print("--- DEBUG: After imports block (shared_state, c_suite_planner uncommented) ---"); sys.stdout.flush()
 
 class MainOrchestrator:
     def __init__(self, command: str):
@@ -56,6 +65,20 @@ class MainOrchestrator:
 
 
 if __name__ == "__main__":
-    initial_command = "Build a competitive intelligence dashboard for pharma."
-    factory = MainOrchestrator(command=initial_command)
-    factory.run()
+    initial_command = "Test run."
+    print(f"--- Starting Main Orchestrator with command: '{initial_command}' ---")
+    sys.stdout.flush()
+    try:
+        factory = MainOrchestrator(command=initial_command)
+        factory.run()
+        print("--- Main Orchestrator run completed successfully. ---")
+        sys.stdout.flush()
+    except Exception as e:
+        print(f"--- CRITICAL ERROR IN MAIN ORCHESTRATOR ---")
+        import traceback
+        traceback.print_exc()
+        sys.stdout.flush()
+        # Optionally re-raise or handle as needed, for now, just printing
+    finally:
+        print("--- Main Orchestrator execution finished. ---")
+        sys.stdout.flush()

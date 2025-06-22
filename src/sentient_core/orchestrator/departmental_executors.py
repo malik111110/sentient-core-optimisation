@@ -3,6 +3,17 @@
 from typing import Dict, Any, List, TypedDict
 from langgraph.graph import StateGraph, END
 from .shared_state import Task # Task is defined in shared_state.py within the same orchestrator package
+from ..specialized_agents import (
+    ResearchAgent,
+    DataAgent,
+    BackendDeveloperAgent,
+    FrontendDeveloperAgent,
+    IntegrationAgent,
+    DeploymentAgent
+)
+import logging # Ensure logging is imported
+
+logger = logging.getLogger(__name__) # Ensure logger is defined
 
 # Define the state for our LangGraph
 class ExecutorGraphState(TypedDict):
@@ -17,6 +28,16 @@ class DepartmentalExecutor:
         self.workflow = StateGraph(ExecutorGraphState)
         self._setup_graph()
         self.app = self.workflow.compile()
+
+        self.agent_mapping = {
+            "Research": ResearchAgent,
+            "Data": DataAgent,
+            "BackendDevelopment": BackendDeveloperAgent,
+            "FrontendDevelopment": FrontendDeveloperAgent,
+            "Integration": IntegrationAgent,
+            "Deployment": DeploymentAgent
+            # Add other departments and their corresponding agents here
+        }
         print("DepartmentalExecutor initialized with LangGraph workflow.")
 
     def _setup_graph(self):
@@ -78,20 +99,58 @@ class DepartmentalExecutor:
             return "execute"
 
     def _execute_single_task(self, state: ExecutorGraphState) -> ExecutorGraphState:
-        # The actual task to execute is at index current_task_index - 1 because _get_next_task increments it
-        task_to_execute = state['tasks_to_process'][state['current_task_index'] - 1]
-        department = task_to_execute.department
-        task_description = task_to_execute.task
-        
-        print(f"[{department} Executor - LangGraph Node]: Starting task - '{task_description}'")
-        # Simulate task execution. In a real scenario, this would call a specialized agent or tool.
-        # For now, we just mock success.
-        result = f"Successfully executed: {task_description}"
-        print(f"[{department} Executor - LangGraph Node]: Finished task - '{task_description}'")
-        
+        current_task_index = state['current_task_index'] -1 # Index of the task just identified by _get_next_task
+        task_object_to_execute = state['tasks_to_process'][current_task_index]
+        department = task_object_to_execute.department
+        task_description = task_object_to_execute.task
         completed_outputs = state.get('completed_task_outputs', [])
-        completed_outputs.append({ "task": task_description, "result": result, "status": "completed"})
-        return {**state, "current_task_result": result, "completed_task_outputs": completed_outputs}
+
+        logger.info(f"[{department} Executor - LangGraph Node]: Preparing task - '{task_description}'")
+
+        agent_class = self.agent_mapping.get(department)
+        if not agent_class:
+            logger.error(f"No agent class found for department: {department}")
+            error_message = f"No agent configured for department {department}"
+            completed_outputs.append({"task": task_description, "result": error_message, "status": "failed"})
+            return {**state, 
+                    "current_task_result": f"Error: No agent for department {department}", 
+                    "error_message": error_message,
+                    "completed_task_outputs": completed_outputs}
+
+        try:
+            agent_instance = agent_class() # Instantiate the agent
+            logger.info(f"Instantiated agent: {agent_instance.name} for task: {task_description}")
+            
+            # Call the agent's execute_task method, passing the full Task Pydantic model
+            execution_outcome = agent_instance.execute_task(task_object_to_execute)
+            logger.info(f"Agent {agent_instance.name} finished task '{task_description}' with outcome: {execution_outcome}")
+
+            task_status = execution_outcome.get("status", "failed")
+            message = execution_outcome.get("message", "No message from agent.")
+            error_details = execution_outcome.get("error_details", "")
+            artifacts = execution_outcome.get("artifacts", []) # Capture artifacts
+
+            completed_outputs.append({
+                "task": task_description, 
+                "result": message, 
+                "status": task_status, 
+                "artifacts": artifacts
+            })
+
+            if task_status == "completed":
+                return {**state, "current_task_result": message, "error_message": "", "completed_task_outputs": completed_outputs}
+            else:
+                logger.error(f"Task '{task_description}' failed. Agent message: {message}. Details: {error_details}")
+                return {**state, "current_task_result": f"Task Failed: {message}", "error_message": error_details or message, "completed_task_outputs": completed_outputs}
+
+        except Exception as e:
+            logger.exception(f"Exception during agent execution for task '{task_description}': {e}")
+            critical_error_message = f"Critical Error: Exception during agent execution for {task_description}: {str(e)}"
+            completed_outputs.append({"task": task_description, "result": critical_error_message, "status": "failed"})
+            return {**state, 
+                    "current_task_result": critical_error_message, 
+                    "error_message": str(e),
+                    "completed_task_outputs": completed_outputs}
 
     def _handle_error(self, state: ExecutorGraphState) -> ExecutorGraphState:
         error_msg = state.get('error_message', 'Unknown error')
