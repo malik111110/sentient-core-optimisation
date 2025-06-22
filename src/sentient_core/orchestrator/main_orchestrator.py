@@ -6,6 +6,7 @@ sys.stdout.flush() # FLUSH AFTER FIRST PRINT
 
 print("--- DEBUG: Before imports block ---"); sys.stdout.flush()
 from .c_suite_planner import CSuitePlanner
+from .chooser import Chooser
 print("--- DEBUG: After CSuitePlanner import attempt ---"); sys.stdout.flush()
 # from .departmental_executors import DepartmentalExecutor
 # print("--- DEBUG: After DepartmentalExecutor import attempt ---"); sys.stdout.flush()
@@ -18,6 +19,7 @@ class MainOrchestrator:
         print("Agentic Factory Initializing...")
         self.state = AgenticState(initial_command=command)
         self.planner = CSuitePlanner()
+        self.chooser = Chooser()
         self.executor = DepartmentalExecutor()
         print("Agentic Factory Initialized.")
 
@@ -29,7 +31,13 @@ class MainOrchestrator:
         
         # Validate and store the plan in the shared state using Pydantic models
         self.state.plan = Plan(**plan_dict)
-        
+
+        # 3. Use the Chooser to determine the sandbox for each task
+        print("Choosing sandbox environments for each task...")
+        for task in self.state.plan.tasks:
+            task.sandbox_type = self.chooser.choose_sandbox(task.task)
+            print(f"  - Task: '{task.task[:50]}...' -> Sandbox: {task.sandbox_type}")
+
         print(f"Plan for project '{self.state.plan.project_name}' received. Executing tasks...")
 
         # 2. Departmental Executors execute the plan using LangGraph workflow

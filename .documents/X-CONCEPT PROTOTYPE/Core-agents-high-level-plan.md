@@ -37,7 +37,7 @@ These agents form the cognitive backbone of the development process, translating
 | Key Responsibilities | - Define the application's layout, navigation, and visual style.<br>- Generate wireframes or mockups for user validation.<br>- Break down the UI into a hierarchy of reusable components.<br>- Select appropriate front-end libraries or frameworks (e.g., Tailwind CSS, Material-UI). |
 | Inputs / Triggers | - A validated `Project Plan` and `Tech Specs`.<br>- User feedback on style and layout preferences. |
 | Outputs / Artifacts | - Visual wireframes or mockups.<br>- A `Design Doc` detailing UI/UX principles.<br>- A list of front-end components to be built.<br>- A `package.json` with required front-end dependencies. |
-| Interaction Protocols | - Presents visual options (e.g., layout choices, style guides) in the central column of the 'Walk me through' UI for user selection.<br>- Engages in a turn-by-turn dialogue with the user via the left-hand column of the 'Walk me through' view.<br>- Collaborates with the Back-End Architect to define data requirements for the UI.<br>- Dispatches component-building tasks to the Front-End Synthesizer. |
+| Interaction Protocols | - Presents visual options (e.g., layout choices, style guides) in the central column of the 'Walk me through' UI for user selection.<br>- Engages in a turn-by-turn dialogue with the user via the left-hand column of the 'Walk me through' view.<br>- Collaborates with the Back-End Architect to define data requirements for the UI.<br>- Dispatches component-building tasks to the Front-End Synthesizer. The generated UI can be previewed in a live environment using the `WebContainerTool`. |
 
 | Agent Name | Back-End & API Architect |
 | :--- | :--- |
@@ -45,7 +45,7 @@ These agents form the cognitive backbone of the development process, translating
 | Key Responsibilities | - Design the database schema.<br>- Define the REST or GraphQL API endpoints, including request/response structures.<br>- Plan the business logic and service layer architecture.<br>- Specify authentication and authorization mechanisms.<br>- Choose the appropriate backend stack (e.g., Node.js/Express, Python/FastAPI). |
 | Inputs / Triggers | - A validated `Project Plan` and `Tech Specs`.<br>- Data requirements from the Front-End Designer. |
 | Outputs / Artifacts | - A database schema definition (e.g., SQL DDL, Prisma schema).<br>- An API specification document (e.g., OpenAPI/Swagger spec).<br>- A `Tech Specs` document outlining the backend architecture.<br>- A list of tasks for the Database, Backend, and API Synthesizers. |
-| Interaction Protocols | - Negotiates the API contract with the Front-End Designer to ensure all UI data needs are met.<br>- Dispatches specific implementation tasks (e.g., "Create a 'users' table," "Implement a `POST /api/articles` endpoint") to the relevant Code Domain Synthesizers. |
+| Interaction Protocols | - Negotiates the API contract with the Front-End Designer to ensure all UI data needs are met.<br>- Dispatches specific implementation tasks (e.g., "Create a 'users' table," "Implement a `POST /api/articles` endpoint") to the relevant Code Domain Synthesizers, which are then executed and validated within a secure sandbox via the `E2BSandboxTool`. |
 
 | Agent Group | Prototype & Integration Agents (Prototype, Data-Viz, Open-Source) |
 | :--- | :--- |
@@ -54,6 +54,14 @@ These agents form the cognitive backbone of the development process, translating
 | Inputs / Triggers | - Finalized design documents and tech specs from architect agents.<br>- A complete list of components and endpoints to be generated. |
 | Outputs / Artifacts | - A fully populated file system within the E2B sandbox, containing all source code, assets, and configuration.<br>- A `package.json` or `requirements.txt` with all dependencies installed.<br>- A running process (e.g., `npm start`) ready for preview. |
 | Interaction Protocols | - Acts as a project manager, delegating tasks to the Code Domain Synthesizers.<br>- Reports overall progress back to the Orchestrator, which is then streamed to the user's UI.<br>- Ensures the generated code artifacts are correctly placed in the project's file structure. |
+
+| Agent Name | Coordinator / Orchestrator |
+| :--- | :--- |
+| Core Mission | To manage the overall workflow, route tasks between agents, and select the appropriate execution environment for each task. |
+| Key Responsibilities | - Receives the `Project Plan` from the Research & Analysis Architect.<br>- Invokes the `Chooser` utility (`src/sentient_core/orchestrator/chooser.py`) to determine the correct sandbox (E2B or WebContainer) for a given task.<br>- Dispatches tasks to the appropriate Strategic Agents or Code Domain Synthesizers.<br>- Mediates communication between agents. |
+| Inputs / Triggers | - A finalized `Project Plan`.<br>- Status updates from other agents. |
+| Outputs / Artifacts | - Task assignments for other agents.<br>- Instructions for invoking the `WebContainerTool` or `E2BSandboxTool`. |
+| Interaction Protocols | - Acts as the central hub for all agent communication.<br>- Uses the `Chooser` to make runtime decisions about the execution environment. |
 
 ---
 
