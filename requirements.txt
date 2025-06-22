@@ -1,4 +1,9 @@
 groq
+e2b-code-interpreter
+python-dotenv
+supabase
+fastapi
+uvicorn
 uagents
 coral-server
 pytest

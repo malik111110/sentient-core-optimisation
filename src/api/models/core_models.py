@@ -65,6 +65,7 @@ class TaskUpdate(BaseModel):
     status: Optional[TaskStatus] = None
     priority: Optional[int] = None
     dependencies: Optional[List[UUID]] = None
+    started_at: Optional[datetime] = None # Allow explicit setting of start time
 
 class TaskRead(TaskBase):
     task_id: UUID

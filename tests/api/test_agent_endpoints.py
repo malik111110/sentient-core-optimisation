@@ -2,7 +2,7 @@ import pytest
 import uuid
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock, patch
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from src.main import app # app instance from src/main.py
 from src.api.models.core_models import AgentCreate, AgentRead, AgentUpdate, AgentStatus
@@ -15,7 +15,7 @@ client = TestClient(app)
 def test_read_api_v1_root():
     response = client.get("/api/v1")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to Sentient Core API v1"}
+    assert response.json() == {"status": "ok", "message": "Welcome to the Sentient Core API v1!"}
 
 @patch('src.api.persistence.supabase_persistence.supabase_client')
 def test_create_agent(mock_supabase_client):
@@ -145,7 +145,8 @@ def test_update_agent(mock_supabase_client):
     assert updated_agent_response["status"] == AgentStatus.ACTIVE.value
     assert updated_agent_response["description"] == "After update"
     assert updated_agent_response["agent_id"] == agent_id_str
-    assert updated_agent_response["created_at"] == original_created_at_iso
+    # Compare datetime objects to be robust against string format differences (Z vs +00:00)
+    assert datetime.fromisoformat(updated_agent_response["created_at"]) == original_created_at_dt
     assert datetime.fromisoformat(updated_agent_response["updated_at"]) > original_created_at_dt
 
 @patch('src.api.persistence.supabase_persistence.supabase_client')
@@ -212,5 +213,4 @@ def test_delete_nonexistent_agent(mock_supabase_client):
     response = client.delete(f"/api/v1/agents/{non_existent_uuid_str}")
     assert response.status_code == 404
 
-# Need to import timedelta for test_update_agent
-from datetime import timedelta
+

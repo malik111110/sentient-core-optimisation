@@ -227,7 +227,8 @@ def test_update_task(mock_supabase_client, prerequisite_agent: AgentRead):
         priority=3
     )
     
-    current_time_iso = datetime.now(timezone.utc).isoformat()
+    current_time_dt = datetime.now(timezone.utc)
+    current_time_iso = current_time_dt.isoformat()
     updated_task_from_db = {
         "task_id": task_id_str,
         "name": update_data_payload.name,
@@ -259,9 +260,10 @@ def test_update_task(mock_supabase_client, prerequisite_agent: AgentRead):
     assert updated_task_json["description"] == update_data_payload.description
     assert updated_task_json["status"] == update_data_payload.status.value
     assert updated_task_json["priority"] == update_data_payload.priority
-    assert updated_task_json["updated_at"] == current_time_iso
+    # Compare datetime objects for robustness against string format differences (Z vs +00:00)
+    assert datetime.fromisoformat(updated_task_json["updated_at"]) == current_time_dt
     if update_data_payload.status == TaskStatus.RUNNING:
-        assert updated_task_json["started_at"] == current_time_iso
+        assert datetime.fromisoformat(updated_task_json["started_at"]) == current_time_dt
     else:
         assert updated_task_json["started_at"] is None # Or check original value if not None
 # 
