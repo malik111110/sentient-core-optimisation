@@ -1,39 +1,37 @@
+from __future__ import annotations
+
+from typing import Any, Dict, Optional
+
 from ..agents.base_agent import BaseAgent
-from ..orchestrator.shared_state import Task
-from typing import Optional, Any
+from ..state.state_models import TaskState
 from ..tools.e2b_sandbox_tool import E2BSandboxToolInput
 
+
 class BackendDeveloperAgent(BaseAgent):
+    """Specialized agent for executing Python code in an E2B sandbox."""
+
     def __init__(self, sandbox_tool: Optional[Any] = None):
         super().__init__(name="BackendDeveloperAgent", sandbox_tool=sandbox_tool)
 
-    def execute_task(self, task: Task) -> dict:
-        self.log(f"Executing task: {task.task}")
-
+    async def _execute_task_impl(self, workflow_id: str, task: TaskState) -> Dict[str, Any]:
+        """Runs a Python script provided in the task description inside an E2B sandbox."""
         if not self.sandbox_tool:
-            return {"status": "failed", "message": "BackendDeveloperAgent requires a sandbox tool but none was provided."}
+            raise ValueError(
+                "BackendDeveloperAgent requires a sandbox tool but none was provided."
+            )
 
-        # Assume the task description is a Python script for now
-        # In a real scenario, this would involve more complex generation
-        script_to_run = task.task
-        
-        try:
-            # Use the E2BSandboxTool
-            tool_input = E2BSandboxToolInput(language='python', script=script_to_run)
-            self.log(f"Running script in E2B sandbox...")
-            sandbox_result = self.sandbox_tool.run(tool_input)
-            self.log(f"E2B sandbox execution finished.")
+        script_to_run = task.description
 
-            # Format the result
-            result = {
-                "status": "completed",
-                "message": f"Task '{task.task}' executed. Output: {sandbox_result.get('output', 'No output')}",
-                "artifacts": sandbox_result.get('artifacts', [])
-            }
+        # Use the E2BSandboxTool
+        tool_input = E2BSandboxToolInput(language="python", script=script_to_run)
+        await self.log(workflow_id, task.id, "Running script in E2B sandbox...")
 
-        except Exception as e:
-            self.log(f"An error occurred during sandbox execution: {e}")
-            result = {"status": "failed", "message": f"Error executing task in sandbox: {e}"}
+        sandbox_result = await self.sandbox_tool.run(tool_input)
 
-        self.log(f"Finished task: {task.task} with status: {result['status']}")
-        return result
+        await self.log(workflow_id, task.id, "E2B sandbox execution finished.")
+
+        # The returned dictionary will be automatically placed in the 'output_data' field.
+        return {
+            "output": sandbox_result.get("output", "No output"),
+            "artifacts": sandbox_result.get("artifacts", []),
+        }

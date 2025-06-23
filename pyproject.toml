@@ -1,12 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "sentient-core"
+name = "sentient_core"
 version = "0.1.0"
+description = "Core components for the Sentient AI agent framework"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Sentient Team"}
+]
 dependencies = [
-    "crewai>=0.30.0",
-    "crewai_tools>=0.1.6"
+    "pydantic>=2.0.0,<3.0.0",
+    "surrealdb>=0.3.2,<0.4.0",
+    "aiofiles>=23.2.0,<24.0.0",
+    "fastapi>=0.100.0,<1.0.0",
+    "uvicorn>=0.23.0,<1.0.0",
+    "httpx>=0.24.0,<0.26.0"
 ]
 
-[tool.pytest.ini_options]
-pythonpath = [
-  "src"
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "mypy>=1.5.0",
+    "types-aiofiles>=23.2.0"
 ]
+crewai = ["crewai>=0.30.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --asyncio-mode=auto"

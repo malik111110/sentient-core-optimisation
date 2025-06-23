@@ -17,7 +17,7 @@ class BaseAgent(ABC):
         self.sandbox_tool = sandbox_tool
 
     @abstractmethod
-    async def _execute_task_impl(self, task: TaskState) -> Dict[str, Any]:
+    async def _execute_task_impl(self, workflow_id: str, task: TaskState) -> Dict[str, Any]:
         """
         Core logic implementation for the agent's task.
 
@@ -45,7 +45,7 @@ class BaseAgent(ABC):
 
             await self.log(workflow_id, task_id, f"Starting task: {task.description}")
 
-            output_data = await self._execute_task_impl(task)
+            output_data = await self._execute_task_impl(workflow_id, task)
 
             await StateManager.update_task_status(
                 workflow_id,

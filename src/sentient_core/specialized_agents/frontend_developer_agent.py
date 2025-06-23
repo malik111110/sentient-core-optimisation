@@ -1,18 +1,24 @@
+from __future__ import annotations
+
+from typing import Any, Dict, Optional
+
 from ..agents.base_agent import BaseAgent
-from ..orchestrator.shared_state import Task
-from typing import Optional, Any
-from ..tools.webcontainer_tool import WebContainerToolInput, WebContainerTool
-from typing import Dict, Any
+from ..state.state_models import TaskState
+from ..tools.webcontainer_tool import WebContainerTool, WebContainerToolInput
+
 
 class FrontendDeveloperAgent(BaseAgent):
+    """Specialized agent for running simple web applications in a WebContainer sandbox."""
+
     def __init__(self, sandbox_tool: Optional[Any] = None):
         super().__init__(name="FrontendDeveloperAgent", sandbox_tool=sandbox_tool)
 
-    def execute_task(self, task: Task) -> dict:
-        self.log(f"Executing task: {task.task}")
-
+    async def _execute_task_impl(self, workflow_id: str, task: TaskState) -> Dict[str, Any]:
+        """Creates an index.html file and serves it in a WebContainer."""
         if not self.sandbox_tool or not isinstance(self.sandbox_tool, WebContainerTool):
-            return {"status": "failed", "message": "FrontendDeveloperAgent requires a sandbox tool but none was provided."}
+            raise ValueError(
+                "FrontendDeveloperAgent requires a WebContainerTool but none was provided."
+            )
 
         # Generate a simple index.html string
         html_content = f"""<!DOCTYPE html>
@@ -21,30 +27,21 @@ class FrontendDeveloperAgent(BaseAgent):
     <title>Task</title>
   </head>
   <body>
-    <h1>{task.task}</h1>
+    <h1>{task.description}</h1>
     <div id=\"backend-response\"></div>
-    <script type=\"module\" src=\"bridge.js\"></script>
+    <script type=\"module\" src=\"./src/bridge.js\"></script>
   </body>
 </html>"""
         file_tree: Dict[str, Any] = {"index.html": html_content}
 
-        try:
-            # Prepare input for WebContainerTool
-            tool_input = WebContainerToolInput(files=file_tree, commands=["serve"])
-            self.log("Running file tree in WebContainer sandbox...")
-            sandbox_result = self.sandbox_tool.run(tool_input)
-            self.log(f"WebContainer sandbox execution finished.")
+        # Prepare input for WebContainerTool
+        tool_input = WebContainerToolInput(files=file_tree, commands=["serve"])
+        await self.log(workflow_id, task.id, "Running file tree in WebContainer sandbox...")
+        sandbox_result = await self.sandbox_tool.run(tool_input)
+        await self.log(workflow_id, task.id, "WebContainer sandbox execution finished.")
 
-            # Format the result
-            result = {
-                "status": "completed",
-                "message": f"Task '{task.task}' executed. URL: {sandbox_result.get('url', 'No URL')}",
-                "artifacts": [sandbox_result.get('url')] if sandbox_result.get('url') else []
-            }
-
-        except Exception as e:
-            self.log(f"An error occurred during sandbox execution: {e}")
-            result = {"status": "failed", "message": f"Error executing task in sandbox: {e}"}
-
-        self.log(f"Finished task: {task.task} with status: {result['status']}")
-        return result
+        url = sandbox_result.get("url")
+        return {
+            "message": f"Task '{task.description}' executed. URL: {url}",
+            "artifacts": [url] if url else [],
+        }
