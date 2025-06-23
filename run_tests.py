@@ -2,50 +2,41 @@
 """
 Cross-platform test runner for Sentient Core.
 
+This script is a simple wrapper around `python -m pytest`.
+It forwards all command-line arguments to pytest and ensures
+the asyncio mode is set correctly.
+
 Usage:
-    python run_tests.py [test_path] [options]
+    python run_tests.py [pytest_options]
     
 Example:
-    python run_tests.py tests/unit/state -v
+    python run_tests.py -v tests/unit/state
 """
 
-import os
 import sys
 import subprocess
-from pathlib import Path
 
-def run_tests(test_path=None, *pytest_args):
-    """Run pytest with the given path and arguments."""
-    # Default test directory if none provided
-    if not test_path:
-        test_path = "tests"
-    
-    # Ensure we're using the current Python interpreter
+def main():
+    """Constructs and runs the pytest command."""
     python_exec = sys.executable
     
-    # Build the pytest command
-    cmd = [python_exec, "-m", "pytest", test_path, "--asyncio-mode=auto"]
+    # Start with the base command
+    cmd = [python_exec, "-m", "pytest"]
     
-    # Add any additional pytest arguments
-    if pytest_args:
-        cmd.extend(pytest_args)
+    # Add all arguments passed to this script
+    pytest_args = sys.argv[1:]
+    cmd.extend(pytest_args)
     
+    # Ensure asyncio_mode is set if not already specified by the user
+    if not any(arg.startswith('--asyncio-mode') for arg in pytest_args):
+        cmd.append('--asyncio-mode=auto')
+        
     # Run the command
     print(f"Running: {' '.join(cmd)}")
     result = subprocess.run(cmd)
-    return result.returncode
+    
+    sys.exit(result.returncode)
 
 if __name__ == "__main__":
-    # Parse command line arguments
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='Run Sentient Core tests')
-    parser.add_argument('test_path', nargs='?', default=None, 
-                       help='Path to test file or directory')
-    parser.add_argument('pytest_args', nargs=argparse.REMAINDER, 
-                       help='Additional arguments to pass to pytest')
-    
-    args = parser.parse_args()
-    
-    # Run the tests
-    sys.exit(run_tests(args.test_path, *args.pytest_args))
+    main()
+

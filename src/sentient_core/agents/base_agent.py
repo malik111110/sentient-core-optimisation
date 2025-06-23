@@ -29,12 +29,24 @@ class BaseAgent(ABC):
         """
         pass
 
-    async def execute_task(self, workflow_id: str, task_id: str) -> None:
-        """Orchestrates the full lifecycle of a task execution."""
-        await self._publish_event(workflow_id, task_id, EventType.AGENT_STARTED)
-        await StateManager.update_task_status(workflow_id, task_id, status=TaskStatus.IN_PROGRESS)
-
-        try:
+    async def execute_task(self, workflow_id: Optional[str] = None, task_id: Optional[str] = None, task: Optional[TaskState] = None) -> Dict[str, Any]:
+        """Orchestrates the full lifecycle of a task execution.
+        
+        Args:
+            workflow_id: The ID of the workflow this task belongs to
+            task_id: The ID of the task to execute (either this or task must be provided)
+            task: The task to execute (either this or task_id must be provided)
+            
+        Returns:
+            A dictionary containing the results of the task execution
+        """
+        if task is None and task_id is None:
+            raise ValueError("Either task or task_id must be provided")
+            
+        if task is None and workflow_id is None:
+            raise ValueError("workflow_id must be provided when task is not")
+            
+        if task is None:
             workflow = await StateManager.get_workflow(workflow_id)
             if not workflow:
                 raise ValueError(f"Workflow {workflow_id} not found.")
@@ -42,7 +54,15 @@ class BaseAgent(ABC):
             task = next((t for t in workflow.tasks if t.id == task_id), None)
             if not task:
                 raise ValueError(f"Task {task_id} not found in workflow {workflow_id}.")
+        else:
+            task_id = task.id
+            if workflow_id is None:
+                workflow_id = task.workflow_id if hasattr(task, 'workflow_id') else 'default_workflow'
 
+        await self._publish_event(workflow_id, task_id, EventType.AGENT_STARTED)
+        await StateManager.update_task_status(workflow_id, task_id, status=TaskStatus.IN_PROGRESS)
+
+        try:
             await self.log(workflow_id, task_id, f"Starting task: {task.description}")
 
             output_data = await self._execute_task_impl(workflow_id, task)

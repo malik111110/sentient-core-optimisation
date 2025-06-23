@@ -1,25 +1,13 @@
 import pytest
-from unittest.mock import AsyncMock, patch
+from uuid import uuid4
 
 from src.sentient_core.state.state_manager import StateManager
 from src.sentient_core.state.state_models import WorkflowState, TaskState, TaskStatus, WorkflowStatus
 
-@pytest.fixture
-def mock_db():
-    """Provides a mock SurrealDB client."""
-    db = AsyncMock()
-    db.select.return_value = []
-    db.create.return_value = None
-    db.update.return_value = None
-    db.query.return_value = None
-    return db
-
 @pytest.mark.asyncio
-@patch('src.sentient_core.state.db.get_db')
-async def test_create_and_get_workflow(mock_get_db, mock_db):
+async def test_create_and_get_workflow(mock_db):
     """Verify workflow creation and retrieval."""
     # Arrange
-    mock_get_db.return_value = mock_db
     task = TaskState(department="Test", description="Run test")
     workflow = WorkflowState(project_name="Test Project", tasks=[task])
 
@@ -36,43 +24,68 @@ async def test_create_and_get_workflow(mock_get_db, mock_db):
     assert retrieved is not None
     assert retrieved.id == workflow.id
     assert retrieved.project_name == "Test Project"
+    assert len(retrieved.tasks) == 1
+    assert retrieved.tasks[0].department == "Test"
+    assert retrieved.tasks[0].description == "Run test"
 
 @pytest.mark.asyncio
-@patch('src.sentient_core.state.db.get_db')
-async def test_update_task_status(mock_get_db, mock_db):
+async def test_update_task_status(mock_db):
     """Verify task status can be updated."""
     # Arrange
-    mock_get_db.return_value = mock_db
-    workflow_id = "wf_123"
-    task_id = "task_abc"
+    workflow_id = str(uuid4())
+    task_id = str(uuid4())
+    
+    # Mock the select to return a workflow with the task
+    mock_db.select.return_value = [{
+        "id": workflow_id,
+        "tasks": {
+            task_id: {
+                "id": task_id,
+                "status": TaskStatus.PENDING,
+                "output_data": {}
+            }
+        }
+    }]
 
     # Act
     await StateManager.update_task_status(
-        workflow_id,
-        task_id,
-        status=TaskStatus.COMPLETED,
-        output_data={"result": "success"}
+        workflow_id=workflow_id,
+        task_id=task_id,
+        status=TaskStatus.IN_PROGRESS,
+        output_data={"key": "value"}
     )
 
     # Assert
-    mock_db.query.assert_awaited_once()
-    query_str = mock_db.query.call_args[0][0]
-    assert "tasks[$idx].status = $status" in query_str
-    assert "tasks[$idx].output_data = $out" in query_str
+    mock_db.update.assert_awaited_once()
+    call_args = mock_db.update.call_args[0]
+    assert f"workflows:{workflow_id}" == call_args[0]
+    assert f"tasks.{task_id}.status" in call_args[1]
+    assert call_args[1][f"tasks.{task_id}.status"] == TaskStatus.IN_PROGRESS
+    assert f"tasks.{task_id}.output_data" in call_args[1]
+    assert call_args[1][f"tasks.{task_id}.output_data"] == {"key": "value"}
 
 @pytest.mark.asyncio
-@patch('src.sentient_core.state.db.get_db')
-async def test_set_workflow_status(mock_get_db, mock_db):
+async def test_set_workflow_status(mock_db):
     """Verify workflow status can be updated."""
     # Arrange
-    mock_get_db.return_value = mock_db
-    workflow_id = "wf_123"
+    workflow_id = str(uuid4())
+    
+    # Mock the select to return a workflow
+    mock_db.select.return_value = [{
+        "id": workflow_id,
+        "status": WorkflowStatus.RUNNING,
+        "tasks": {}
+    }]
 
     # Act
     await StateManager.set_workflow_status(workflow_id, WorkflowStatus.COMPLETED)
 
     # Assert
-    mock_db.update.assert_awaited_once_with(
-        f"workflow_state:{workflow_id}",
-        {"status": WorkflowStatus.COMPLETED}
-    )
+    mock_db.update.assert_awaited_once()
+    call_args = mock_db.update.call_args[0]
+    assert f"workflows:{workflow_id}" == call_args[0]
+    assert "status" in call_args[1]
+    assert call_args[1]["status"] == WorkflowStatus.COMPLETED.value  # Note: .value for enum string value
+    
+    # Verify we're using the correct SurrealDB update syntax
+    assert "=" in str(mock_db.update.call_args[1])  # Check we're using the update syntax

@@ -1,24 +1,13 @@
 import pytest
-from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
 from src.sentient_core.state.event_bus import EventBus
 from src.sentient_core.state.state_models import AgentEvent, EventType
 
-@pytest.fixture
-def mock_db():
-    """Provides a mock SurrealDB client."""
-    db = AsyncMock()
-    db.create.return_value = None
-    db.query.return_value = None
-    return db
-
 @pytest.mark.asyncio
-@patch('src.sentient_core.state.db.get_db')
-async def test_publish_event(mock_get_db, mock_db):
+async def test_publish_event(mock_db):
     """Verify that an event is correctly persisted."""
     # Arrange
-    mock_get_db.return_value = mock_db
     event = AgentEvent(
         event_type=EventType.AGENT_STARTED,
         source_agent="TestAgent",

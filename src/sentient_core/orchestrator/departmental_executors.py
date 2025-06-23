@@ -88,13 +88,20 @@ class DepartmentalExecutor:
             if not agent_class:
                 raise ValueError(f"No agent for department: {task.department}")
 
-            tool = self.webcontainer_tool if task.sandbox_type == 'webcontainer' else self.e2b_tool
-            agent = agent_class(tools=[tool])
-
-            if asyncio.iscoroutinefunction(agent.execute_task):
-                result = await agent.execute_task(task)
-            else:
-                result = agent.execute_task(task)
+            # Get the appropriate sandbox tool based on task requirements
+            sandbox_tool = None
+            if hasattr(task, 'sandbox_type') and task.sandbox_type:
+                sandbox_tool = (
+                    self.webcontainer_tool 
+                    if task.sandbox_type.lower() == 'webcontainer' 
+                    else self.e2b_tool
+                )
+            
+            # Initialize agent with sandbox tool
+            agent = agent_class(sandbox_tool=sandbox_tool)
+            
+            # Execute the task with proper async handling
+            result = await agent.execute_task(task=task)
 
             result_with_id = {**result, "task_id": task.task_id}
             completed_outputs = state['completed_task_outputs'] + [result_with_id]
