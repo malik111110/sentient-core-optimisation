@@ -6,23 +6,23 @@ from src.sentient_core.orchestrator.departmental_executors import DepartmentalEx
 from src.sentient_core.orchestrator.shared_state import Task
 
 @pytest.mark.asyncio
-async def test_webcontainer_smoke():
-    """Ensure a FrontendDeveloperAgent task runs through WebContainerTool inside executor."""
+async def test_e2b_smoke():
+    """Ensure a BackendDeveloperAgent task runs through E2BSandboxTool inside executor."""
     # Arrange
     task = Task(
         task_id=uuid4(),
-        department="FrontendDevelopment",
-        task="Generate hello world HTML page",
-        sandbox_type="webcontainer"
+        department="BackendDevelopment",
+        task="print('Hello from E2B')",
+        sandbox_type="e2b",
     )
 
     executor = DepartmentalExecutor()
 
-    # Patch the WebContainerTool.run method to avoid real execution
-    with patch("src.sentient_core.tools.webcontainer_tool.WebContainerTool.run") as mock_run:
+    # Patch the E2BSandboxTool.run method to avoid real execution
+    with patch("src.sentient_core.tools.e2b_sandbox_tool.E2BSandboxTool.run") as mock_run:
         mock_run.return_value = {
             "status": "success",
-            "url": "https://example.com"
+            "output": "Hello from E2B",
         }
 
         # Act

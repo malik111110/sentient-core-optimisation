@@ -17,8 +17,14 @@ class FrontendDeveloperAgent(BaseAgent):
         # Generate a simple index.html string
         html_content = f"""<!DOCTYPE html>
 <html>
-  <head><title>Task</title></head>
-  <body><h1>{task.task}</h1></body>
+  <head>
+    <title>Task</title>
+  </head>
+  <body>
+    <h1>{task.task}</h1>
+    <div id=\"backend-response\"></div>
+    <script type=\"module\" src=\"bridge.js\"></script>
+  </body>
 </html>"""
         file_tree: Dict[str, Any] = {"index.html": html_content}
 

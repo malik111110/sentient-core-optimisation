@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 import asyncio
+from uuid import uuid4
 
 from src.sentient_core.orchestrator.departmental_executors import DepartmentalExecutor
 from src.sentient_core.orchestrator.shared_state import Task
@@ -9,15 +10,14 @@ from src.api.models.memory_models import MemoryNode, NodeType, SurrealID
 @pytest.fixture
 def executor():
     """Provides an instance of the DepartmentalExecutor."""
-    # Mock the sandbox tools during initialization as they are not needed for this test
     with patch('src.sentient_core.tools.E2BSandboxTool'), patch('src.sentient_core.tools.WebContainerTool'):
         yield DepartmentalExecutor()
 
+@pytest.mark.asyncio
 @patch('src.sentient_core.specialized_agents.data_agent.create_node')
-def test_executor_handles_data_agent_task(mock_create_node, executor):
+async def test_executor_handles_data_agent_task(mock_create_node, executor):
     """Verify the DepartmentalExecutor can route a task to the DataAgent and execute it."""
     # Arrange
-    # Mock the async create_node function to return a valid MemoryNode
     async def async_create_node(*args, **kwargs):
         return MemoryNode(
             id=SurrealID("memory_node:mock_id"),
@@ -26,25 +26,23 @@ def test_executor_handles_data_agent_task(mock_create_node, executor):
         )
     mock_create_node.side_effect = async_create_node
 
-    # Define the task for the Data department
     data_task = Task(
-        task_id="uuid-data-1",
+        task_id=uuid4(),
         department="Data",
         task="Create a new memory node for a concept.",
         input_data={"node_type": "CONCEPT", "content": "Test concept from executor"}
     )
 
     # Act
-    result = executor.execute_plan([data_task])
+    result = await executor.execute_plan([data_task])
 
     # Assert
     assert result["status"] == "success"
     assert len(result["results"]) == 1
     task_result = result["results"][0]
     assert task_result["status"] == "completed"
-    assert "Successfully created memory node memory_node:mock_id" in task_result["result"]
+    assert "Successfully created memory node memory_node:mock_id" in task_result["message"]
 
-    # Verify that the underlying persistence function was called
     mock_create_node.assert_called_once()
     call_args = mock_create_node.call_args[0][0]
     assert isinstance(call_args, MemoryNode)

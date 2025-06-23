@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 import asyncio
+from uuid import uuid4
 
 from src.sentient_core.orchestrator.shared_state import Task
 from src.sentient_core.specialized_agents.data_agent import DataAgent
@@ -16,19 +17,23 @@ def data_agent():
 async def test_data_agent_create_node_success(mock_create_node, data_agent):
     """Verify DataAgent successfully handles a 'create node' task."""
     # Arrange
-    mock_create_node.return_value = MemoryNode(
-        id=SurrealID("memory_node:test_id"),
-        node_type=NodeType.CONCEPT,
-        content="Test content"
-    )
+    async def async_create_node(*args, **kwargs):
+        return MemoryNode(
+            id=SurrealID("memory_node:test_id"),
+            node_type=NodeType.CONCEPT,
+            content="Test content"
+        )
+    mock_create_node.side_effect = async_create_node
+
     task = Task(
-        task_id="uuid1",
+        task_id=uuid4(),
+        department="Data",
         task="create node for concept",
         input_data={"node_type": "CONCEPT", "content": "Test content"}
     )
 
     # Act
-    result = data_agent.execute_task(task)
+    result = await data_agent.execute_task(task)
 
     # Assert
     assert result["status"] == "completed"
@@ -41,14 +46,18 @@ async def test_data_agent_create_node_success(mock_create_node, data_agent):
 async def test_data_agent_create_edge_success(mock_create_edge, data_agent):
     """Verify DataAgent successfully handles a 'create edge' task."""
     # Arrange
-    mock_create_edge.return_value = MemoryEdge(
-        id=SurrealID("relates_to:edge_id"),
-        source_node_id=SurrealID("memory_node:source"),
-        target_node_id=SurrealID("memory_node:target"),
-        edge_type=EdgeType.RELATES_TO
-    )
+    async def async_create_edge(*args, **kwargs):
+        return MemoryEdge(
+            id=SurrealID("relates_to:edge_id"),
+            source_node_id=SurrealID("memory_node:source"),
+            target_node_id=SurrealID("memory_node:target"),
+            edge_type=EdgeType.RELATES_TO
+        )
+    mock_create_edge.side_effect = async_create_edge
+
     task = Task(
-        task_id="uuid2",
+        task_id=uuid4(),
+        department="Data",
         task="create edge between nodes",
         input_data={
             "source_id": "memory_node:source",
@@ -58,40 +67,44 @@ async def test_data_agent_create_edge_success(mock_create_edge, data_agent):
     )
 
     # Act
-    result = data_agent.execute_task(task)
+    result = await data_agent.execute_task(task)
 
     # Assert
     assert result["status"] == "completed"
     assert "Successfully created edge" in result["message"]
     mock_create_edge.assert_called_once()
 
-def test_data_agent_invalid_input(data_agent):
+@pytest.mark.asyncio
+async def test_data_agent_invalid_input(data_agent):
     """Verify DataAgent returns a failed status with invalid input."""
     # Arrange
     task = Task(
-        task_id="uuid3",
+        task_id=uuid4(),
+        department="Data",
         task="create node", # Missing input_data
         input_data={}
     )
 
     # Act
-    result = data_agent.execute_task(task)
+    result = await data_agent.execute_task(task)
 
     # Assert
     assert result["status"] == "failed"
     assert "Missing 'node_type' or 'content'" in result["message"]
 
-def test_data_agent_unsupported_action(data_agent):
+@pytest.mark.asyncio
+async def test_data_agent_unsupported_action(data_agent):
     """Verify DataAgent returns a failed status for an unsupported action."""
     # Arrange
     task = Task(
-        task_id="uuid4",
+        task_id=uuid4(),
+        department="Data",
         task="delete the database",
         input_data={}
     )
 
     # Act
-    result = data_agent.execute_task(task)
+    result = await data_agent.execute_task(task)
 
     # Assert
     assert result["status"] == "failed"

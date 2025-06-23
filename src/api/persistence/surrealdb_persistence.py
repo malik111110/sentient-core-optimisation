@@ -14,8 +14,12 @@ async def create_node(node: MemoryNode) -> Optional[MemoryNode]:
     try:
         node_data = node.model_dump(exclude_none=True, exclude={'id'})
         # SurrealDB's Python driver can take the dict directly
-        created_node = await db.create("memory_node", node_data)
-        return MemoryNode(**created_node)
+        created_records = await db.create("memory_node", node_data)
+        if created_records:
+            # The driver returns a list of created records
+            created_data = created_records[0]
+            return MemoryNode(**created_data)
+        return None
     except Exception as e:
         print(f"Error creating memory node: {e}")
         return None

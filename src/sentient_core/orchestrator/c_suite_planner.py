@@ -1,7 +1,17 @@
 # C-Suite Planner Agent using CrewAI
 
 import json
-from crewai import Agent, Task as CrewTask, Crew, Process
+try:
+    from crewai import Agent, Task as CrewTask, Crew, Process  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover
+    class _Stub:
+        def __init__(self, *args, **kwargs):
+            pass
+    Agent = _Stub  # type: ignore
+    CrewTask = _Stub  # type: ignore
+    Crew = _Stub  # type: ignore
+    class Process:  # type: ignore
+        sequential = "sequential"
 from .shared_state import Task # Renamed crewai.Task to avoid conflict
 # from langchain_community.llms import Ollama # Example, replace with actual LLM
 
@@ -88,6 +98,19 @@ class CSuitePlanner:
                     tasks_to_add_later.append(data_task)
             
             enhanced_tasks.extend(tasks_to_add_later)
+
+            # --- Cross-sandbox bridge injection ---
+            frontend_task = next((t for t in enhanced_tasks if t.department == "FrontendDevelopment"), None)
+            backend_task = next((t for t in enhanced_tasks if t.department == "BackendDevelopment"), None)
+            if frontend_task and backend_task:
+                bridge_task = Task(
+                    department="Bridge",
+                    task="Connect frontend & backend sandboxes",
+                    depends_on=[frontend_task.task_id, backend_task.task_id],
+                    input_data={},
+                    sandbox_type="e2b",
+                )
+                enhanced_tasks.append(bridge_task)
 
             # Convert tasks back to dictionaries for the final plan
             raw_plan['tasks'] = [t.model_dump(mode='json') for t in enhanced_tasks]

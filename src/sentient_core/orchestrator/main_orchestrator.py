@@ -1,92 +1,49 @@
-print("--- PYTHON SCRIPT EXECUTION STARTED ---") # ABSOLUTE FIRST LINE TEST
-import sys
-sys.stdout.flush() # FLUSH AFTER FIRST PRINT
-
-# Main entry point for the Sentient-Core Agentic Factory
-
-print("--- DEBUG: Before imports block ---"); sys.stdout.flush()
+import asyncio
+from typing import List
 from .c_suite_planner import CSuitePlanner
-from .chooser import Chooser
-print("--- DEBUG: After CSuitePlanner import attempt ---"); sys.stdout.flush()
-# from .departmental_executors import DepartmentalExecutor
-# print("--- DEBUG: After DepartmentalExecutor import attempt ---"); sys.stdout.flush()
-from .shared_state import AgenticState, Plan, Task
-print("--- DEBUG: After SharedState import attempt ---"); sys.stdout.flush()
-print("--- DEBUG: After imports block (shared_state, c_suite_planner uncommented) ---"); sys.stdout.flush()
+from .departmental_executors import DepartmentalExecutor
+from .shared_state import Plan, Task, OrchestratorState
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class MainOrchestrator:
     def __init__(self, command: str):
-        print("Agentic Factory Initializing...")
-        self.state = AgenticState(initial_command=command)
+        self.command = command
         self.planner = CSuitePlanner()
-        self.chooser = Chooser()
         self.executor = DepartmentalExecutor()
-        print("Agentic Factory Initialized.")
+        self.state = OrchestratorState(plan=None, completed_tasks=[], final_result=None)
+        logger.info("MainOrchestrator initialized.")
 
-    def run(self):
-        print(f"Executing command: {self.state.initial_command}")
+    async def run(self):
+        logger.info(f"Received command: '{self.command}'. Starting orchestration.")
         
-        # 1. C-Suite Planner creates the plan
-        plan_dict = self.planner.create_plan(self.state.initial_command)
+        # 1. Create a plan
+        logger.info("Creating a plan...")
+        plan_dict = self.planner.create_plan(self.command)
+        tasks = [Task(**task_data) for task_data in plan_dict['tasks']]
+        self.state.plan = Plan(project_name=plan_dict['project_name'], tasks=tasks)
+        logger.info(f"Plan created for project: '{self.state.plan.project_name}' with {len(tasks)} tasks.")
+
+        # 2. Execute the plan
+        logger.info("Executing the plan...")
+        execution_result = await self.executor.execute_plan(self.state.plan.tasks)
         
-        # Validate and store the plan in the shared state using Pydantic models
-        self.state.plan = Plan(**plan_dict)
-
-        # 3. Use the Chooser to determine the sandbox for each task
-        print("Choosing sandbox environments for each task...")
-        for task in self.state.plan.tasks:
-            task.sandbox_type = self.chooser.choose_sandbox(task.task)
-            print(f"  - Task: '{task.task[:50]}...' -> Sandbox: {task.sandbox_type}")
-
-        print(f"Plan for project '{self.state.plan.project_name}' received. Executing tasks...")
-
-        # 2. Departmental Executors execute the plan using LangGraph workflow
-        # The print statement: "Plan for project '{self.state.plan.project_name}' received. Executing tasks..." is already present before this block.
-            
-        # Pass the list of Task objects directly to the new execute_plan method
-        execution_results = self.executor.execute_plan(self.state.plan.tasks)
-            
-        if execution_results.get("status") == "success":
-            results_list = execution_results.get("results", [])
-            # Create a mapping from task description to original Task object for easy update
-            task_map = {task.task: task for task in self.state.plan.tasks}
-                
-            for result_detail in results_list:
-                task_description = result_detail.get("task")
-                task_status = result_detail.get("status") # This should be 'completed' from our mock
-                if task_description in task_map:
-                    original_task = task_map[task_description]
-                    original_task.status = task_status # Update status on the Pydantic model instance
-                    if task_status == 'completed':
-                        self.state.completed_tasks.append(original_task)
-                    else: # Handle other statuses if they become possible
-                        print(f"Task '{original_task.task}' processed by LangGraph with status: {task_status}")
-                else:
-                    print(f"Warning: Result received from LangGraph for unknown task: {task_description}")
-            print("\nAll tasks processed by Departmental Executor using LangGraph.")
+        # 3. Process results
+        if execution_result["status"] == "success":
+            logger.info("Plan execution completed successfully.")
+            self.state.completed_tasks = execution_result["results"]
+            self.state.final_result = "Orchestration successful."
         else:
-            print("Departmental Executor (LangGraph) reported a failure in processing the plan.")
-        
-        print("\nAgentic Factory run complete.") # This replaces the old "All tasks executed..." print statement
-        print(f"\n--- Final State ---")
-        print(self.state.model_dump_json(indent=2))
+            logger.error(f"Plan execution failed: {execution_result.get('error')}")
+            self.state.completed_tasks = execution_result.get("results", [])
+            self.state.final_result = f"Orchestration failed: {execution_result.get('error')}"
 
+        logger.info("Orchestration finished.")
 
-if __name__ == "__main__":
-    initial_command = "Test run."
-    print(f"--- Starting Main Orchestrator with command: '{initial_command}' ---")
-    sys.stdout.flush()
-    try:
-        factory = MainOrchestrator(command=initial_command)
-        factory.run()
-        print("--- Main Orchestrator run completed successfully. ---")
-        sys.stdout.flush()
-    except Exception as e:
-        print(f"--- CRITICAL ERROR IN MAIN ORCHESTRATOR ---")
-        import traceback
-        traceback.print_exc()
-        sys.stdout.flush()
-        # Optionally re-raise or handle as needed, for now, just printing
-    finally:
-        print("--- Main Orchestrator execution finished. ---")
-        sys.stdout.flush()
+    @staticmethod
+    def main(command: str):
+        orchestrator = MainOrchestrator(command)
+        asyncio.run(orchestrator.run())
+        return orchestrator.state

@@ -10,7 +10,7 @@ class DataAgent(BaseAgent):
     def __init__(self, sandbox_tool: Optional[Any] = None):
         super().__init__(name="DataAgent", sandbox_tool=sandbox_tool)
 
-    def execute_task(self, task: Task) -> dict:
+    async def execute_task(self, task: Task) -> dict:
         self.log(f"Executing data task: {task.task}")
         action = task.task.lower()
         input_data = task.input_data or {}
@@ -23,7 +23,7 @@ class DataAgent(BaseAgent):
                     raise ValueError("Missing 'node_type' or 'content' for create node task.")
 
                 node = MemoryNode(node_type=NodeType[node_type_str.upper()], content=content, metadata=input_data.get("metadata", {}))
-                created_node = asyncio.run(create_node(node))
+                created_node = await create_node(node)
                 if not created_node:
                     raise Exception("Failed to create node in the database.")
 
@@ -46,7 +46,7 @@ class DataAgent(BaseAgent):
                     edge_type=EdgeType[edge_type_str.upper()],
                     metadata=input_data.get("metadata", {})
                 )
-                created_edge = asyncio.run(create_edge(source_id, target_id, edge))
+                created_edge = await create_edge(source_id, target_id, edge)
                 if not created_edge:
                     raise Exception("Failed to create edge in the database.")
 
