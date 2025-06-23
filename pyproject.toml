@@ -1,3 +1,11 @@
+[project]
+name = "sentient-core"
+version = "0.1.0"
+dependencies = [
+    "crewai>=0.30.0",
+    "crewai_tools>=0.1.6"
+]
+
 [tool.pytest.ini_options]
 pythonpath = [
   "src"

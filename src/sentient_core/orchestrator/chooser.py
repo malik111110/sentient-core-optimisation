@@ -3,7 +3,7 @@ from typing import Literal, Optional
 
 # Define constants for sandbox types for clarity and to avoid magic strings
 SANDBOX_TYPE_E2B = "e2b"
-SANDBOX_TYPE_WEB_CONTAINER = "webcontainer"
+SANDBOX_TYPE_WEB_CONTAINER = "webcontainer"  # normalized without hyphen
 
 
 @dataclass
@@ -60,3 +60,23 @@ def choose_sandbox(requirements: SandboxTaskRequirements) -> str:
 
     # Fallback to E2B if no other condition is met, as it's the more powerful option.
     return SANDBOX_TYPE_E2B
+
+
+# --------------------------------------------------
+# Runtime-friendly wrapper
+# --------------------------------------------------
+class Chooser:
+    """Lightweight wrapper exposed to MainOrchestrator for runtime sandbox selection."""
+
+    _KEYWORDS_FRONTEND = [
+        "html", "css", "frontend", "ui", "react", "next.js", "javascript"
+    ]
+
+    def choose_sandbox(self, task_description: str) -> str:
+        """Infer sandbox type from a raw task description string."""
+        lowered = task_description.lower()
+        if any(kw in lowered for kw in self._KEYWORDS_FRONTEND):
+            req = SandboxTaskRequirements(language="javascript", requires_ui_feedback=True)
+        else:
+            req = SandboxTaskRequirements(language="python")
+        return choose_sandbox(req)

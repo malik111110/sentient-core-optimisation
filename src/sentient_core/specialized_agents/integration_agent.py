@@ -1,9 +1,10 @@
-from ..orchestrator.base_agent import BaseAgent
+from ..agents.base_agent import BaseAgent
 from ..orchestrator.shared_state import Task
+from typing import Optional, Any
 
 class IntegrationAgent(BaseAgent):
-    def __init__(self, name: str = "IntegrationAgent"):
-        super().__init__(name)
+    def __init__(self, sandbox_tool: Optional[Any] = None):
+        super().__init__(name="IntegrationAgent", sandbox_tool=sandbox_tool)
 
     def execute_task(self, task: Task) -> dict:
         self.log(f"Executing task: {task.task}")

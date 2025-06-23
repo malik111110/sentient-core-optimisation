@@ -3,6 +3,7 @@
 from typing import Dict, Any, List, TypedDict
 from langgraph.graph import StateGraph, END
 from .shared_state import Task # Task is defined in shared_state.py within the same orchestrator package
+from ..tools import E2BSandboxTool, WebContainerTool
 from ..specialized_agents import (
     ResearchAgent,
     DataAgent,
@@ -26,6 +27,8 @@ class ExecutorGraphState(TypedDict):
 class DepartmentalExecutor:
     def __init__(self):
         self.workflow = StateGraph(ExecutorGraphState)
+        self.e2b_tool = E2BSandboxTool()
+        self.webcontainer_tool = WebContainerTool()
         self._setup_graph()
         self.app = self.workflow.compile()
 
@@ -104,6 +107,21 @@ class DepartmentalExecutor:
         department = task_object_to_execute.department
         task_description = task_object_to_execute.task
         completed_outputs = state.get('completed_task_outputs', [])
+        # Create a map of completed task IDs to their full output for easy lookup
+        completed_task_map = {t['task_id']: t for t in completed_outputs}
+
+        # Check for dependencies and inject their output
+        if task_object_to_execute.depends_on:
+            for dep_id in task_object_to_execute.depends_on:
+                if dep_id in completed_task_map:
+                    dependency_output = completed_task_map[dep_id]
+                    # Inject the artifact from the parent task into the current task's input_data
+                    if dependency_output.get('artifacts'):
+                        # Assuming the first artifact is the primary content
+                        task_object_to_execute.input_data['content'] = dependency_output['artifacts'][0]
+                else:
+                    # This case should ideally be handled by a more robust dependency resolution logic
+                    logger.warning(f"Dependency task {dep_id} not found in completed tasks.")
 
         logger.info(f"[{department} Executor - LangGraph Node]: Preparing task - '{task_description}'")
 
@@ -118,7 +136,15 @@ class DepartmentalExecutor:
                     "completed_task_outputs": completed_outputs}
 
         try:
-            agent_instance = agent_class() # Instantiate the agent
+            # Select the appropriate tool based on the task's requirements
+            sandbox_type = task_object_to_execute.sandbox_type
+            selected_tool = None
+            if sandbox_type == 'e2b':
+                selected_tool = self.e2b_tool
+            elif sandbox_type == 'webcontainer':
+                selected_tool = self.webcontainer_tool
+
+            agent_instance = agent_class(sandbox_tool=selected_tool) # Instantiate the agent with the tool
             logger.info(f"Instantiated agent: {agent_instance.name} for task: {task_description}")
             
             # Call the agent's execute_task method, passing the full Task Pydantic model
@@ -131,6 +157,7 @@ class DepartmentalExecutor:
             artifacts = execution_outcome.get("artifacts", []) # Capture artifacts
 
             completed_outputs.append({
+                "task_id": task_object_to_execute.task_id, # Store the task_id for dependency tracking
                 "task": task_description, 
                 "result": message, 
                 "status": task_status, 

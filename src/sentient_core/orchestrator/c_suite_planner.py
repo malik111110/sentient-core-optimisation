@@ -1,6 +1,8 @@
 # C-Suite Planner Agent using CrewAI
 
-from crewai import Agent, Task, Crew, Process
+import json
+from crewai import Agent, Task as CrewTask, Crew, Process
+from .shared_state import Task # Renamed crewai.Task to avoid conflict
 # from langchain_community.llms import Ollama # Example, replace with actual LLM
 
 # Placeholder for LLM - replace with actual LLM integration later
@@ -28,7 +30,7 @@ class CSuitePlanner:
     def create_plan(self, command: str) -> dict:
         print(f"C-Suite Planner: Received command - '{command}'. Initiating planning sequence...")
 
-        planning_task = Task(
+        planning_task = CrewTask(
             description=f'Analyze the following user command and generate a detailed project plan: "{command}". ' \
                         'The plan must include a project_name (a concise, catchy name derived from the command) ' \
                         'and a list of tasks. Each task must specify a department (e.g., Research, Data, Development, Deployment) ' \
@@ -64,12 +66,34 @@ class CSuitePlanner:
         }
         '''
         
-        import json
         try:
             # Simulating the LLM's structured JSON output
-            plan_output = json.loads(mock_plan_json_string)
-            print("C-Suite Planner: Plan successfully generated (mocked).")
-            return plan_output
+            raw_plan = json.loads(mock_plan_json_string)
+            enhanced_tasks = []
+            tasks_to_add_later = []
+
+            # Create Pydantic Task objects to assign UUIDs
+            original_tasks = [Task(**t) for t in raw_plan.get("tasks", [])]
+
+            for task in original_tasks:
+                enhanced_tasks.append(task)
+                # If a task is for research, create a follow-up data task
+                if task.department == "Research":
+                    data_task = Task(
+                        department="Data",
+                        task=f"Create memory node from findings of task: '{task.task[:30]}...'",
+                        depends_on=[task.task_id],
+                        input_data={"node_type": "CONCEPT"}
+                    )
+                    tasks_to_add_later.append(data_task)
+            
+            enhanced_tasks.extend(tasks_to_add_later)
+
+            # Convert tasks back to dictionaries for the final plan
+            raw_plan['tasks'] = [t.model_dump(mode='json') for t in enhanced_tasks]
+
+            print("C-Suite Planner: Plan successfully generated and enhanced with memory tasks (mocked).")
+            return raw_plan
         except json.JSONDecodeError as e:
             print(f"C-Suite Planner: Error decoding mock JSON plan: {e}")
             # Fallback to a simpler mock plan in case of error with the complex one
